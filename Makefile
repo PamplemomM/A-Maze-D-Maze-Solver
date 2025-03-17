@@ -9,6 +9,10 @@ NAME    =		amazed
 
 SRCS	=		$(shell find src/ -type f -name '*.c')
 
+SRCTEST	=	$(shell find src/lib -type f -name '*.c')
+SRCTEST	+=	$(shell find src/cuddle_help -type f -name '*.c')
+SRCTEST	+=	$(shell find tests/ -type f -name '*.c')
+
 CFLAGS	=		-Wall -Wextra -Wshadow -I./../include
 
 OBJS	=		$(SRCS:.c=.o)
@@ -21,12 +25,9 @@ $(NAME)	:
 val		:
 		gcc -o $(NAME) $(SRCS) $(CFLAGS)
 
-unit_tests	:	fclean all
-			gcc -o unit_tests $(SRCS) tests/*.c \
-			--coverage -lcriterion
-
-tests_run       :		unit_tests
-				./unit_tests
+tests_run:
+	gcc -o unit_tests $(SRCTEST) -Iinclude -lcriterion --coverage
+	./unit_tests
 
 clean	:
 			rm -rf $(OBJS)
