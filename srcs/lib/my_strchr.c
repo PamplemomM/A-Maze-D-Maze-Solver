@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2024
-** robot_factory
-** File description:
 ** my_strchr.c
+** File description:
+** file for the my_strchr function.
 */
 #include "../../include/header_amazed.h"
 

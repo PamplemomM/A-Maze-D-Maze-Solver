@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2024
-** robot_factory
+** my_strtok.c
 ** File description:
-** my_strchr.c
+** file for the strtok function.
 */
 #include "../../include/header_amazed.h"
 
