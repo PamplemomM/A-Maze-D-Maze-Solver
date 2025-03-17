@@ -1,4 +1,4 @@
-# **Amazed**
+# **A-maze-d**
 
 ## **Description**
 The goal of the Amazed is to move all robots in a maze from the entrance to the exit.
