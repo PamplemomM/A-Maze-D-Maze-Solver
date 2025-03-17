@@ -10,7 +10,6 @@ NAME    =		amazed
 SRCS	=		$(shell find src/ -type f -name '*.c')
 
 SRCTEST	=	$(shell find src/lib -type f -name '*.c')
-SRCTEST	+=	$(shell find src/cuddle_help -type f -name '*.c')
 SRCTEST	+=	$(shell find tests/ -type f -name '*.c')
 
 CFLAGS	=		-Wall -Wextra -Wshadow -I./../include
