@@ -22,3 +22,10 @@ int init_gamestuff(void)
     GAME->hue = diceroll(0, 360);
     return SUCCESS;
 }
+
+void destroy_gamestuff(void)
+{
+    if (GAME == NULL)
+        return;
+    free(GAME);
+}
