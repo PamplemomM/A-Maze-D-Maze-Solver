@@ -48,6 +48,7 @@ void destroy_assets(void);
 
 game_t **get_gamestuff(void);
 int init_gamestuff(void);
+void destroy_gamestuff(void);
 
 data_t **get_data(void);
 int read_data(void);

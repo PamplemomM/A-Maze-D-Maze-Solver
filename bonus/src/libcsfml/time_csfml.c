@@ -9,7 +9,7 @@
 
 sfClock **get_clock(void)
 {
-    static sfClock *clock;
+    static sfClock *clock = NULL;
 
     return &clock;
 }
@@ -24,5 +24,7 @@ float get_time(void)
 
 void destroy_clock(void)
 {
+    if (*get_clock() == NULL)
+        return;
     sfClock_destroy(*get_clock());
 }

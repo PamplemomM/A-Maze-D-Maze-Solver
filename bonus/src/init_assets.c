@@ -94,6 +94,5 @@ void destroy_assets(void)
     destroy_clock();
     destroy_window();
     destroy_cam();
-    destroy_data();
-    free(GAME);
+    destroy_gamestuff();
 }

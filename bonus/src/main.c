@@ -106,19 +106,22 @@ void update_stuff(void)
 
 void run(void)
 {
-    if (init_gamestuff() == ERROR)
-        sfRenderWindow_close(WINDOW);
-    if (init_assets() == ERROR)
-        sfRenderWindow_close(WINDOW);
     while (sfRenderWindow_isOpen(WINDOW)) {
         sfRenderWindow_clear(WINDOW, color_from_hue(0, 75, 0, 255));
         update_stuff();
         events();
         sfRenderWindow_display(WINDOW);
     }
+}
+
+void start(void)
+{
+    if (init_gamestuff() != ERROR && init_assets() != ERROR)
+        run();
     destroy_assets();
 }
 
+// the CSFML itself leaks 226,396 bytes of memory on its own
 int main(int ac, char **av)
 {
     if (ac > 1 && strcmp(av[1], "-h") == 0)
@@ -126,7 +129,8 @@ int main(int ac, char **av)
     if (read_data() == -1)
         return 84;
     srand(time(NULL));
-    DATA->robotcnt = diceroll(2, 10);
-    run();
+    DATA->robotcnt = diceroll(2, 10); // tmp
+    start();
+    destroy_data();
     return 0;
 }
