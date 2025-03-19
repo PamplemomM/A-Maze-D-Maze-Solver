@@ -8,9 +8,14 @@
 #ifndef AMAZEDVIS_H
     #define AMAZEDVIS_H
 
+    #define ERROR 84
+    #define SUCCESS 0
+
     #define OMNIFREE(thing, dimension) omnifree((void **)thing, dimension)
     #define GAME (*get_gamestuff())
     #define DATA (*get_data())
+
+    #define HUESHIFT 0.5
 
     #include "header_csfml.h"
     #include <unistd.h>
@@ -38,15 +43,18 @@ typedef struct data {
     move_t *moves;
 } data_t;
 
-void *init_assets(void);
+int init_assets(void);
 void destroy_assets(void);
 
 game_t **get_gamestuff(void);
-game_t *init_gamestuff(void);
+int init_gamestuff(void);
 
 data_t **get_data(void);
+int read_data(void);
+void destroy_data(void);
 
-sfColor color_from_hue(float hue, float brightness, float saturation);
+sfColor color_from_hue(float hue, float brightness,
+    float saturation, float opacity);
 int diceroll(int low, int high);
 int digitcount(int nbr);
 char *int_to_str(int nbr);

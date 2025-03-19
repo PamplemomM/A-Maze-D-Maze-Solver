@@ -14,11 +14,11 @@ game_t **get_gamestuff(void)
     return &game;
 }
 
-game_t *init_gamestuff(void)
+int init_gamestuff(void)
 {
     GAME = malloc(sizeof(game_t));
     if (GAME == NULL)
-        return NULL;
+        return ERROR;
     GAME->hue = diceroll(0, 360);
-    return GAME;
+    return SUCCESS;
 }
