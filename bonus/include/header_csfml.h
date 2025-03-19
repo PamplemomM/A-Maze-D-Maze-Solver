@@ -17,6 +17,7 @@
 
     #define WINDOW *get_window()
     #define TIME get_time()
+    #define CAM (*get_cam())
     #define KEYPRESS(key) sfKeyboard_isKeyPressed(key)
     #define MOUSEPRESS(button) sfMouse_isButtonPressed(button)
 
@@ -29,6 +30,14 @@ typedef enum tween_methods {
     EASEOUT,
     EASEINOUT
 } method_t;
+
+typedef struct camera {
+    sfView *view;
+    sfVector2f center;
+    sfVector2f size;
+    float zoom;
+    float angle;
+} cam_t;
 
 typedef struct sprite {
     char *name;
@@ -96,6 +105,11 @@ typedef struct music {
 sfRenderWindow **get_window(void);
 void create_window(unsigned int width, unsigned int height, char const *name);
 void destroy_window(void);
+
+cam_t **get_cam(void);
+cam_t *init_cam(void);
+void update_cam(void);
+void destroy_cam(void);
 
 sprite_t **get_spritelist(void);
 sprite_t *get_sprite(char const *name);
