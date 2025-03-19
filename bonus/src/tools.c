@@ -7,21 +7,21 @@
 
 #include "../include/header.h"
 
-sfColor color_from_hue(float hue, float brightness, float saturation)
+sfColor color_from_hue(float hue, float brightness,
+    float saturation, float opacity)
 {
-    sfColor color = sfWhite;
+    sfColor color;
 
     color.r = (cos(hue * M_PI / 180.0) + 1) * 127;
     color.g = (cos((hue + 120) * M_PI / 180.0) + 1) * 127;
     color.b = (cos((hue + 240) * M_PI / 180.0) + 1) * 127;
-
     color.r = brightness + (color.r - brightness) * saturation / 255.0;
     color.g = brightness + (color.g - brightness) * saturation / 255.0;
     color.b = brightness + (color.b - brightness) * saturation / 255.0;
-
     color.r *= brightness / 255.0;
     color.g *= brightness / 255.0;
     color.b *= brightness / 255.0;
+    color.a = opacity;
     return color;
 }
 
