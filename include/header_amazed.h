@@ -12,6 +12,7 @@
     #include <stdlib.h>
     #include <unistd.h>
     #include <fcntl.h>
+    #include <stdio.h>
 
     //defines :
     #define SUCCESS 0
@@ -42,6 +43,5 @@ char *my_strrchr(const char *str, int c);
 
 // --- my_strtok.c ---
 char *my_strtok(char *str, char const *delim);
-
 
 #endif /* AMAZED_H */

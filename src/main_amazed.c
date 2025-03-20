@@ -4,9 +4,9 @@
 ** File description:
 ** the main file for the amazed project.
 */
-#include "../include/header_amazed.h"
+#include "../include/struct.h"
 
-int main(int argc, char *argv[])
+int main(int ac, char **av)
 {
     return SUCCESS;
 }
