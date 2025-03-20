@@ -26,11 +26,12 @@ typedef struct maze_s {
 } maze_t;
 
 // --- parse functions ---
-int parse_room(maze_t *maze, char *line, int *special);
+
+// ---Structure room initialisation---
 room_t *init_room(char *name, int x, int y);
+// ---Function to find the room's name---
 room_t *find_room_name(room_t *room, char *name);
+// ---Add a room in the structure
 void add_room(char *name, int x, int y, room_t **room);
-int link_counter(room_t *room);
-int add_link(room_t *link, room_t *to);
 
 #endif /* STRUCT_H */
