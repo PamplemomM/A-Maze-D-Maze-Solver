@@ -17,6 +17,7 @@
     //defines :
     #define SUCCESS 0
     #define ERROR 84
+    #define OMNIFREE(thing, dimension) omnifree((void **)thing, dimension)
 
 
 // ----------- LIB FUNCTIONS -----------

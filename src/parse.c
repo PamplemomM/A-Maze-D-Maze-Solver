@@ -118,5 +118,3 @@ int parse_room(maze_t *maze, char *line, int *special)
     handle_room(maze, name, special);
     return 1;
 }
-
-
