@@ -86,10 +86,10 @@ void hue_shift(void)
     GAME->hue += HUESHIFT;
     if (GAME->hue >= 360)
         GAME->hue -= 360;
-    while (sprite != NULL && i < DATA->robotcnt) {
+    while (sprite != NULL && i < MAZE->robotcnt) {
         tmp = strcmp(sprite->name, "P0");
         if (tmp > 0 && tmp < 10) {
-            sprite->color = color_from_hue(360 / DATA->robotcnt * i + GAME->hue, 255, 225, 255);
+            sprite->color = color_from_hue(360 / MAZE->robotcnt * i + GAME->hue, 255, 225, 255);
             i++;
         }
         sprite = sprite->next;
@@ -126,11 +126,11 @@ int main(int ac, char **av)
 {
     if (ac > 1 && strcmp(av[1], "-h") == 0)
         return usage_print();
-    if (read_data() == -1)
-        return 84;
+    if (read_maze() == ERROR)
+        return ERROR;
     srand(time(NULL));
-    DATA->robotcnt = diceroll(2, 10); // tmp
+    DATA->robotcnt = diceroll(2, 7); // tmp
     start();
-    destroy_data();
-    return 0;
+    free_maze(MAZE);
+    return SUCCESS;
 }

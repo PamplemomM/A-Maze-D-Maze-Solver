@@ -7,28 +7,17 @@
 
 #include "../include/header.h"
 
-data_t **get_data(void)
+maze_t **get_maze(void)
 {
-    static data_t *data = NULL;
+    static maze_t *maze = NULL;
 
-    return &data;
+    return &maze;
 }
 
-int read_data(void)
+int read_maze(void)
 {
-    DATA = malloc(sizeof(data_t));
-    if (DATA == NULL)
-        return -1;
-    DATA->robotcnt = 3;
-    DATA->rooms = NULL;
-    DATA->moves = NULL;
-    return 0;
-}
-
-void destroy_data(void)
-{
-    if (DATA == NULL)
-        return;
-    // to do
-    free(DATA);
+    MAZE = parse_maze();
+    if (MAZE == NULL)
+        return ERROR;
+    return SUCCESS;
 }

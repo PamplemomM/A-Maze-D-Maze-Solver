@@ -7,15 +7,20 @@
 
 #include "../include/header.h"
 
-static void gender_reveal(sprite_t *guy)
+static void gender_reveal(sprite_t *robot)
 {
     if (diceroll(0, 100) <= 8) {
-        guy->rect.left = 175;
-        guy->rect.width = 185;
+        robot->rect.left = 175;
+        robot->rect.width = 185;
     } else
-        guy->rect.width = 175;
-    sfSprite_setOrigin(guy->sprite,
-        (sfVector2f){guy->rect.width / 2.0, guy->rect.height / 2.0});
+        robot->rect.width = 175;
+}
+
+static void robot_tweaks(sprite_t *robot)
+{
+    //robot->scale = (sfVector2f){0.3, 0.3};
+    sfSprite_setOrigin(robot->sprite,
+        (sfVector2f){robot->rect.width / 2.0, robot->rect.height / 2.0});
 }
 
 static void *init_robots(void)
@@ -23,7 +28,7 @@ static void *init_robots(void)
     char *name;
     char *tmp;
 
-    for (int i = 1; i <= DATA->robotcnt; i++) {
+    for (int i = 1; i <= MAZE->robotcnt; i++) {
         name = malloc(sizeof(char) * (digitcount(i) + 2));
         if (name == NULL)
             return NULL;
@@ -33,11 +38,11 @@ static void *init_robots(void)
             return OMNIFREE(name, 1);
         strcpy(&name[1], tmp);
         OMNIFREE(tmp, 1);
-        make_sprite(name, "assets/guy.png", 150 + (i - 1)
-            * (500 / (DATA->robotcnt - 1)), 285);
+        make_sprite(name, "assets/guy.png", 150 + (i - 1) * (500 / (MAZE->robotcnt - 1)), 285); // fails if only 1 robot
         if (get_sprite(name) == NULL)
             return OMNIFREE(name, 1);
         gender_reveal(get_sprite(name));
+        robot_tweaks(get_sprite(name));
         OMNIFREE(name, 1);
     }
 }

@@ -16,10 +16,17 @@ game_t **get_gamestuff(void)
 
 int init_gamestuff(void)
 {
+    move_t *move = MAZE->moves;
+
     GAME = malloc(sizeof(game_t));
     if (GAME == NULL)
         return ERROR;
     GAME->hue = diceroll(0, 360);
+    GAME->nb_moves = 0;
+    while (move != NULL) {
+        GAME->nb_moves++;
+        move = move->next;
+    }
     return SUCCESS;
 }
 
