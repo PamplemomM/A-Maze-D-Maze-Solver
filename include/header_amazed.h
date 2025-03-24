@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** header_amazed.h
 ** File description:
-** The header for the RobotFactory project.
+** The header for the A-Maze-d project.
 */
 
 #ifndef AMAZED_H
@@ -14,11 +14,56 @@
     #include <fcntl.h>
     #include <stdio.h>
 
-    //defines :
+    // defines:
     #define SUCCESS 0
     #define ERROR 84
     #define OMNIFREE(thing, dimension) omnifree((void **)thing, dimension)
 
+// -------- A-MAZE-D STRUCTURES --------
+
+typedef struct room_s {
+    char *name;
+    int x;
+    int y;
+    struct room_s **links;
+    struct room_s *next;
+} room_t;
+
+typedef struct tunnel_s {
+    room_t *r1;
+    room_t *r2;
+    int val;
+    struct tunnel_s *next;
+} tunnel_t;
+
+typedef struct move_s {
+    char *robot;
+    room_t *dest;
+    struct move_s *next;
+} move_t;
+
+typedef struct maze_s {
+    int nb_robots;
+    room_t *rooms;
+    room_t *start;
+    room_t *end;
+    tunnel_t *tunnels;
+    move_t *moves;
+} maze_t;
+
+// --------- A-MAZE-D FUNCTIONS --------
+
+// --- parse_maze.c ---
+void free_maze(maze_t *maze);
+maze_t *parse_maze(void);
+
+// --- parse_room.c ---
+room_t *find_room_name(room_t *room, char *name);
+char *get_name(char *line, int *i, char const *separators);
+int parse_room(maze_t *maze, char *line, int *special);
+
+// --- parse_tunnel.c ---
+int parse_tunnel(maze_t *maze, char *line);
 
 // ----------- LIB FUNCTIONS -----------
 
