@@ -45,4 +45,7 @@ char *my_strrchr(const char *str, int c);
 // --- my_strtok.c ---
 char *my_strtok(char *str, char const *delim);
 
+// --- omnifree.c ---
+void *omnifree(void **thing, int dimension);
+
 #endif /* AMAZED_H */

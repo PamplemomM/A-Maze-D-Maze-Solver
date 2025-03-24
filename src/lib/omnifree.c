@@ -5,7 +5,7 @@
 ** Free anything.
 */
 
-#include "../include/header.h"
+#include "../../include/header_amazed.h"
 
 void *omnifree(void **thing, int dimension)
 {
