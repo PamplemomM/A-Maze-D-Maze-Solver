@@ -7,7 +7,15 @@
 #include "../include/struct.h"
 #include "../include/header_amazed.h"
 
-void print_rooms_rev(room_t *room, maze_t *maze)
+static void print_tunnels_rev(tunnel_t *tunnel)
+{
+    if (tunnel == NULL)
+        return;
+    print_tunnels_rev(tunnel->next);
+    mini_printf("%s-%s\n", tunnel->r1->name, tunnel->r2->name);
+}
+
+static void print_rooms_rev(room_t *room, maze_t *maze)
 {
     if (room == NULL)
         return;
@@ -26,6 +34,7 @@ void print_maze(maze_t *maze)
     mini_printf("#rooms\n");
     print_rooms_rev(maze->rooms, maze);
     mini_printf("#tunnels\n");
+    print_tunnels_rev(maze->tunnels);
     mini_printf("#moves\n");
 }
 
