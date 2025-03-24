@@ -23,6 +23,7 @@
 // ----------- LIB FUNCTIONS -----------
 
 // --- lib_c_functions.c ---
+int char_in_str(char ch, char const *str);
 int my_getnbr(char const *str);
 int mini_printf(const char *format, ...);
 

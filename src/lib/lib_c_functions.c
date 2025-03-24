@@ -7,6 +7,15 @@
 #include "../../include/header_amazed.h"
 #include <stdarg.h>
 
+int char_in_str(char ch, char const *str)
+{
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == ch)
+            return 1;
+    }
+    return 0;
+}
+
 int my_getnbr(char const *str)
 {
     int i = 0;
