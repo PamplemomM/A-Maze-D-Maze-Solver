@@ -2,31 +2,53 @@
 ** EPITECH PROJECT, 2025
 ** parse_maze.c
 ** File description:
-** te file for parsing the maze.
+** Input parsing and creation of the maze structure.
 */
-#include "../include/struct.h"
+
 #include "../include/header_amazed.h"
 
-void free_maze(maze_t *maze)
+static void free_rooms(room_t *room)
 {
-    room_t *current = maze->rooms;
-    tunnel_t *tunnel = maze->tunnels;
     void *tmp = NULL;
-    int i = 0;
 
-    while (current != NULL) {
-        tmp = current->next;
-        OMNIFREE(current->name, 1);
-        if (current->links != NULL)
-            OMNIFREE(current->links, 1);
-        OMNIFREE(current, 1);
-        current = tmp;
+    while (room != NULL) {
+        tmp = room->next;
+        OMNIFREE(room->name, 1);
+        if (room->links != NULL)
+            OMNIFREE(room->links, 1);
+        OMNIFREE(room, 1);
+        room = tmp;
     }
+}
+
+static void free_tunnels(tunnel_t *tunnel)
+{
+    void *tmp = NULL;
+
     while (tunnel != NULL) {
         tmp = tunnel->next;
         OMNIFREE(tunnel, 1);
         tunnel = tmp;
     }
+}
+
+static void free_moves(move_t *move)
+{
+    void *tmp = NULL;
+
+    while (move != NULL) {
+        tmp = move->next;
+        OMNIFREE(move->robot, 1);
+        OMNIFREE(move, 1);
+        move = tmp;
+    }
+}
+
+void free_maze(maze_t *maze)
+{
+    free_rooms(maze->rooms);
+    free_tunnels(maze->tunnels);
+    free_moves(maze->moves);
     OMNIFREE(maze, 1);
 }
 
@@ -56,6 +78,7 @@ static void nullify_maze(maze_t *maze)
     maze->start = NULL;
     maze->end = NULL;
     maze->tunnels = NULL;
+    maze->moves = NULL;
 }
 
 maze_t *parse_maze(void)

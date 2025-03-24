@@ -1,10 +1,10 @@
 /*
-** EPITECH PROJECT, 2024
+** EPITECH PROJECT, 2025
 ** main_amazed.c
 ** File description:
-** the main file for the amazed project.
+** Main file for the A-Maze-d project.
 */
-#include "../include/struct.h"
+
 #include "../include/header_amazed.h"
 
 static void print_tunnels_rev(tunnel_t *tunnel)

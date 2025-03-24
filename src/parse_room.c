@@ -1,11 +1,11 @@
 /*
-** EPITECH PROJECT, 2024
-** parse_room
+** EPITECH PROJECT, 2025
+** parse_room.c
 ** File description:
-** Parse a room.
+** Room parsing.
 */
 
-#include "../include/struct.h"
+#include "../include/header_amazed.h"
 
 static room_t *init_room(char *name, int x, int y)
 {

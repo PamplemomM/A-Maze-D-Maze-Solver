@@ -1,11 +1,11 @@
 /*
-** EPITECH PROJECT, 2024
-** parse_tunnel
+** EPITECH PROJECT, 2025
+** parse_tunnel.c
 ** File description:
-** Parse a tunnel.
+** Tunnel parsing.
 */
 
-#include "../include/struct.h"
+#include "../include/header_amazed.h"
 
 static int add_tunnel(room_t *r1, room_t *r2, tunnel_t **tunnels)
 {
