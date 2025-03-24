@@ -1,30 +1,13 @@
 /*
 ** EPITECH PROJECT, 2024
-** amazed
+** parse_room
 ** File description:
-** parse.c
+** Parse a room.
 */
 
 #include "../include/struct.h"
 
-void free_maze(maze_t *maze)
-{
-    room_t *current = maze->rooms;
-    room_t *tmp = NULL;
-    int i = 0;
-
-    while (current != NULL) {
-        tmp = current->next;
-        OMNIFREE(current->name, 1);
-        if (current->links != NULL)
-            OMNIFREE(current->links, 1);
-        OMNIFREE(current, 1);
-        current = tmp;
-    }
-    OMNIFREE(maze, 1);
-}
-
-room_t *init_room(char *name, int x, int y)
+static room_t *init_room(char *name, int x, int y)
 {
     room_t *room = malloc(sizeof(room_t));
 
@@ -44,6 +27,8 @@ room_t *find_room_name(room_t *room, char *name)
 {
     room_t *target_room = room;
 
+    if (name == NULL)
+        return NULL;
     while (target_room != NULL) {
         if (my_strcmp(target_room->name, name) == 0)
             return target_room;
@@ -52,21 +37,22 @@ room_t *find_room_name(room_t *room, char *name)
     return NULL;
 }
 
-void add_room(char *name, int x, int y, room_t **room)
+static int add_room(char *name, int x, int y, room_t **rooms)
 {
     room_t *new_room = init_room(name, x, y);
 
     if (new_room == NULL)
-        return;
-    new_room->next = *room;
-    *room = new_room;
+        return ERROR;
+    new_room->next = *rooms;
+    *rooms = new_room;
+    return SUCCESS;
 }
 
-static char *get_name(char *line, int *i)
+char *get_name(char *line, int *i, char const *separators)
 {
     char *name = NULL;
 
-    while (line[*i] != ' ' && line[*i] != '\0')
+    while (!char_in_str(line[*i], separators) && line[*i] != '\0')
         (*i)++;
     name = malloc(sizeof(char) * (*i + 1));
     if (name == NULL)
@@ -74,7 +60,7 @@ static char *get_name(char *line, int *i)
     for (int j = 0; j < *i; j++)
         name[j] = line[j];
     name[*i] = '\0';
-    while (line[*i] == ' ')
+    while (char_in_str(line[*i], separators) && line[*i] != '\0')
         (*i)++;
     return name;
 }
@@ -84,7 +70,7 @@ static int get_coords(char *line, int *i)
     int nbr = 0;
     int tmp = *i;
 
-    while (line[*i] >= '0' && line[*i] <= '9') { // line[*i] != ' ' && line[*i] != '\0' && line[*i] != '\n') {
+    while (line[*i] >= '0' && line[*i] <= '9') {
         nbr = nbr * 10 + line[*i] - '0';
         (*i)++;
     }
@@ -111,15 +97,16 @@ int parse_room(maze_t *maze, char *line, int *special)
     int y = 0;
     int i = 0;
 
-    name = get_name(line, &i);
+    name = get_name(line, &i, " ");
+    if (name == NULL)
+        return ERROR;
     x = get_coords(line, &i);
     y = get_coords(line, &i);
-    if (name == NULL || x == -1 || y == -1) {
+    if (x == -1 || y == -1 || add_room(name, x, y, &maze->rooms) == ERROR) {
         OMNIFREE(name, 1);
-        return 0;
+        return -1;
     }
-    add_room(name, x, y, &maze->rooms);
     handle_room(maze, name, special);
     OMNIFREE(name, 1);
-    return 1;
+    return SUCCESS;
 }
