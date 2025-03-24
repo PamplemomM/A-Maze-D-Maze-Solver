@@ -72,13 +72,19 @@ static int read_tunnel(char *line, maze_t *maze)
     return parse_tunnel(maze, line);
 }
 
-static void nullify_maze(maze_t *maze)
+static int setup_maze(maze_t *maze, char *line, size_t len)
 {
+    while (line[0] < '0' && line[0] > '9') {
+        if (getline(&line, &len, stdin) == -1)
+            return ERROR;
+    }
+    maze->nb_robots = my_getnbr(line);
     maze->rooms = NULL;
     maze->start = NULL;
     maze->end = NULL;
     maze->tunnels = NULL;
     maze->moves = NULL;
+    return SUCCESS;
 }
 
 maze_t *parse_maze(void)
@@ -91,8 +97,8 @@ maze_t *parse_maze(void)
         return NULL;
     if (getline(&line, &len, stdin) == -1)
         return OMNIFREE(maze, 1);
-    maze->nb_robots = my_getnbr(line);
-    nullify_maze(maze);
+    if (setup_maze(maze, line, len) == ERROR)
+        return OMNIFREE(maze, 1);
     while (getline(&line, &len, stdin) != -1) {
         if (read_room(line, maze) != SUCCESS)
             break;
