@@ -19,13 +19,20 @@ maze_t *parse_maze(void)
     if (getline(&line, &len, stdin) == -1)
         return OMNIFREE(maze, 1);
     maze->nb_robots = my_getnbr(line);
+    maze->rooms = NULL;
+    maze->start = NULL;
+    maze->end = NULL;
     while (getline(&line, &len, stdin) != -1) {     
         if (line[0] == '#' && my_strncmp(line, "##start", 7) == 0)
             end_or_start = 1;
         if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0)
             end_or_start = 2;
+        if (line[0] == '#')
+            continue;
         if (parse_room(maze, line, &end_or_start) == 0)
-            return NULL;
+            break;
     }
+    OMNIFREE(line, 1);
     return maze;
 }
+// Il reste juste à implémenter le parsing des tunnels entre les rooms

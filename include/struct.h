@@ -14,8 +14,8 @@ typedef struct room_s {
     char *name;
     int x;
     int y;
-    struct room **links;
-    struct room *next;
+    struct room_s **links;
+    struct room_s *next;
 } room_t;
 
 typedef struct maze_s {
@@ -26,7 +26,9 @@ typedef struct maze_s {
 } maze_t;
 
 // --- parse functions ---
-
+maze_t *parse_maze(void);
+int parse_room(maze_t *maze, char *line, int *special);
+void free_maze(maze_t *maze);
 // ---Structure room initialisation---
 room_t *init_room(char *name, int x, int y);
 // ---Function to find the room's name---

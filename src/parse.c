@@ -10,17 +10,18 @@
 void free_maze(maze_t *maze)
 {
     room_t *current = maze->rooms;
-    room_t *temp;
+    room_t *tmp = NULL;
+    int i = 0;
 
     while (current != NULL) {
-        temp = current;
-        current = current->next;
-        free(temp->name);
-        if (temp->links != NULL)
-            free(temp->links);
-        free(temp);
+        tmp = current->next;
+        OMNIFREE(current->name, 1);
+        if (current->links != NULL)
+            OMNIFREE(current->links, 1);
+        OMNIFREE(current, 1);
+        current = tmp;
     }
-    free(maze);
+    OMNIFREE(maze, 1);
 }
 
 room_t *init_room(char *name, int x, int y)
@@ -30,10 +31,8 @@ room_t *init_room(char *name, int x, int y)
     if (room == NULL)
         return NULL;
     room->name = my_strdup(name);
-    if (room->name == NULL) {
-        free(room);
-        return NULL;
-    }
+    if (room->name == NULL)
+        return OMNIFREE(room, 1);
     room->x = x;
     room->y = y;
     room->links = NULL;
@@ -63,34 +62,37 @@ void add_room(char *name, int x, int y, room_t **room)
     *room = new_room;
 }
 
-static void get_name(char *line, char *name, int *i)
+static char *get_name(char *line, int *i)
 {
-    int j = 0;
+    char *name = NULL;
 
-    while (line[*i] != ' ' && line[*i] != '\0') {
-        name[j] = line[(*i)];
-        j++;
+    while (line[*i] != ' ' && line[*i] != '\0')
         (*i)++;
-    }
-    name[j] = '\0';
+    name = malloc(sizeof(char) * (*i + 1));
+    if (name == NULL)
+        return NULL;
+    for (int j = 0; j < *i; j++)
+        name[j] = line[j];
+    name[*i] = '\0';
     while (line[*i] == ' ')
         (*i)++;
+    return name;
 }
 
 static int get_coords(char *line, int *i)
 {
-    char coord[100];
-    int j = 0;
+    int nbr = 0;
+    int tmp = *i;
 
-    while (line[*i] != ' ' && line[*i] != '\0' && line[*i] != '\n') {
-        coord[j] = line[(*i)];
-        j++;
+    while (line[*i] >= '0' && line[*i] <= '9') { // line[*i] != ' ' && line[*i] != '\0' && line[*i] != '\n') {
+        nbr = nbr * 10 + line[*i] - '0';
         (*i)++;
     }
-    coord[j] = '\0';
+    if (tmp == *i)
+        return -1;
     while (line[*i] == ' ')
         (*i)++;
-    return my_getnbr(coord);
+    return nbr;
 }
 
 static void handle_room(maze_t *maze, char *name, int *start_or_end)
@@ -104,17 +106,20 @@ static void handle_room(maze_t *maze, char *name, int *start_or_end)
 
 int parse_room(maze_t *maze, char *line, int *special)
 {
-    char *name = malloc(sizeof(char) * (my_strlen(line) + 1));
+    char *name = NULL;
     int x = 0;
     int y = 0;
     int i = 0;
 
-    get_name(line, name, &i);
+    name = get_name(line, &i);
     x = get_coords(line, &i);
     y = get_coords(line, &i);
-    if (name[0] == '\0' || (x == 0 && y == 0))
+    if (name == NULL || x == -1 || y == -1) {
+        OMNIFREE(name, 1);
         return 0;
-    add_room(&maze->rooms, name, x, y);
+    }
+    add_room(name, x, y, &maze->rooms);
     handle_room(maze, name, special);
+    OMNIFREE(name, 1);
     return 1;
 }
