@@ -17,7 +17,7 @@
     // defines:
     #define SUCCESS 0
     #define ERROR 84
-    #define OMNIFREE(thing, dimension) omnifree((void **)thing, dimension)
+    #define OMNIFREE(thing, dimension) omnifree((void ***)&thing, dimension)
 
 // -------- A-MAZE-D STRUCTURES --------
 
@@ -93,6 +93,6 @@ char *my_strrchr(const char *str, int c);
 char *my_strtok(char *str, char const *delim);
 
 // --- omnifree.c ---
-void *omnifree(void **thing, int dimension);
+void *omnifree(void ***thing, int dimension);
 
 #endif /* AMAZED_H */

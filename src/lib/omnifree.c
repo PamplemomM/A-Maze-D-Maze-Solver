@@ -7,14 +7,15 @@
 
 #include "../../include/header_amazed.h"
 
-void *omnifree(void **thing, int dimension)
+void *omnifree(void ***thing, int dimension)
 {
-    if (thing == NULL)
+    if (*thing == NULL)
         return NULL;
     if (dimension > 1) {
-        for (int i = 0; thing[i] != NULL; i++)
-            omnifree((void **)thing[i], dimension - 1);
+        for (int i = 0; (*thing)[i] != NULL; i++)
+            omnifree((void ***)&(*thing)[i], dimension - 1);
     }
-    free(thing);
+    free(*thing);
+    *thing = NULL;
     return NULL;
 }
