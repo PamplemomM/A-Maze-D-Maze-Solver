@@ -58,10 +58,11 @@ typedef struct maze_s {
 void free_maze(maze_t **maze);
 
 // --- parse_maze.c ---
+tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze);
 maze_t *parse_maze(void);
 
 // --- parse_room.c ---
-room_t *find_room_name(room_t *room, char *name);
+room_t *get_room(char *name, maze_t *maze);
 char *get_name(char *line, int *i, char const *separators);
 int parse_room(maze_t *maze, char *line, int *special);
 

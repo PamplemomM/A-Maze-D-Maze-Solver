@@ -23,16 +23,16 @@ static room_t *init_room(char *name, int x, int y)
     return room;
 }
 
-room_t *find_room_name(room_t *room, char *name)
+room_t *get_room(char *name, maze_t *maze)
 {
-    room_t *target_room = room;
+    room_t *room = maze->rooms;
 
     if (name == NULL)
         return NULL;
-    while (target_room != NULL) {
-        if (my_strcmp(target_room->name, name) == 0)
-            return target_room;
-        target_room = target_room->next;
+    while (room != NULL) {
+        if (my_strcmp(room->name, name) == 0)
+            return room;
+        room = room->next;
     }
     return NULL;
 }
@@ -84,9 +84,9 @@ static int get_coords(char *line, int *i)
 static void handle_room(maze_t *maze, char *name, int *start_or_end)
 {
     if (*start_or_end == 1)
-        maze->start = find_room_name(maze->rooms, name);
+        maze->start = get_room(name, maze);
     else if (*start_or_end == 2)
-        maze->end = find_room_name(maze->rooms, name);
+        maze->end = get_room(name, maze);
     *start_or_end = 0;
 }
 

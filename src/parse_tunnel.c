@@ -15,7 +15,7 @@ static int add_tunnel(room_t *r1, room_t *r2, tunnel_t **tunnels)
         return ERROR;
     newtunnel->r1 = r1;
     newtunnel->r2 = r2;
-    newtunnel->val = 1;
+    newtunnel->val = 0;
     newtunnel->next = *tunnels;
     *tunnels = newtunnel;
     return SUCCESS;
@@ -51,8 +51,8 @@ int parse_tunnel(maze_t *maze, char *line)
     int j = 0;
     char *name1 = get_name(line, &i, " -\n");
     char *name2 = get_name(&line[i], &j, " -\n");
-    room_t *r1 = find_room_name(maze->rooms, name1);
-    room_t *r2 = find_room_name(maze->rooms, name2);
+    room_t *r1 = get_room(name1, maze);
+    room_t *r2 = get_room(name2, maze);
 
     OMNIFREE(name1, 1);
     OMNIFREE(name2, 1);
