@@ -71,6 +71,9 @@ typedef struct maze_s {
 // --- free_maze.c ---
 void free_maze(maze_t **maze);
 
+
+// --------- PARSING FOLDER ---------
+
 // --- parse_maze.c ---
 tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze);
 maze_t *parse_maze(case_t cs);
@@ -82,6 +85,9 @@ int parse_room(maze_t *maze, char *line, int *special);
 
 // --- parse_tunnel.c ---
 int parse_tunnel(maze_t *maze, char *line);
+
+
+// --------- PATH_FINDING FOLDER ---------
 
 // --- find_moves.c ---
 move_t *find_moves(maze_t *maze, int current_id);
