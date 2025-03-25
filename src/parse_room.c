@@ -7,22 +7,6 @@
 
 #include "../include/header_amazed.h"
 
-static room_t *init_room(char *name, int x, int y)
-{
-    room_t *room = malloc(sizeof(room_t));
-
-    if (room == NULL)
-        return NULL;
-    room->name = my_strdup(name);
-    if (room->name == NULL)
-        return OMNIFREE(room, 1);
-    room->x = x;
-    room->y = y;
-    room->links = NULL;
-    room->next = NULL;
-    return room;
-}
-
 room_t *get_room(char *name, maze_t *maze)
 {
     room_t *room = maze->rooms;
@@ -37,14 +21,27 @@ room_t *get_room(char *name, maze_t *maze)
     return NULL;
 }
 
-static int add_room(char *name, int x, int y, room_t **rooms)
+static int add_room(char *name, int x, int y, maze_t *maze)
 {
-    room_t *new_room = init_room(name, x, y);
+    room_t *room = get_room(name, maze);
 
-    if (new_room == NULL)
+    if (room != NULL)
         return ERROR;
-    new_room->next = *rooms;
-    *rooms = new_room;
+    else {
+        room = malloc(sizeof(room_t));
+        if (room == NULL)
+            return ERROR;
+    }
+    room->name = my_strdup(name);
+    if (room->name == NULL) {
+        OMNIFREE(room, 1);
+        return ERROR;
+    }
+    room->x = x;
+    room->y = y;
+    room->links = NULL;
+    room->next = maze->rooms;
+    maze->rooms = room;
     return SUCCESS;
 }
 
@@ -102,7 +99,7 @@ int parse_room(maze_t *maze, char *line, int *special)
         return ERROR;
     x = get_coords(line, &i);
     y = get_coords(line, &i);
-    if (x == -1 || y == -1 || add_room(name, x, y, &maze->rooms) == ERROR) {
+    if (x == -1 || y == -1 || add_room(name, x, y, maze) == ERROR) {
         OMNIFREE(name, 1);
         return -1;
     }
