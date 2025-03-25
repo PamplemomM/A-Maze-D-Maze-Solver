@@ -83,7 +83,7 @@ static int read_tunnel(char *line, maze_t **maze, case_t cs)
     if (line[0] == '#')
         return SUCCESS;
     if (parse_tunnel(*maze, line) == ERROR) {
-        if (cs == VIEWER)
+        if (cs == MAIN)
             free_maze(maze);
         return ERROR;
     }
