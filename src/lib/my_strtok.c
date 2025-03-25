@@ -10,11 +10,11 @@ static int is_delimiter(char c, const char *delim)
 {
     char *d = (char *)delim;
 
-    for (d; *d != '\0'; d++) {
-        if (c == *d) {
+    for (int i = 0; d[i] != '\0'; i++) {
+        if (c == d[i]) {
             return 1;
         }
-        d = (char *)delim;
+        d[i] = (char *)delim;
     }
     return SUCCESS;
 }
