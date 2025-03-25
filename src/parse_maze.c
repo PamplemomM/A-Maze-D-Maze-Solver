@@ -7,53 +7,32 @@
 
 #include "../include/header_amazed.h"
 
-static void free_rooms(room_t *room)
+static int check_possible_path(room_t *r1, room_t *r2)
 {
-    void *tmp = NULL;
-
-    while (room != NULL) {
-        tmp = room->next;
-        OMNIFREE(room->name, 1);
-        if (room->links != NULL)
-            OMNIFREE(room->links, 1);
-        OMNIFREE(room, 1);
-        room = tmp;
+    if (r1 == NULL || r2 == NULL)
+        return ERROR;
+    if (r1 == r2)
+        return SUCCESS;
+    if (r1->links == NULL)
+        return ERROR;
+    for (int i = 0; r1->links[i] != NULL; i++) {
+        if (check_possible_path(r1->links[i], r2) == SUCCESS)
+            return SUCCESS;
     }
+    return ERROR;
 }
 
-static void free_tunnels(tunnel_t *tunnel)
+static int check_valid_maze(maze_t *maze)
 {
-    void *tmp = NULL;
-
-    while (tunnel != NULL) {
-        tmp = tunnel->next;
-        OMNIFREE(tunnel, 1);
-        tunnel = tmp;
-    }
+    if (maze == NULL || maze->nb_robots <= 0 || maze->tunnels == NULL)
+        return ERROR;
+    if (check_possible_path(maze->start, maze->end) == ERROR)
+        return ERROR;
+    return SUCCESS;
 }
 
-static void free_moves(move_t *move)
-{
-    void *tmp = NULL;
-
-    while (move != NULL) {
-        tmp = move->next;
-        OMNIFREE(move->robot, 1);
-        OMNIFREE(move, 1);
-        move = tmp;
-    }
-}
-
-void free_maze(maze_t **maze)
-{
-    if (*maze == NULL)
-        return;
-    free_rooms((*maze)->rooms);
-    free_tunnels((*maze)->tunnels);
-    free_moves((*maze)->moves);
-    OMNIFREE(*maze, 1);
-}
-
+// to check for multiple SUCCESSIVE '##start' or '##end' markers,
+// check if 'end_or_start' is different than 0 when finding one.
 static int read_room(char *line, maze_t **maze)
 {
     static int end_or_start = 0;
@@ -120,5 +99,7 @@ maze_t *parse_maze(void)
             break;
     } while (getline(&line, &len, stdin) != -1);
     OMNIFREE(line, 1);
+    if (check_valid_maze(maze) == ERROR)
+        free_maze(&maze);
     return maze;
 }
