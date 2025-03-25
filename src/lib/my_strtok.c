@@ -14,7 +14,7 @@ static int is_delimiter(char c, const char *delim)
         if (c == d[i]) {
             return 1;
         }
-        d[i] = (char *)delim;
+        d = (char *)delim;
     }
     return SUCCESS;
 }
