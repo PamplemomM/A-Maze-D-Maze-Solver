@@ -7,8 +7,24 @@
 
 #include "../include/header_amazed.h"
 
-static int check_possible_path(room_t *r1, room_t *r2)
+tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze)
 {
+    tunnel_t *tunnel = maze->tunnels;
+
+    if (r1 == NULL || r2 == NULL)
+        return NULL;
+    while (tunnel != NULL) {
+        if (tunnel->r1 == r1 && tunnel->r2 == r2)
+            return tunnel;
+        tunnel = tunnel->next;
+    }
+    return NULL;
+}
+
+static int check_possible_path(room_t *r1, room_t *r2, maze_t *maze)
+{
+    tunnel_t *tunnel = NULL;
+
     if (r1 == NULL || r2 == NULL)
         return ERROR;
     if (r1 == r2)
@@ -16,7 +32,12 @@ static int check_possible_path(room_t *r1, room_t *r2)
     if (r1->links == NULL)
         return ERROR;
     for (int i = 0; r1->links[i] != NULL; i++) {
-        if (check_possible_path(r1->links[i], r2) == SUCCESS)
+        tunnel = get_tunnel(r1, r1->links[i], maze);
+        if (tunnel != NULL && tunnel->val != 0)
+            continue;
+        if (tunnel != NULL)
+            tunnel->val++;
+        if (check_possible_path(r1->links[i], r2, maze) == SUCCESS)
             return SUCCESS;
     }
     return ERROR;
@@ -26,7 +47,7 @@ static int check_valid_maze(maze_t *maze)
 {
     if (maze == NULL || maze->nb_robots <= 0 || maze->tunnels == NULL)
         return ERROR;
-    if (check_possible_path(maze->start, maze->end) == ERROR)
+    if (check_possible_path(maze->start, maze->end, maze) == ERROR)
         return ERROR;
     return SUCCESS;
 }
