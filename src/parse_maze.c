@@ -53,19 +53,17 @@ static int check_valid_maze(maze_t *maze)
     return SUCCESS;
 }
 
-// to check for multiple SUCCESSIVE '##start' or '##end' markers,
-// check if 'end_or_start' is different than 0 when finding one.
 static int read_room(char *line, maze_t **maze)
 {
     static int end_or_start = 0;
 
     if (line[0] == '#' && my_strncmp(line, "##start", 7) == 0) {
-        if (*maze != NULL && (*maze)->start != NULL)
+        if ((*maze != NULL && (*maze)->start != NULL) || end_or_start != 0)
             free_maze(maze);
         end_or_start = 1;
     }
     if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0) {
-        if (*maze != NULL && (*maze)->end != NULL)
+        if ((*maze != NULL && (*maze)->end != NULL) || end_or_start != 0)
             free_maze(maze);
         end_or_start = 2;
     }
