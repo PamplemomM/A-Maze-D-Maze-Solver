@@ -37,6 +37,12 @@ typedef struct room_s {
     struct room_s *next;
 } room_t;
 
+typedef struct path_s {
+    room_t *room;
+    struct path_s *next;
+} path_t;
+
+
 typedef struct tunnel_s {
     room_t *r1;
     room_t *r2;
@@ -77,9 +83,14 @@ int parse_room(maze_t *maze, char *line, int *special);
 // --- parse_tunnel.c ---
 int parse_tunnel(maze_t *maze, char *line);
 
+// --- find_moves.c ---
+move_t *find_moves(maze_t *maze, int current_id);
+
 // --- solve_maze.c ---
+move_t *add_new_move(move_t **list, int id, int robot, room_t *dest);
 int solve_maze(maze_t *maze);
 int find_solved_maze(maze_t *maze);
+void free_move_list(move_t *move_list);
 
 // ----------- LIB FUNCTIONS -----------
 

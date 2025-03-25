@@ -12,7 +12,7 @@ int solve_maze(maze_t *maze)
     return SUCCESS;
 }
 
-int find_robot_move(room_t *current, maze_t *maze, int robot)
+static int find_robot_move(room_t *current, maze_t *maze, int robot)
 {
     tunnel_t *tunnel = NULL;
 
@@ -38,4 +38,43 @@ int find_solved_maze(maze_t *maze)
         find_robot_move(maze->start, maze, i);
     }
     return SUCCESS;
+}
+
+move_t *add_new_move(move_t **list, int id, int robot, room_t *dest)
+{
+    move_t *new_move = NULL;
+
+    if (list == NULL || dest == NULL)
+        return NULL;
+    new_move = malloc(sizeof(move_t));
+    if (new_move == NULL)
+        return NULL;
+    new_move->id = id;
+    new_move->robot = robot;
+    new_move->dest = dest;
+    new_move->next = *list;
+    *list = new_move;
+    return new_move;
+}
+
+int detect_moves(maze_t *maze)
+{
+    move_t *moves = NULL;
+    int id = 0;
+
+    if (maze == NULL)
+        return ERROR;
+    moves = find_moves(maze, id);
+    return SUCCESS;
+}
+
+void free_move_list(move_t *move_list)
+{
+    move_t *temp = NULL;
+
+    while (move_list != NULL) {
+        temp = move_list;
+        move_list = move_list->next;
+        free(temp);
+    }
 }
