@@ -41,7 +41,7 @@ static int my_putstr(char const *str)
 {
     int i = 0;
 
-    for (int i = 0; str[i] != '\0'; i++) {
+    for (i = 0; str[i] != '\0'; i++) {
         write(1, &str[i], 1);
     }
     return i;

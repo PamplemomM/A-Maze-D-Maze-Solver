@@ -40,7 +40,7 @@ void print_maze(maze_t *maze)
     mini_printf("#moves\n");
 }
 
-int main(int ac, char **av)
+int main(void)
 {
     maze_t *maze = parse_maze();
 

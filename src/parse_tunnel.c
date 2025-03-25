@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** parse_tunnel.c
 ** File description:
-** Tunnel parsing.
+** Parsing of Tunnels.
 */
 
 #include "../include/header_amazed.h"

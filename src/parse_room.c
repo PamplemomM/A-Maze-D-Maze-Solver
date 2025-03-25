@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** parse_room.c
 ** File description:
-** Room parsing.
+** Parsing of Rooms.
 */
 
 #include "../include/header_amazed.h"
