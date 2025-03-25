@@ -92,18 +92,6 @@ char *my_strcpy(char *dest, char const *src);
 int my_strcmp(char const *s1, char const *s2);
 int my_strncmp(char const *s1, char const *s2, int n);
 
-// --- my_str_to_word_array.c ---
-char **my_str_to_word_array(char *str);
-void free_word_array(char **wa);
-int my_print_wa(char **wa);
-
-// --- my_strchr.c ---
-char *my_strchr(char const *str, int c);
-char *my_strrchr(const char *str, int c);
-
-// --- my_strtok.c ---
-char *my_strtok(char *str, char const *delim);
-
 // --- omnifree.c ---
 void *omnifree(void ***thing, int dimension);
 
