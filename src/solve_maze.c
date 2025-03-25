@@ -12,7 +12,7 @@ int solve_maze(maze_t *maze)
     return SUCCESS;
 }
 
-int find_solved_maze(room_t *current, maze_t *maze)
+int find_robot_move(room_t *current, maze_t *maze)
 {
     tunnel_t *tunnel = NULL;
 
@@ -25,8 +25,14 @@ int find_solved_maze(room_t *current, maze_t *maze)
         if (tunnel->val == 1) {
             tunnel->val = 1;
             mini_printf("P%d-%s\n", 1, current->links[i]->name);
-            find_solved_maze(current->next, maze);
+            find_robot_move(current->next, maze);
         }
     }
+    return SUCCESS;
+}
+
+int find_solved_maze(maze_t *maze)
+{
+    find_robot_move(maze->start, maze);
     return SUCCESS;
 }
