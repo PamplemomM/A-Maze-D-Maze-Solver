@@ -63,7 +63,8 @@ static int read_room(char *line, maze_t **maze)
         end_or_start = 1;
     }
     if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0) {
-        if ((*maze != NULL && (*maze)->end != NULL) || end_or_start != 0)
+        if ((*maze != NULL && ((*maze)->end != NULL || (*maze)->start == NULL))
+            || end_or_start != 0)
             free_maze(maze);
         end_or_start = 2;
     }
