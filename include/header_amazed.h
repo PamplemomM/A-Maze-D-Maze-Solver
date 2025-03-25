@@ -21,6 +21,11 @@
 
 // -------- A-MAZE-D STRUCTURES --------
 
+typedef enum {
+    MAIN,
+    VIEWER
+} case_t;
+
 typedef struct room_s {
     char *name;
     int x;
