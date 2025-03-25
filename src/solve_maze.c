@@ -32,6 +32,8 @@ int find_robot_move(room_t *current, maze_t *maze, int robot)
 
 int find_solved_maze(maze_t *maze)
 {
+    if (maze == NULL)
+        return ERROR;
     for (int i = 1; i <= maze->nb_robots; i++) {
         find_robot_move(maze->start, maze, i);
     }
