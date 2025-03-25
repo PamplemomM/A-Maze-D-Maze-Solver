@@ -11,9 +11,9 @@ int char_in_str(char ch, char const *str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == ch)
-            return 1;
+            return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 int my_getnbr(char const *str)
@@ -23,7 +23,7 @@ int my_getnbr(char const *str)
     int is_neg = 1;
 
     if (str == NULL)
-        return 0;
+        return FALSE;
     while (str[i] != '\0' && !(str[i] >= '0' && str[i] <= '9')) {
         if (str[i] == '-') {
             is_neg *= -1;
@@ -100,5 +100,5 @@ int mini_printf(const char *format, ...)
         }
     }
     va_end(arg);
-    return 1;
+    return TRUE;
 }
