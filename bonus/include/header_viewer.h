@@ -16,30 +16,53 @@
     #define SDFREE(format, ...) salade_de_free(format, __VA_ARGS__)
     #define GAME (*get_gamestuff())
     #define MAZE (*get_maze())
-
     #define HUESHIFT 0.5
+
+// --------- VIEWER STRUCTURES ---------
+
+typedef struct vwr_robot_s {
+    struct vwr_robot_s *next;
+    int id;
+    sprite_t *sprite;
+    room_t *room;
+} vwr_robot_t; // robot structure for the viewer
 
 typedef struct game {
     float hue;
     int nb_moves;
-} game_t;
+} game_t; // miscellaneous data that needs to be globalized
 
-int init_assets(void);
-void destroy_assets(void);
+// --------- VIEWER FUNCTIONS ----------
 
+// --- amazed_data.c ---
+maze_t **get_maze(void);
+int read_maze(void);
+
+// --- gamestuff.c ---
 game_t **get_gamestuff(void);
 int init_gamestuff(void);
 void destroy_gamestuff(void);
 
-maze_t **get_maze(void);
-int read_maze(void);
+// --- init_assets.c ---
+int init_assets(void);
+void destroy_assets(void);
 
+// --- robots_list.c ---
+vwr_robot_t **get_robotlist(void);
+vwr_robot_t *get_robot(int id);
+vwr_robot_t *make_robot(int id);
+void free_robot(vwr_robot_t *robot);
+
+// --- tools.c ---
 sfColor color_from_hue(float hue, float brightness,
     float saturation, float opacity);
 int diceroll(int low, int high);
 int digitcount(int nbr);
 char *int_to_str(int nbr);
 
+// ----------- LIB FUNCTIONS -----------
+
+// --- salade_de_free.c ---
 void *salade_de_free(char const *format, ...);
 
 #endif /* AMAZEDVIS_H */

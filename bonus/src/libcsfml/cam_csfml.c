@@ -46,5 +46,5 @@ void destroy_cam(void)
     if (CAM == NULL)
         return;
     sfView_destroy(CAM->view);
-    free(CAM);
+    OMNIFREE(CAM, 1);
 }

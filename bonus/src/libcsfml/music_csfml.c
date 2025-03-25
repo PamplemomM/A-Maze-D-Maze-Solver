@@ -20,18 +20,20 @@ music_t *play_music(char *name, char const *file, float volume, float pitch)
 
     if (music == NULL) {
         music = malloc(sizeof(music_t));
+        if (music == NULL)
+            return NULL;
         *get_music() = music;
     } else
         sfMusic_destroy(music->music);
-    if (music == NULL)
-        return NULL;
     music->name = strdup(name);
+    if (music->name == NULL)
+        return OMNIFREE(music, 1);
     music->music = sfMusic_createFromFile(file);
     music->time = 0.0;
     music->volume = volume;
     music->pitch = pitch;
-    update_music();
     sfMusic_play(music->music);
+    update_music();
     return music;
 }
 
@@ -54,7 +56,6 @@ void destroy_music(void)
     if (music == NULL)
         return;
     sfMusic_destroy(music->music);
-    free(music->name);
-    free(music);
-    *get_music() = NULL;
+    OMNIFREE(music->name, 1);
+    OMNIFREE(music, 1);
 }

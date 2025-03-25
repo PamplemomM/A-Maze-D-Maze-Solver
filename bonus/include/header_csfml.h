@@ -2,12 +2,13 @@
 ** EPITECH PROJECT, 2025
 ** header_csfml
 ** File description:
-** Header for my csfml tools.
+** Header for my CSFML lib.
 */
 
 #ifndef CSFML_H
     #define CSFML_H
 
+    #include "../../include/header_amazed.h"
     #include <SFML/Graphics.h>
     #include <SFML/Audio.h>
     #include <SFML/System.h>
@@ -15,31 +16,41 @@
     #include <string.h>
     #include <math.h>
 
+    // defines:
     #define WINDOW *get_window()
     #define TIME get_time()
     #define CAM (*get_cam())
     #define KEYPRESS(key) sfKeyboard_isKeyPressed(key)
     #define MOUSEPRESS(button) sfMouse_isButtonPressed(button)
+    #define DESTROY(thing, list_func, free_func) destroy_thing((void *)thing, \
+        (void **(*)(void))(list_func), (void (*)(void *))(free_func))
 
     #define MIN(a, b) ((a) < (b) ? (a) : (b))
     #define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+// ------- CSFML LIB STRUCTURES --------
 
 typedef enum tween_methods {
     LINEAR,
     EASEIN,
     EASEOUT,
     EASEINOUT
-} method_t;
+} method_t; // tweening methods for the tween_t structure
 
-typedef struct camera {
+typedef struct camera_s {
     sfView *view;
     sfVector2f center;
     sfVector2f size;
     float zoom;
     float angle;
-} cam_t;
+} cam_t; // structure for a game camera
 
-typedef struct sprite {
+typedef struct linked_list_s {
+    struct linked_list_s *next;
+} linked_list_t; // generic linked list for destroy functions
+
+typedef struct sprite_s {
+    struct sprite_s *next;
     char *name;
     sfSprite *sprite;
     sfTexture *texture;
@@ -49,10 +60,10 @@ typedef struct sprite {
     sfColor color;
     sfIntRect rect;
     int draw;
-    struct sprite *next;
-} sprite_t;
+} sprite_t; // linked list for sprites
 
-typedef struct text {
+typedef struct text_s {
+    struct text_s *next;
     char *name;
     sfText *text;
     sfFont *font;
@@ -63,10 +74,10 @@ typedef struct text {
     float alpha;
     sfColor color;
     int draw;
-    struct text *next;
-} text_t;
+} text_t; // linked list for texts
 
-typedef struct tween {
+typedef struct tween_s {
+    struct tween_s *next;
     char *name;
     float *value;
     float start;
@@ -74,16 +85,18 @@ typedef struct tween {
     float tstart;
     float tend;
     method_t method;
-    struct tween *next;
-} tween_t;
+} tween_t; // linked list for tweens
+           // a tween is used to ease a value into a destination
 
-typedef struct timer {
+typedef struct timer_s {
+    struct timer_s *next;
     char *name;
+    float tstart;
     float tend;
-    struct timer *next;
-} timers_t;
+} timers_t; // linked list for timers
 
-typedef struct sound {
+typedef struct sound_s {
+    struct sound_s *next;
     char *name;
     sfSound *sound;
     sfSoundBuffer *buffer;
@@ -91,65 +104,77 @@ typedef struct sound {
     float volume;
     float pitch;
     sfSoundStatus status;
-    struct sound *next;
-} sound_t;
+} sound_t; // linked list for sounds
 
-typedef struct music {
+typedef struct music_s {
     char *name;
     sfMusic *music;
     float time;
     float volume;
     float pitch;
-} music_t;
+} music_t; // structure for music
 
+// -------- CSFML LIB FUNCTIONS --------
+
+// --- window_csfml.c ---
 sfRenderWindow **get_window(void);
 void create_window(unsigned int width, unsigned int height, char const *name);
 void destroy_window(void);
 
+// --- destroy_csfml.c ---
+void destroy_thing(void *element, void **(*list_func)(void),
+    void (*free_func)(void *));
+
+// --- cam_csfml.c ---
 cam_t **get_cam(void);
 cam_t *init_cam(void);
 void update_cam(void);
 void destroy_cam(void);
 
+// --- sprites_csfml.c ---
 sprite_t **get_spritelist(void);
 sprite_t *get_sprite(char const *name);
 sprite_t *make_sprite(char *name, char const *file, int x, int y);
 void draw_sprite(sprite_t *sprite);
-void destroy_sprite(sprite_t *sprite);
-
 void draw_allsprites(void);
+void free_sprite(sprite_t *sprite);
 
+// --- text_csfml.c ---
 text_t **get_textlist(void);
 text_t *get_text(char const *name);
 text_t *make_text(char *name, char *str, int x, int y);
 void draw_alltexts(void);
-void destroy_text(text_t *text);
+void free_text(text_t *text);
 
+// --- tweens_csfml.c ---
 tween_t **get_tweenlist(void);
 tween_t *get_tween(char const *name);
 void update_tweens(void);
 tween_t *make_tween(char *name, float *val, float dest, float dur);
-void destroy_tween(char const *name);
+void free_tween(tween_t *tween);
 
+// --- timers_csfml.c ---
 timers_t **get_timerlist(void);
 timers_t *get_timer(char const *name);
 timers_t *run_timer(char *name, float dur);
 void update_timers(void);
-void destroy_timer(char const *name);
+void free_timer(timers_t *timer);
 
-sound_t *make_sound(char *name, char const *file);
-
+// --- sounds_csfml.c ---
 sound_t **get_soundbank(void);
 sound_t *get_sound(char const *name);
+sound_t *load_sound(char *name, char const *file);
 sound_t *play_sound(char *name, float volume, float pitch);
 void update_sounds(void);
-void destroy_sound(sound_t *sound);
+void free_sound(sound_t *sound);
 
+// --- music_csfml.c ---
 music_t **get_music(void);
 music_t *play_music(char *name, char const *file, float volume, float pitch);
 void update_music(void);
 void destroy_music(void);
 
+// --- time_csfml.c ---
 sfClock **get_clock(void);
 float get_time(void);
 void destroy_clock(void);

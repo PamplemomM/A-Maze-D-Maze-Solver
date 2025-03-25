@@ -33,6 +33,8 @@ sprite_t *make_sprite(char *name, char const *file, int x, int y)
     if (sprite == NULL)
         return NULL;
     sprite->name = strdup(name);
+    if (sprite->name == NULL)
+        return OMNIFREE(sprite, 1);
     sprite->sprite = sfSprite_create();
     sprite->texture = sfTexture_createFromFile(file, NULL);
     sfSprite_setTexture(sprite->sprite, sprite->texture, sfTrue);
@@ -60,58 +62,20 @@ void draw_sprite(sprite_t *sprite)
     }
 }
 
-static void free_sprite(sprite_t *sprite)
+void draw_allsprites(void)
+{
+    sprite_t *sprite = *get_spritelist();
+
+    while (sprite != NULL) {
+        draw_sprite(sprite);
+        sprite = sprite->next;
+    }
+}
+
+void free_sprite(sprite_t *sprite)
 {
     sfSprite_destroy(sprite->sprite);
     sfTexture_destroy(sprite->texture);
-    free(sprite->name);
-    free(sprite);
-}
-
-static void destroy_firstsprite(void)
-{
-    sprite_t *next = NULL;
-
-    if (*get_spritelist() == NULL)
-        return;
-    next = (*get_spritelist())->next;
-    free_sprite(*get_spritelist());
-    *get_spritelist() = next;
-}
-
-static void destroy_lastsprite(void)
-{
-    sprite_t *list = *get_spritelist();
-
-    if (list->next == NULL) {
-        free_sprite(*get_spritelist());
-        return;
-    }
-    while (list->next->next != NULL)
-        list = list->next;
-    free_sprite(list->next);
-    list->next = NULL;
-}
-
-void destroy_sprite(sprite_t *sprite)
-{
-    sprite_t *list = *get_spritelist();
-    sprite_t *tmp = NULL;
-
-    if (strcmp(list->name, sprite->name) == 0) {
-        destroy_firstsprite();
-        return;
-    }
-    while (list->next != NULL) {
-        if (strcmp(list->next->name, sprite->name) == 0)
-            break;
-        list = list->next;
-    }
-    if (list->next == NULL) {
-        destroy_lastsprite();
-        return;
-    }
-    tmp = list->next;
-    list->next = tmp->next;
-    free_sprite(tmp);
+    OMNIFREE(sprite->name, 1);
+    OMNIFREE(sprite, 1);
 }

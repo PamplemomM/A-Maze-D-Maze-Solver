@@ -26,6 +26,29 @@ tween_t *get_tween(char const *name)
     return NULL;
 }
 
+tween_t *make_tween(char *name, float *val, float dest, float dur)
+{
+    tween_t *tween = get_tween(name);
+
+    if (tween == NULL) {
+        tween = malloc(sizeof(tween_t));
+        if (tween == NULL)
+            return NULL;
+        tween->name = strdup(name);
+        if (tween->name == NULL)
+            return OMNIFREE(tween, 1);
+        tween->next = *get_tweenlist();
+        *get_tweenlist() = tween;
+    }
+    tween->value = val;
+    tween->start = *val;
+    tween->dest = dest;
+    tween->tstart = TIME;
+    tween->tend = TIME + dur;
+    tween->method = LINEAR;
+    return tween;
+}
+
 static void do_tween(tween_t *tween, method_t method)
 {
     float *val = tween->value;
@@ -60,82 +83,14 @@ void update_tweens(void)
         do_tween(tween, tween->method);
         if (TIME >= tween->tend) {
             *tween->value = tween->dest;
-            destroy_tween(tween->name);
+            DESTROY(tween, get_tweenlist, free_tween);
         }
         tween = tmp;
     }
 }
 
-tween_t *make_tween(char *name, float *val, float dest, float dur)
+void free_tween(tween_t *tween)
 {
-    tween_t *tween = malloc(sizeof(tween_t));
-
-    if (tween == NULL)
-        return NULL;
-    if (get_tween(name) != NULL)
-        destroy_tween(name);
-    tween->name = strdup(name);
-    tween->value = val;
-    tween->start = *val;
-    tween->dest = dest;
-    tween->tstart = TIME;
-    tween->tend = TIME + dur;
-    tween->method = LINEAR;
-    tween->next = *get_tweenlist();
-    *get_tweenlist() = tween;
-    return tween;
-}
-
-static void free_tween(tween_t *tween)
-{
-    free(tween->name);
-    free(tween);
-}
-
-static void destroy_firsttween(void)
-{
-    tween_t *next = NULL;
-
-    if (*get_tweenlist() == NULL)
-        return;
-    next = (*get_tweenlist())->next;
-    free_tween(*get_tweenlist());
-    *get_tweenlist() = next;
-}
-
-static void destroy_lasttween(void)
-{
-    tween_t *list = *get_tweenlist();
-
-    if (list->next == NULL) {
-        free_tween(*get_tweenlist());
-        return;
-    }
-    while (list->next->next != NULL)
-        list = list->next;
-    free_tween(list->next);
-    list->next = NULL;
-}
-
-void destroy_tween(char const *name)
-{
-    tween_t *list = *get_tweenlist();
-    tween_t *tmp = NULL;
-
-    if (strcmp(list->name, name) == 0) {
-        destroy_firsttween();
-        return;
-    }
-    while (list->next != NULL) {
-        if (strcmp(list->next->name, name) == 0)
-            break;
-        list = list->next;
-    }
-    if (list->next == NULL) {
-        destroy_lasttween();
-        return;
-    }
-    tmp = list->next;
-    list->next = tmp->next;
-    free_tween(tmp);
+    OMNIFREE(tween->name, 1);
+    OMNIFREE(tween, 1);
 }

@@ -26,6 +26,25 @@ sound_t *get_sound(char const *name)
     return NULL;
 }
 
+sound_t *load_sound(char *name, char const *file)
+{
+    sound_t *sound = malloc(sizeof(sound_t));
+
+    if (sound == NULL)
+        return NULL;
+    sound->name = strdup(name);
+    if (sound->name == NULL)
+        return NULL;
+    sound->sound = sfSound_create();
+    sound->buffer = sfSoundBuffer_createFromFile(file);
+    sfSound_setBuffer(sound->sound, sound->buffer);
+    sound->volume = 0.0;
+    sound->pitch = 1.0;
+    sound->next = *get_soundbank();
+    *get_soundbank() = sound;
+    return sound;
+}
+
 sound_t *play_sound(char *name, float volume, float pitch)
 {
     sound_t *sound = get_sound(name);
@@ -54,58 +73,10 @@ void update_sounds(void)
     }
 }
 
-static void free_sound(sound_t *sound)
+void free_sound(sound_t *sound)
 {
     sfSound_destroy(sound->sound);
     sfSoundBuffer_destroy(sound->buffer);
-    free(sound->name);
-    free(sound);
-}
-
-static void destroy_firstsound(void)
-{
-    sound_t *next = NULL;
-
-    if (*get_soundbank() == NULL)
-        return;
-    next = (*get_soundbank())->next;
-    free_sound(*get_soundbank());
-    *get_soundbank() = next;
-}
-
-static void destroy_lastsound(void)
-{
-    sound_t *list = *get_soundbank();
-
-    if (list->next == NULL) {
-        free_sound(*get_soundbank());
-        return;
-    }
-    while (list->next->next != NULL)
-        list = list->next;
-    free_sound(list->next);
-    list->next = NULL;
-}
-
-void destroy_sound(sound_t *sound)
-{
-    sound_t *list = *get_soundbank();
-    sound_t *tmp = NULL;
-
-    if (strcmp(list->name, sound->name) == 0) {
-        destroy_firstsound();
-        return;
-    }
-    while (list->next != NULL) {
-        if (strcmp(list->next->name, sound->name) == 0)
-            break;
-        list = list->next;
-    }
-    if (list->next == NULL) {
-        destroy_lastsound();
-        return;
-    }
-    tmp = list->next;
-    list->next = tmp->next;
-    free_sound(tmp);
+    OMNIFREE(sound->name, 1);
+    OMNIFREE(sound, 1);
 }

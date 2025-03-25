@@ -7,49 +7,18 @@
 
 #include "../include/header_viewer.h"
 
-static void gender_reveal(sprite_t *robot)
+static int init_robots(void)
 {
-    if (diceroll(0, 100) <= 8) {
-        robot->rect.left = 175;
-        robot->rect.width = 185;
-    } else
-        robot->rect.width = 175;
-}
-
-static void robot_tweaks(sprite_t *robot)
-{
-    //robot->scale = (sfVector2f){0.3, 0.3};
-    sfSprite_setOrigin(robot->sprite,
-        (sfVector2f){robot->rect.width / 2.0, robot->rect.height / 2.0});
-}
-
-static void *init_robots(void)
-{
-    char *name;
-    char *tmp;
-
     for (int i = 1; i <= MAZE->nb_robots; i++) {
-        name = malloc(sizeof(char) * (digitcount(i) + 2));
-        if (name == NULL)
-            return NULL;
-        strcpy(name, "P");
-        tmp = int_to_str(i);
-        if (tmp == NULL)
-            return OMNIFREE(name, 1);
-        strcpy(&name[1], tmp);
-        OMNIFREE(tmp, 1);
-        make_sprite(name, "assets/guy.png", 150 + (i - 1) * (500 / (MAZE->nb_robots - 1)), 285); // fails if only 1 robot
-        if (get_sprite(name) == NULL)
-            return OMNIFREE(name, 1);
-        gender_reveal(get_sprite(name));
-        robot_tweaks(get_sprite(name));
-        OMNIFREE(name, 1);
+        if (make_robot(i) == NULL)
+            return ERROR;
     }
+    return SUCCESS;
 }
 
 static int init_sprites(void)
 {
-    if (init_robots() == NULL)
+    if (init_robots() == ERROR)
         return ERROR;
     make_sprite("bg", "assets/bg.png", -100, -50);
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
@@ -83,18 +52,20 @@ int init_assets(void)
 
 void destroy_assets(void)
 {
+    while (*get_robotlist())
+        DESTROY(*get_robotlist(), get_robotlist, free_robot);
     while (*get_spritelist())
-        destroy_sprite(*get_spritelist());
-    if (*get_textlist() != NULL)
+        DESTROY(*get_spritelist(), get_spritelist, free_sprite);
+    if (*get_textlist())
         sfFont_destroy((*get_textlist())->font);
     while (*get_textlist())
-        destroy_text(*get_textlist());
+        DESTROY(*get_textlist(), get_textlist, free_text);
     while (*get_tweenlist())
-        destroy_tween((*get_tweenlist())->name);
+        DESTROY(*get_tweenlist(), get_tweenlist, free_tween);
     while (*get_timerlist())
-        destroy_timer((*get_timerlist())->name);
+        DESTROY(*get_timerlist(), get_timerlist, free_timer);
     while (*get_soundbank())
-        destroy_sound(*get_soundbank());
+        DESTROY(*get_soundbank(), get_soundbank, free_sound);
     destroy_music();
     destroy_clock();
     destroy_window();
