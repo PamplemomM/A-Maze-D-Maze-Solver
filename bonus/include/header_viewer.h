@@ -8,7 +8,7 @@
 #ifndef AMAZEDVIS_H
     #define AMAZEDVIS_H
 
-    #include "../include/header_amazed.h"
+    #include "../../include/header_amazed.h"
     #include "header_csfml.h"
     #include <time.h>
 

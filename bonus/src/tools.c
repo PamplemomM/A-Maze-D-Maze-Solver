@@ -5,7 +5,7 @@
 ** Tool functions with awesome names.
 */
 
-#include "../include/header.h"
+#include "../include/header_viewer.h"
 
 sfColor color_from_hue(float hue, float brightness,
     float saturation, float opacity)
@@ -43,7 +43,7 @@ void play_random_sound(char *name, int range, float volume, float pitch)
     strcat(newname, "0");
     newname[strlen(name)] += pick;
     play_sound(newname, volume, pitch);
-    free(newname);
+    OMNIFREE(newname, 1);
 }
 
 void animate(sprite_t *sprite, int first, int last, int fps)

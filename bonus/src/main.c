@@ -5,7 +5,7 @@
 ** Main file for the A-Maze-d visualizer.
 */
 
-#include "../include/header.h"
+#include "../include/header_viewer.h"
 
 int usage_print(void)
 {
@@ -86,10 +86,10 @@ void hue_shift(void)
     GAME->hue += HUESHIFT;
     if (GAME->hue >= 360)
         GAME->hue -= 360;
-    while (sprite != NULL && i < MAZE->robotcnt) {
+    while (sprite != NULL && i < MAZE->nb_robots) {
         tmp = strcmp(sprite->name, "P0");
         if (tmp > 0 && tmp < 10) {
-            sprite->color = color_from_hue(360 / MAZE->robotcnt * i + GAME->hue, 255, 225, 255);
+            sprite->color = color_from_hue(360 / MAZE->nb_robots * i + GAME->hue, 255, 225, 255);
             i++;
         }
         sprite = sprite->next;
@@ -129,8 +129,8 @@ int main(int ac, char **av)
     if (read_maze() == ERROR)
         return ERROR;
     srand(time(NULL));
-    DATA->robotcnt = diceroll(2, 7); // tmp
+    MAZE->nb_robots = diceroll(2, 7); // tmp
     start();
-    free_maze(MAZE);
+    free_maze(&MAZE);
     return SUCCESS;
 }

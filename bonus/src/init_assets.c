@@ -5,7 +5,7 @@
 ** Functions to initialize the program's assets.
 */
 
-#include "../include/header.h"
+#include "../include/header_viewer.h"
 
 static void gender_reveal(sprite_t *robot)
 {
@@ -28,7 +28,7 @@ static void *init_robots(void)
     char *name;
     char *tmp;
 
-    for (int i = 1; i <= MAZE->robotcnt; i++) {
+    for (int i = 1; i <= MAZE->nb_robots; i++) {
         name = malloc(sizeof(char) * (digitcount(i) + 2));
         if (name == NULL)
             return NULL;
@@ -38,7 +38,7 @@ static void *init_robots(void)
             return OMNIFREE(name, 1);
         strcpy(&name[1], tmp);
         OMNIFREE(tmp, 1);
-        make_sprite(name, "assets/guy.png", 150 + (i - 1) * (500 / (MAZE->robotcnt - 1)), 285); // fails if only 1 robot
+        make_sprite(name, "assets/guy.png", 150 + (i - 1) * (500 / (MAZE->nb_robots - 1)), 285); // fails if only 1 robot
         if (get_sprite(name) == NULL)
             return OMNIFREE(name, 1);
         gender_reveal(get_sprite(name));

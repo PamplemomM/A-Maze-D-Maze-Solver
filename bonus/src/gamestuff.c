@@ -5,7 +5,7 @@
 ** Functions to manipulate the 'game_t' struct.
 */
 
-#include "../include/header.h"
+#include "../include/header_viewer.h"
 
 game_t **get_gamestuff(void)
 {
@@ -34,5 +34,5 @@ void destroy_gamestuff(void)
 {
     if (GAME == NULL)
         return;
-    free(GAME);
+    OMNIFREE(GAME, 1);
 }
