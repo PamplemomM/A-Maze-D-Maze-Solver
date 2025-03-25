@@ -12,7 +12,7 @@ static void print_tunnels_rev(tunnel_t *tunnel)
     if (tunnel == NULL)
         return;
     print_tunnels_rev(tunnel->next);
-    mini_printf("%s-%s\n", tunnel->r1->name, tunnel->r2->name);
+    PRINT("%s-%s\n", tunnel->r1->name, tunnel->r2->name);
 }
 
 static void print_rooms_rev(room_t *room, maze_t *maze)
@@ -24,7 +24,7 @@ static void print_rooms_rev(room_t *room, maze_t *maze)
         mini_printf("##start\n");
     if (room == maze->end)
         mini_printf("##end\n");
-    mini_printf("%s %d %d\n", room->name, room->x, room->y);
+    PRINT("%s %d %d\n", room->name, room->x, room->y);
 }
 
 void print_maze(maze_t *maze)
@@ -32,7 +32,7 @@ void print_maze(maze_t *maze)
     if (maze == NULL)
         return;
     mini_printf("#number_of_robots\n");
-    mini_printf("%d\n", maze->nb_robots);
+    PRINT("%d\n", maze->nb_robots);
     mini_printf("#rooms\n");
     print_rooms_rev(maze->rooms, maze);
     mini_printf("#tunnels\n");

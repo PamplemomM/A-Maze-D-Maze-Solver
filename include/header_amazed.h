@@ -18,6 +18,7 @@
     #define SUCCESS 0
     #define ERROR 84
     #define OMNIFREE(thing, dimension) omnifree((void ***)&thing, dimension)
+    #define PRINT(format, ...) mini_printf(format, __VA_ARGS__)
 
 // -------- A-MAZE-D STRUCTURES --------
 
