@@ -71,7 +71,7 @@ int parse_tunnel(maze_t *maze, char *line);
 
 // --- solve_maze.c ---
 int solve_maze(maze_t *maze);
-int find_solved_maze(maze_t *maze);
+int find_solved_maze(room_t *current, maze_t *maze);
 
 // ----------- LIB FUNCTIONS -----------
 

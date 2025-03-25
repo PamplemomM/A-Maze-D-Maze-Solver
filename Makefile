@@ -22,7 +22,7 @@ $(NAME)	:
 		gcc -o $(NAME) $(SRCS)
 
 val		:
-		gcc -o $(NAME) $(SRCS) $(CFLAGS)
+		gcc -o $(NAME) $(SRCS) $(CFLAGS) -g3
 
 tests_run:
 	gcc -o unit_tests $(SRCTEST) -Iinclude -lcriterion --coverage

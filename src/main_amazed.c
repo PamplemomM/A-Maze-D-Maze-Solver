@@ -45,6 +45,7 @@ int main(int ac, char **av)
     maze_t *maze = parse_maze();
 
     print_maze(maze);
+    find_solved_maze(maze->start, maze);
     free_maze(&maze);
     return SUCCESS;
 }
