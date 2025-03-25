@@ -12,3 +12,7 @@ int solve_maze(maze_t *maze)
     return SUCCESS;
 }
 
+int find_solved_maze(maze_t *maze)
+{
+    return SUCCESS;
+}
