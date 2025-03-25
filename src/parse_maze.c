@@ -33,12 +33,11 @@ static int check_possible_path(room_t *r1, room_t *r2, maze_t *maze)
         return ERROR;
     for (int i = 0; r1->links[i] != NULL; i++) {
         tunnel = get_tunnel(r1, r1->links[i], maze);
-        if (tunnel != NULL && tunnel->val != 0)
+        if (tunnel == NULL || tunnel->val == 0)
             continue;
-        if (tunnel != NULL)
-            tunnel->val++;
+        tunnel->val = 0;
         if (check_possible_path(r1->links[i], r2, maze) == SUCCESS) {
-            tunnel->val = 7;
+            tunnel->val = 1;
             return SUCCESS;
         }
     }

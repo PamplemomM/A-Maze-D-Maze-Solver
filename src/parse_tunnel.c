@@ -15,7 +15,7 @@ static int add_tunnel(room_t *r1, room_t *r2, tunnel_t **tunnels)
         return ERROR;
     newtunnel->r1 = r1;
     newtunnel->r2 = r2;
-    newtunnel->val = 0;
+    newtunnel->val = -1;
     newtunnel->next = *tunnels;
     *tunnels = newtunnel;
     return SUCCESS;
