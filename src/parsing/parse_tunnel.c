@@ -5,7 +5,7 @@
 ** Parsing of Tunnels.
 */
 
-#include "../include/header_amazed.h"
+#include "../../include/header_amazed.h"
 
 static int add_tunnel(room_t *r1, room_t *r2, tunnel_t **tunnels)
 {

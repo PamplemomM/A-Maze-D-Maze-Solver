@@ -5,7 +5,7 @@
 ** Solving algorithm of the maze structure.
 */
 
-#include "../include/header_amazed.h"
+#include "../../include/header_amazed.h"
 
 int solve_maze(maze_t *maze)
 {

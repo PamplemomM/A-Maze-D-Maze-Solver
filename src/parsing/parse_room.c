@@ -5,7 +5,7 @@
 ** Parsing of Rooms.
 */
 
-#include "../include/header_amazed.h"
+#include "../../include/header_amazed.h"
 
 room_t *get_room(char *name, maze_t *maze)
 {

@@ -5,7 +5,7 @@
 ** Input parsing and creation of the maze structure.
 */
 
-#include "../include/header_amazed.h"
+#include "../../include/header_amazed.h"
 
 tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze)
 {

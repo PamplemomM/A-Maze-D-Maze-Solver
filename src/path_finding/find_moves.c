@@ -5,7 +5,7 @@
 ** Find the best path of the maze.
 */
 
-#include "../include/header_amazed.h"
+#include "../../include/header_amazed.h"
 
 static path_t *add_path_node(path_t **path_list, room_t *room)
 {
