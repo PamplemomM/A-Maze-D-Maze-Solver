@@ -69,6 +69,9 @@ int parse_room(maze_t *maze, char *line, int *special);
 // --- parse_tunnel.c ---
 int parse_tunnel(maze_t *maze, char *line);
 
+// --- solve_maze.c ---
+int solve_maze(maze_t *maze);
+
 // ----------- LIB FUNCTIONS -----------
 
 // --- lib_c_functions.c ---
