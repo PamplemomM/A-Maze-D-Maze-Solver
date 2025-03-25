@@ -112,6 +112,7 @@ maze_t *parse_maze(case_t cs)
     char *line = NULL;
     size_t len = 0;
     maze_t *maze = malloc(sizeof(maze_t));
+    int retval = 0;
 
     if (maze == NULL || getline(&line, &len, stdin) == -1
         || setup_maze(maze, line, len) == ERROR)

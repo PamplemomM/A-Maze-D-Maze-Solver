@@ -42,7 +42,7 @@ void print_maze(maze_t *maze)
 
 int main(void)
 {
-    maze_t *maze = parse_maze();
+    maze_t *maze = parse_maze(MAIN);
 
     print_maze(maze);
     find_solved_maze(maze);
