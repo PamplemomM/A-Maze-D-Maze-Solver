@@ -38,7 +38,7 @@ typedef struct tunnel_s {
 
 typedef struct move_s {
     int id;
-    char *robot;
+    int robot;
     room_t *dest;
     struct move_s *next;
 } move_t;
