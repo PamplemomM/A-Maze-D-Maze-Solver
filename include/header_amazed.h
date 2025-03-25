@@ -64,7 +64,7 @@ void free_maze(maze_t **maze);
 
 // --- parse_maze.c ---
 tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze);
-maze_t *parse_maze(void);
+maze_t *parse_maze(case_t cs);
 
 // --- parse_room.c ---
 room_t *get_room(char *name, maze_t *maze);
