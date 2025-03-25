@@ -55,7 +55,7 @@ typedef struct maze_s {
 // --------- A-MAZE-D FUNCTIONS --------
 
 // --- parse_maze.c ---
-void free_maze(maze_t *maze);
+void free_maze(maze_t **maze);
 maze_t *parse_maze(void);
 
 // --- parse_room.c ---

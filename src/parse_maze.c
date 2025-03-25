@@ -44,29 +44,41 @@ static void free_moves(move_t *move)
     }
 }
 
-void free_maze(maze_t *maze)
+void free_maze(maze_t **maze)
 {
-    free_rooms(maze->rooms);
-    free_tunnels(maze->tunnels);
-    free_moves(maze->moves);
-    OMNIFREE(maze, 1);
+    if (*maze == NULL)
+        return;
+    free_rooms((*maze)->rooms);
+    free_tunnels((*maze)->tunnels);
+    free_moves((*maze)->moves);
+    OMNIFREE(*maze, 1);
 }
 
-static int read_room(char *line, maze_t *maze)
+static int read_room(char *line, maze_t **maze)
 {
     static int end_or_start = 0;
 
-    if (line[0] == '#' && my_strncmp(line, "##start", 7) == 0)
+    if (line[0] == '#' && my_strncmp(line, "##start", 7) == 0) {
+        if (*maze != NULL && (*maze)->start != NULL)
+            free_maze(maze);
         end_or_start = 1;
-    if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0)
+    }
+    if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0) {
+        if (*maze != NULL && (*maze)->end != NULL)
+            free_maze(maze);
         end_or_start = 2;
+    }
+    if (*maze == NULL)
+        return ERROR;
     if (line[0] == '#')
         return SUCCESS;
-    return parse_room(maze, line, &end_or_start);
+    return parse_room(*maze, line, &end_or_start);
 }
 
 static int read_tunnel(char *line, maze_t *maze)
 {
+    if (maze == NULL)
+        return ERROR;
     if (line[0] == '#')
         return SUCCESS;
     return parse_tunnel(maze, line);
@@ -74,9 +86,11 @@ static int read_tunnel(char *line, maze_t *maze)
 
 static int setup_maze(maze_t *maze, char *line, size_t len)
 {
-    while (line[0] < '0' && line[0] > '9') {
-        if (getline(&line, &len, stdin) == -1)
+    while (line[0] < '0' || line[0] > '9') {
+        if (getline(&line, &len, stdin) == -1) {
+            OMNIFREE(line, 1);
             return ERROR;
+        }
     }
     maze->nb_robots = my_getnbr(line);
     maze->rooms = NULL;
@@ -92,15 +106,13 @@ maze_t *parse_maze(void)
     char *line = NULL;
     size_t len = 0;
     maze_t *maze = malloc(sizeof(maze_t));
+    int retval = 0;
 
-    if (maze == NULL)
-        return NULL;
-    if (getline(&line, &len, stdin) == -1)
-        return OMNIFREE(maze, 1);
-    if (setup_maze(maze, line, len) == ERROR)
+    if (maze == NULL || getline(&line, &len, stdin) == -1
+        || setup_maze(maze, line, len) == ERROR)
         return OMNIFREE(maze, 1);
     while (getline(&line, &len, stdin) != -1) {
-        if (read_room(line, maze) != SUCCESS)
+        if (read_room(line, &maze) != SUCCESS)
             break;
     }
     do {

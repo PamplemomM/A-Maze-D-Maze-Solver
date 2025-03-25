@@ -29,6 +29,8 @@ static void print_rooms_rev(room_t *room, maze_t *maze)
 
 void print_maze(maze_t *maze)
 {
+    if (maze == NULL)
+        return;
     mini_printf("#number_of_robots\n");
     mini_printf("%d\n", maze->nb_robots);
     mini_printf("#rooms\n");
@@ -43,6 +45,6 @@ int main(int ac, char **av)
     maze_t *maze = parse_maze();
 
     print_maze(maze);
-    free_maze(maze);
+    free_maze(&maze);
     return SUCCESS;
 }
