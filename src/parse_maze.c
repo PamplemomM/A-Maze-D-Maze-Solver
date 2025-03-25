@@ -76,13 +76,17 @@ static int read_room(char *line, maze_t **maze)
     return parse_room(*maze, line, &end_or_start);
 }
 
-static int read_tunnel(char *line, maze_t *maze)
+static int read_tunnel(char *line, maze_t **maze)
 {
-    if (maze == NULL)
+    if (*maze == NULL)
         return ERROR;
     if (line[0] == '#')
         return SUCCESS;
-    return parse_tunnel(maze, line);
+    if (parse_tunnel(*maze, line) == ERROR) {
+        free_maze(maze);
+        return ERROR;
+    }
+        return SUCCESS;
 }
 
 static int setup_maze(maze_t *maze, char *line, size_t len)
@@ -117,7 +121,7 @@ maze_t *parse_maze(void)
             break;
     }
     do {
-        if (read_tunnel(line, maze) != SUCCESS)
+        if (read_tunnel(line, &maze) != SUCCESS)
             break;
     } while (getline(&line, &len, stdin) != -1);
     OMNIFREE(line, 1);
