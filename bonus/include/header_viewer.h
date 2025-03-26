@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** header_viewer
+** header_viewer.h
 ** File description:
 ** Header for the A-Maze-d visualizer.
 */
@@ -9,13 +9,16 @@
     #define AMAZEDVIS_H
 
     #include "../../include/header_amazed.h"
+    #include "header_tools.h"
     #include "header_csfml.h"
     #include <time.h>
 
-    // defines:
+    // functions:
     #define SDFREE(format, ...) salade_de_free(format, __VA_ARGS__)
     #define GAME (*get_gamestuff())
     #define MAZE (*get_maze())
+
+    // values:
     #define HUESHIFT 0.5
 
 // --------- VIEWER STRUCTURES ---------
@@ -52,17 +55,5 @@ vwr_robot_t **get_robotlist(void);
 vwr_robot_t *get_robot(int id);
 vwr_robot_t *make_robot(int id);
 void free_robot(vwr_robot_t *robot);
-
-// --- tools.c ---
-sfColor color_from_hue(float hue, float brightness,
-    float saturation, float opacity);
-int diceroll(int low, int high);
-int digitcount(int nbr);
-char *int_to_str(int nbr);
-
-// ----------- LIB FUNCTIONS -----------
-
-// --- salade_de_free.c ---
-void *salade_de_free(char const *format, ...);
 
 #endif /* AMAZEDVIS_H */

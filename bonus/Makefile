@@ -8,11 +8,9 @@
 NAME	=	visualizer
 
 SRC	=	$(shell find src/ -type f -name '*.c')
-SRC	+=	../src/parse_maze.c	\
-		../src/parse_room.c	\
-		../src/parse_tunnel.c	\
-		../src/free_maze.c	\
+SRC	+=	$(shell find ../src/parsing/ -type f -name '*.c')	\
 		$(shell find ../src/lib/ -type f -name '*.c')	\
+		../src/free_maze.c	\
 
 LIBS	=	-l csfml-graphics -l csfml-system -l csfml-audio	\
 		-l csfml-window -lm	\

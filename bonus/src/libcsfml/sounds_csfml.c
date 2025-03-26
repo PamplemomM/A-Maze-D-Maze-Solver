@@ -1,6 +1,6 @@
 /*
-** EPITECH PROJECT, 2024
-** sounds_csfml
+** EPITECH PROJECT, 2025
+** sounds_csfml.c
 ** File description:
 ** Sound related functions.
 */
@@ -26,31 +26,15 @@ sound_t *get_sound(char const *name)
     return NULL;
 }
 
-sound_t *load_sound(char *name, char const *file)
-{
-    sound_t *sound = malloc(sizeof(sound_t));
-
-    if (sound == NULL)
-        return NULL;
-    sound->name = strdup(name);
-    if (sound->name == NULL)
-        return NULL;
-    sound->sound = sfSound_create();
-    sound->buffer = sfSoundBuffer_createFromFile(file);
-    sfSound_setBuffer(sound->sound, sound->buffer);
-    sound->volume = 0.0;
-    sound->pitch = 1.0;
-    sound->next = *get_soundbank();
-    *get_soundbank() = sound;
-    return sound;
-}
-
 sound_t *play_sound(char *name, float volume, float pitch)
 {
     sound_t *sound = get_sound(name);
 
-    if (sound == NULL)
-        return NULL;
+    if (sound == NULL) {
+        sound = load_sound(name);
+        if (sound == NULL)
+            return NULL;
+    }
     sound->time = 0.0;
     sound->volume = volume;
     sound->pitch = pitch;

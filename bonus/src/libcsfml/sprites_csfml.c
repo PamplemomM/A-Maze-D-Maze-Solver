@@ -26,19 +26,25 @@ sprite_t *get_sprite(char const *name)
     return NULL;
 }
 
-sprite_t *make_sprite(char *name, char const *file, int x, int y)
+static char *merge_sprite_path(char *name)
 {
-    sprite_t *sprite = malloc(sizeof(sprite_t));
+    char *path = NULL;
+    char *tmp = NULL;
 
-    if (sprite == NULL)
+    printf("\nLALA\n");
+    tmp = merge_str(name, FORMAT_IMG);
+    if (tmp == NULL)
         return NULL;
-    sprite->name = strdup(name);
-    if (sprite->name == NULL)
-        return OMNIFREE(sprite, 1);
-    sprite->sprite = sfSprite_create();
-    sprite->texture = sfTexture_createFromFile(file, NULL);
+    printf("%s\n", tmp);
+    path = merge_str(PATH_IMG, tmp);
+    if (path == NULL)
+        return OMNIFREE(tmp, 1);
+    return path;
+}
+
+static void setup_sprite(sprite_t *sprite)
+{
     sfSprite_setTexture(sprite->sprite, sprite->texture, sfTrue);
-    sprite->pos = (sfVector2f){x, y};
     sprite->scale = (sfVector2f){1, 1};
     sprite->angle = 0;
     sprite->color = sfWhite;
@@ -47,6 +53,28 @@ sprite_t *make_sprite(char *name, char const *file, int x, int y)
     sprite->draw = 1;
     sprite->next = *get_spritelist();
     *get_spritelist() = sprite;
+}
+
+sprite_t *make_sprite(char *name, char *file, int x, int y)
+{
+    sprite_t *sprite = malloc(sizeof(sprite_t));
+    char *path = NULL;
+
+    if (sprite == NULL)
+        return NULL;
+    path = merge_sprite_path(file);
+    if (path == NULL)
+        return OMNIFREE(sprite, 1);
+    sprite->name = strdup(name);
+    if (sprite->name == NULL) {
+        OMNIFREE(path, 1);
+        return OMNIFREE(sprite, 1);
+    }
+    sprite->sprite = sfSprite_create();
+    sprite->texture = sfTexture_createFromFile(path, NULL);
+    sprite->pos = (sfVector2f){x, y};
+    OMNIFREE(path, 1);
+    setup_sprite(sprite);
     return sprite;
 }
 
@@ -59,16 +87,6 @@ void draw_sprite(sprite_t *sprite)
         sfSprite_setRotation(sprite->sprite, sprite->angle);
         sfSprite_setColor(sprite->sprite, sprite->color);
         sfRenderWindow_drawSprite(WINDOW, sprite->sprite, NULL);
-    }
-}
-
-void draw_allsprites(void)
-{
-    sprite_t *sprite = *get_spritelist();
-
-    while (sprite != NULL) {
-        draw_sprite(sprite);
-        sprite = sprite->next;
     }
 }
 

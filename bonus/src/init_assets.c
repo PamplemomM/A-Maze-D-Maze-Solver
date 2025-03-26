@@ -20,7 +20,7 @@ static int init_sprites(void)
 {
     if (init_robots() == ERROR)
         return ERROR;
-    make_sprite("bg", "assets/bg.png", -100, -50);
+    make_sprite("bg", "bg", -100, -50);
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
     return SUCCESS;
 }

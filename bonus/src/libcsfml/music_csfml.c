@@ -1,6 +1,6 @@
 /*
-** EPITECH PROJECT, 2024
-** music_csfml
+** EPITECH PROJECT, 2025
+** music_csfml.c
 ** File description:
 ** Music related functions.
 */
@@ -14,26 +14,48 @@ music_t **get_music(void)
     return &music;
 }
 
-music_t *play_music(char *name, char const *file, float volume, float pitch)
+static char *merge_music_path(char *name)
 {
-    music_t *music = *get_music();
+    char *path = NULL;
+    char *tmp = NULL;
 
-    if (music == NULL) {
-        music = malloc(sizeof(music_t));
-        if (music == NULL)
-            return NULL;
-        *get_music() = music;
-    } else
-        sfMusic_destroy(music->music);
-    music->name = strdup(name);
-    if (music->name == NULL)
-        return OMNIFREE(music, 1);
-    music->music = sfMusic_createFromFile(file);
+    tmp = merge_str(name, FORMAT_MUS);
+    if (tmp == NULL)
+        return NULL;
+    path = merge_str(PATH_MUS, tmp);
+    if (path == NULL)
+        return OMNIFREE(tmp, 1);
+    return path;
+}
+
+static void setup_music(music_t *music)
+{
     music->time = 0.0;
-    music->volume = volume;
-    music->pitch = pitch;
     sfMusic_play(music->music);
     update_music();
+}
+
+music_t *play_music(char *name, char *file, float volume, float pitch)
+{
+    music_t *music = malloc(sizeof(music_t));
+    char *path = NULL;
+
+    destroy_music();
+    if (music == NULL)
+        return NULL;
+    path = merge_music_path(name);
+    if (path == NULL)
+        return OMNIFREE(music, 1);
+    music->name = strdup(name);
+    if (music->name == NULL) {
+        OMNIFREE(path, 1);
+        return OMNIFREE(music, 1);
+    }
+    music->music = sfMusic_createFromFile(path);
+    music->volume = volume;
+    music->pitch = pitch;
+    OMNIFREE(path, 1);
+    setup_music(music);
     return music;
 }
 

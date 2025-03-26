@@ -1,11 +1,15 @@
 /*
 ** EPITECH PROJECT, 2025
-** tools
+** csfml_arsenal.c
 ** File description:
-** Tool functions with awesome names.
+** An arsenal of functions that concern the CSFML library.
 */
 
-#include "../include/header_viewer.h"
+#include "../../../include/header_csfml.h"
+#include "../../../include/header_tools.h"
+#include <stddef.h>
+#include <stdlib.h>
+#include <math.h>
 
 sfColor color_from_hue(float hue, float brightness,
     float saturation, float opacity)
@@ -25,25 +29,22 @@ sfColor color_from_hue(float hue, float brightness,
     return color;
 }
 
-int diceroll(int low, int high)
+int play_random_sound(char *name, int range, float volume, float pitch)
 {
-    if (high < low)
-        return high;
-    return low + rand() % (high - low + 1);
-}
+    char *newname = NULL;
+    char *pick = int_to_str(diceroll(0, range));
 
-void play_random_sound(char *name, int range, float volume, float pitch)
-{
-    char *newname = malloc(sizeof(char) * (strlen(name) + 2));
-    int pick = diceroll(0, range);
-
-    if (newname == NULL)
-        return;
-    strcpy(newname, name);
-    strcat(newname, "0");
-    newname[strlen(name)] += pick;
+    if (pick == NULL)
+        return ERROR;
+    newname = merge_str(name, pick);
+    if (newname == NULL) {
+        OMNIFREE(pick, 1);
+        return ERROR;
+    }
+    OMNIFREE(pick, 1);
     play_sound(newname, volume, pitch);
     OMNIFREE(newname, 1);
+    return SUCCESS;
 }
 
 void animate(sprite_t *sprite, int first, int last, int fps)
@@ -59,35 +60,6 @@ void animate(sprite_t *sprite, int first, int last, int fps)
     rect->top = (frame / frx % fry) * rect->height;
 }
 
-int digitcount(int nbr)
-{
-    int len = 0;
-
-    if (nbr == 0)
-        return 0;
-    while (nbr != nbr / 10) {
-        nbr /= 10;
-        len++;
-    }
-    return len;
-}
-
-char *int_to_str(int nbr)
-{
-    char *str;
-    int len = digitcount(nbr);
-
-    str = malloc(sizeof(char) * (len + 1));
-    if (str == NULL)
-        return NULL;
-    for (int i = 0; i < len; i++) {
-        str[len - i - 1] = nbr % 10 + '0';
-        nbr /= 10;
-    }
-    str[len] = '\0';
-    return str;
-}
-
 void text_jumpscare(char *str, float dur)
 {
     char *jumpscare[3] = {"jumpscare1", "jumpscare2", "jumpscare3"};
@@ -98,7 +70,7 @@ void text_jumpscare(char *str, float dur)
         txt = make_text(jumpscare[i], str, 400 + diceroll(-30, 30),
         300 + diceroll(-20, 20));
     } else {
-        free(txt->str);
+        OMNIFREE(txt->str, 1);
         txt->str = strdup(str);
         sfText_setString(txt->text, txt->str);
     }

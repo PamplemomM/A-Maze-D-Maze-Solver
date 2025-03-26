@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** header_csfml
+** header_csfml.h
 ** File description:
 ** Header for my CSFML lib.
 */
@@ -9,6 +9,7 @@
     #define CSFML_H
 
     #include "../../include/header_amazed.h"
+    #include "header_tools.h"
     #include <SFML/Graphics.h>
     #include <SFML/Audio.h>
     #include <SFML/System.h>
@@ -16,7 +17,20 @@
     #include <string.h>
     #include <math.h>
 
-    // defines:
+    // assets paths:
+    #define PATH_IMG "assets/images/"
+    #define PATH_SFX "assets/sounds/"
+    #define PATH_MUS "assets/music/"
+
+    // assets formats:
+    #define FORMAT_IMG ".png"
+    #define FORMAT_SFX ".wav"
+    #define FORMAT_MUS ".ogg"
+
+    // default font:
+    #define DEF_FONT "assets/fonts/VT323-Regular.ttf"
+
+    // functions:
     #define WINDOW *get_window()
     #define TIME get_time()
     #define CAM (*get_cam())
@@ -25,6 +39,7 @@
     #define DESTROY(thing, list_func, free_func) destroy_thing((void *)thing, \
         (void **(*)(void))(list_func), (void (*)(void *))(free_func))
 
+    // tools:
     #define MIN(a, b) ((a) < (b) ? (a) : (b))
     #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
@@ -134,9 +149,8 @@ void destroy_cam(void);
 // --- sprites_csfml.c ---
 sprite_t **get_spritelist(void);
 sprite_t *get_sprite(char const *name);
-sprite_t *make_sprite(char *name, char const *file, int x, int y);
+sprite_t *make_sprite(char *name, char *file, int x, int y);
 void draw_sprite(sprite_t *sprite);
-void draw_allsprites(void);
 void free_sprite(sprite_t *sprite);
 
 // --- text_csfml.c ---
@@ -163,14 +177,13 @@ void free_timer(timers_t *timer);
 // --- sounds_csfml.c ---
 sound_t **get_soundbank(void);
 sound_t *get_sound(char const *name);
-sound_t *load_sound(char *name, char const *file);
 sound_t *play_sound(char *name, float volume, float pitch);
 void update_sounds(void);
 void free_sound(sound_t *sound);
 
 // --- music_csfml.c ---
 music_t **get_music(void);
-music_t *play_music(char *name, char const *file, float volume, float pitch);
+music_t *play_music(char *name, char *file, float volume, float pitch);
 void update_music(void);
 void destroy_music(void);
 
@@ -178,5 +191,22 @@ void destroy_music(void);
 sfClock **get_clock(void);
 float get_time(void);
 void destroy_clock(void);
+
+// ----- CSFML LIB TOOL FUNCTIONS ------
+
+// --- spritetools_csfml.c ---
+void draw_allsprites(void);
+void center_sprite_origin(sprite_t *sprite, float xfact, float yfact);
+
+// --- soundloading_csfml.c ---
+sound_t *load_sound(char *name);
+int precache_sounds(void);
+
+// --- arsenal_csfml.c ---
+sfColor color_from_hue(float hue, float brightness,
+    float saturation, float opacity);
+int play_random_sound(char *name, int range, float volume, float pitch);
+void animate(sprite_t *sprite, int first, int last, int fps);
+void text_jumpscare(char *str, float dur);
 
 #endif /* CSFML_H */

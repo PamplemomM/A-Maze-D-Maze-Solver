@@ -26,12 +26,13 @@ text_t *get_text(char const *name)
     return NULL;
 }
 
-static void make_text_init(text_t *text)
+static void setup_text(text_t *text)
 {
     if (*get_textlist() == NULL)
-        text->font = sfFont_createFromFile("assets/fonts/VT323-Regular.ttf");
+        text->font = sfFont_createFromFile(DEF_FONT);
     else
         text->font = (*get_textlist())->font;
+    text->text = sfText_create();
     sfText_setCharacterSize(text->text, 60);
     sfText_setFont(text->text, text->font);
     sfText_setString(text->text, text->str);
@@ -40,6 +41,8 @@ static void make_text_init(text_t *text)
     text->alpha = 1;
     text->color = sfBlack;
     text->draw = 1;
+    text->next = *get_textlist();
+    *get_textlist() = text;
 }
 
 text_t *make_text(char *name, char *str, int x, int y)
@@ -51,16 +54,13 @@ text_t *make_text(char *name, char *str, int x, int y)
     text->name = strdup(name);
     if (text->name == NULL)
         return OMNIFREE(text, 1);
-    text->text = sfText_create();
     text->pos = (sfVector2f){x, y};
     text->str = strdup(str);
     if (text->str == NULL) {
         OMNIFREE(text->name, 1);
         return OMNIFREE(text, 1);
     }
-    make_text_init(text);
-    text->next = *get_textlist();
-    *get_textlist() = text;
+    setup_text(text);
     return text;
 }
 

@@ -1,11 +1,11 @@
 /*
 ** EPITECH PROJECT, 2025
-** destroy_csfml
+** destroy_csfml.c
 ** File description:
 ** Element destruction related functions.
 */
 
-#include "../../include/header_csfml.h"
+#include "../../../include/header_csfml.h"
 
 static void destroy_first(void **(*list_func)(void), void (*free_func)(void *))
 {

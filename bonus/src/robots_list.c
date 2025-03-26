@@ -44,16 +44,14 @@ static void robot_tweaks(sprite_t *robot)
 
 static char *make_robot_name(int id)
 {
-    char *tmp;
-    char *name = malloc(sizeof(char) * (digitcount(id) + 2));
+    char *name = NULL;
+    char *tmp = int_to_str(id);
 
-    if (name == NULL)
-        return NULL;
-    strcpy(name, "P");
-    tmp = int_to_str(id);
     if (tmp == NULL)
-        return OMNIFREE(name, 1);
-    strcpy(&name[1], tmp);
+        return NULL;
+    name = merge_str("P", tmp);
+    if (name == NULL)
+        return OMNIFREE(tmp, 1);
     OMNIFREE(tmp, 1);
     return name;
 }
@@ -66,7 +64,8 @@ vwr_robot_t *make_robot(int id)
 
     if (name == NULL)
         return NULL;
-    sprite = make_sprite(name, "assets/guy.png", 150 + (id - 1) * (500 / (MAZE->nb_robots - 1)), 285); // tmp position // fails if only 1 robot
+    sprite = make_sprite(name, "guy", 150 + (id - 1) * (500 / (MAZE->nb_robots - 1)), 285); // tmp position // fails if only 1 robot
+    printf("lala\n");
     if (sprite == NULL)
         return OMNIFREE(name, 1);
     OMNIFREE(name, 1);

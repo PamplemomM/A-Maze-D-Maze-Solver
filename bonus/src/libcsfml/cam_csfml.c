@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** cam_csfml
+** cam_csfml.c
 ** File description:
 ** Camera related functions.
 */
