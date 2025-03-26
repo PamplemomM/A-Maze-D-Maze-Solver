@@ -43,6 +43,7 @@
     #define MIN(a, b) ((a) < (b) ? (a) : (b))
     #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+
 // ------- CSFML LIB STRUCTURES --------
 
 typedef enum tween_methods {
@@ -129,6 +130,7 @@ typedef struct music_s {
     float pitch;
 } music_t; // structure for music
 
+
 // -------- CSFML LIB FUNCTIONS --------
 
 // --- window_csfml.c ---
@@ -191,6 +193,7 @@ void destroy_music(void);
 sfClock **get_clock(void);
 float get_time(void);
 void destroy_clock(void);
+
 
 // ----- CSFML LIB TOOL FUNCTIONS ------
 

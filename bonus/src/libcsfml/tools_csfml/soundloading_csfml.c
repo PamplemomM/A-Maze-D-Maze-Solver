@@ -22,6 +22,7 @@ static char *merge_sound_path(char *name)
     path = merge_str(PATH_SFX, tmp);
     if (path == NULL)
         return OMNIFREE(tmp, 1);
+    OMNIFREE(tmp, 1);
     return path;
 }
 

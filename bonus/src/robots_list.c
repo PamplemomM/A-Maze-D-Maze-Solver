@@ -26,22 +26,6 @@ vwr_robot_t *get_robot(int id)
     return NULL;
 }
 
-static void gender_reveal(sprite_t *robot)
-{
-    if (diceroll(0, 100) <= 8) {
-        robot->rect.left = 175;
-        robot->rect.width = 185;
-    } else
-        robot->rect.width = 175;
-}
-
-static void robot_tweaks(sprite_t *robot)
-{
-    //robot->scale = (sfVector2f){0.3, 0.3};
-    sfSprite_setOrigin(robot->sprite,
-        (sfVector2f){robot->rect.width / 2.0, robot->rect.height / 2.0});
-}
-
 static char *make_robot_name(int id)
 {
     char *name = NULL;
@@ -56,6 +40,27 @@ static char *make_robot_name(int id)
     return name;
 }
 
+static void gender_reveal(sprite_t *robot)
+{
+    if (diceroll(0, 100) <= 8) {
+        robot->rect.left = 175;
+        robot->rect.width = 185;
+    } else
+        robot->rect.width = 175;
+}
+
+static void setup_robot(vwr_robot_t *robot)
+{
+    sprite_t *sprite = robot->sprite;
+
+    gender_reveal(sprite);
+    //sprite->scale = (sfVector2f){0.3, 0.3};
+    sfSprite_setOrigin(sprite->sprite,
+        (sfVector2f){sprite->rect.width / 2.0, sprite->rect.height / 2.0});
+    robot->next = *get_robotlist();
+    *get_robotlist() = robot;
+}
+
 vwr_robot_t *make_robot(int id)
 {
     vwr_robot_t *robot = NULL;
@@ -65,7 +70,6 @@ vwr_robot_t *make_robot(int id)
     if (name == NULL)
         return NULL;
     sprite = make_sprite(name, "guy", 150 + (id - 1) * (500 / (MAZE->nb_robots - 1)), 285); // tmp position // fails if only 1 robot
-    printf("lala\n");
     if (sprite == NULL)
         return OMNIFREE(name, 1);
     OMNIFREE(name, 1);
@@ -74,15 +78,15 @@ vwr_robot_t *make_robot(int id)
         DESTROY(sprite, get_spritelist, free_sprite);
         return NULL;
     }
+    robot->sprite = sprite;
     robot->id = id;
     robot->room = MAZE->start;
-    gender_reveal(sprite);
-    robot->next = *get_robotlist();
-    *get_robotlist() = robot;
+    setup_robot(robot);
     return robot;
 }
 
 void free_robot(vwr_robot_t *robot)
 {
+    DESTROY(robot->sprite, get_spritelist, free_sprite);
     OMNIFREE(robot, 1);
 }

@@ -25,6 +25,7 @@ static char *merge_music_path(char *name)
     path = merge_str(PATH_MUS, tmp);
     if (path == NULL)
         return OMNIFREE(tmp, 1);
+    OMNIFREE(tmp, 1);
     return path;
 }
 

@@ -14,12 +14,12 @@
     #include <time.h>
 
     // functions:
-    #define SDFREE(format, ...) salade_de_free(format, __VA_ARGS__)
     #define GAME (*get_gamestuff())
     #define MAZE (*get_maze())
 
     // values:
     #define HUESHIFT 0.5
+
 
 // --------- VIEWER STRUCTURES ---------
 
@@ -34,6 +34,7 @@ typedef struct game {
     float hue;
     int nb_moves;
 } game_t; // miscellaneous data that needs to be globalized
+
 
 // --------- VIEWER FUNCTIONS ----------
 

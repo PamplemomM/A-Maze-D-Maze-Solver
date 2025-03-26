@@ -31,14 +31,13 @@ static char *merge_sprite_path(char *name)
     char *path = NULL;
     char *tmp = NULL;
 
-    printf("\nLALA\n");
     tmp = merge_str(name, FORMAT_IMG);
     if (tmp == NULL)
         return NULL;
-    printf("%s\n", tmp);
     path = merge_str(PATH_IMG, tmp);
     if (path == NULL)
         return OMNIFREE(tmp, 1);
+    OMNIFREE(tmp, 1);
     return path;
 }
 

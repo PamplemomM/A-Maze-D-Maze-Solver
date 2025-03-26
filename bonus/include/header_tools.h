@@ -11,13 +11,11 @@
     #include "../../include/header_amazed.h"
 
     // functions:
+    #define ARRLEN(array) arrlen((void **)array)
     #define SDFREE(format, ...) salade_de_free(format, __VA_ARGS__)
-    #define ULTRALEN(thing, end) ultralen((void **)thing, (void *)end)
+
 
 // ------- C LIB TOOL FUNCTIONS --------
-
-// --- salade_de_free.c ---
-void *salade_de_free(char const *format, ...);
 
 // --- string_arsenal.c ---
 char *merge_str(char *s1, char *s2);
@@ -27,7 +25,10 @@ char *int_to_str(int nbr);
 int digitcount(int nbr);
 int diceroll(int low, int high);
 
-// --- ultralen.c ---
-int ultralen(void **thing, void *end);
+// --- arrlen.c ---
+long unsigned int arrlen(void **array);
+
+// --- salade_de_free.c ---
+void *salade_de_free(char const *format, ...);
 
 #endif /* TOOLS_H */
