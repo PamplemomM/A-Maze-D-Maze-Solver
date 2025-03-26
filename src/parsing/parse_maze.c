@@ -59,13 +59,13 @@ static int read_room(char *line, maze_t **maze)
 
     if (line[0] == '#' && my_strncmp(line, "##start", 7) == 0) {
         if ((*maze != NULL && (*maze)->start != NULL) || end_or_start != 0)
-            free_maze(maze);
+            return ERROR;
         end_or_start = 1;
     }
     if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0) {
         if ((*maze != NULL && ((*maze)->end != NULL || (*maze)->start == NULL))
             || end_or_start != 0)
-            free_maze(maze);
+            return ERROR;
         end_or_start = 2;
     }
     if (*maze == NULL)
@@ -83,7 +83,7 @@ static int read_tunnel(char *line, maze_t **maze, case_t cs)
         return SUCCESS;
     if (parse_tunnel(*maze, line) == ERROR) {
         if (cs == MAIN)
-            free_maze(maze);
+            return ERROR;
         return ERROR;
     }
     return SUCCESS;
@@ -125,6 +125,6 @@ maze_t *parse_maze(case_t cs)
     } while (getline(&line, &len, stdin) != -1);
     OMNIFREE(line, 1);
     if (check_valid_maze(maze) == ERROR)
-        free_maze(&maze);
+        return maze;
     return maze;
 }
