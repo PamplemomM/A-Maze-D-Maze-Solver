@@ -17,7 +17,7 @@ Then execute the program using
 You can also use the visualiser in the folder `bonus`.
 For this, use :
 ```bash
-make re
+make remake re
 ```
 Then go to the directory bonus and compile it with
 ```bash
@@ -27,7 +27,7 @@ cd ..
 ```
 Then launch the program with the bonus with :
 ```bash
-./amazed < script/pdf.txt | ./visualizer
+./amazed < scripts/pdf.txt | ./bonus/visualizer
 ```
 
 📝 Project developed as part of the B-CPE-200 module by AntothP, Pathie and PamplemomM.
