@@ -33,6 +33,19 @@ static room_t *check_valid_room(char *name, int x, int y, maze_t *maze)
     return get_room(name, maze);
 }
 
+static void link_room(room_t *room, maze_t *maze)
+{
+    room_t *headcpy = maze->rooms;
+
+    if (headcpy == NULL) {
+        maze->rooms = room;
+        return;
+    }
+    while (headcpy->next != NULL)
+        headcpy = headcpy->next;
+    headcpy->next = room;
+}
+
 static int add_room(char *name, int x, int y, maze_t *maze)
 {
     room_t *room = check_valid_room(name, x, y, maze);
@@ -52,8 +65,8 @@ static int add_room(char *name, int x, int y, maze_t *maze)
     room->x = x;
     room->y = y;
     room->links = NULL;
-    room->next = maze->rooms;
-    maze->rooms = room;
+    room->next = NULL;
+    link_room(room, maze);
     return SUCCESS;
 }
 

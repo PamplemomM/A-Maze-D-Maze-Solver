@@ -7,17 +7,24 @@
 
 #include "../../include/header_amazed.h"
 
-static int add_tunnel(room_t *r1, room_t *r2, tunnel_t **tunnels)
+static int add_tunnel(room_t *r1, room_t *r2, maze_t *maze)
 {
-    tunnel_t *newtunnel = malloc(sizeof(tunnel_t));
+    tunnel_t *headcpy = maze->tunnels;
+    tunnel_t *tunnel = malloc(sizeof(tunnel_t));
 
-    if (newtunnel == NULL)
+    if (tunnel == NULL)
         return ERROR;
-    newtunnel->r1 = r1;
-    newtunnel->r2 = r2;
-    newtunnel->val = -1;
-    newtunnel->next = *tunnels;
-    *tunnels = newtunnel;
+    tunnel->r1 = r1;
+    tunnel->r2 = r2;
+    tunnel->val = -1;
+    tunnel->next = NULL;
+    if (headcpy == NULL) {
+        maze->tunnels = tunnel;
+        return SUCCESS;
+    }
+    while (headcpy->next != NULL)
+        headcpy = headcpy->next;
+    headcpy->next = tunnel;
     return SUCCESS;
 }
 
@@ -56,7 +63,7 @@ int parse_tunnel(maze_t *maze, char *line)
     OMNIFREE(name1, 1);
     OMNIFREE(name2, 1);
     if (connect_rooms(r1, r2) == ERROR
-        || add_tunnel(r1, r2, &maze->tunnels) == ERROR)
+        || add_tunnel(r1, r2, maze) == ERROR)
         return ERROR;
     return SUCCESS;
 }

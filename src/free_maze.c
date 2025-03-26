@@ -7,7 +7,7 @@
 
 #include "../include/header_amazed.h"
 
-static void free_rooms(room_t *room)
+void free_rooms(room_t *room)
 {
     void *tmp = NULL;
 
@@ -21,7 +21,7 @@ static void free_rooms(room_t *room)
     }
 }
 
-static void free_tunnels(tunnel_t *tunnel)
+void free_tunnels(tunnel_t *tunnel)
 {
     void *tmp = NULL;
 
@@ -32,13 +32,12 @@ static void free_tunnels(tunnel_t *tunnel)
     }
 }
 
-static void free_moves(move_t *move)
+void free_moves(move_t *move)
 {
     void *tmp = NULL;
 
     while (move != NULL) {
         tmp = move->next;
-        OMNIFREE(move->robot, 1);
         OMNIFREE(move, 1);
         move = tmp;
     }

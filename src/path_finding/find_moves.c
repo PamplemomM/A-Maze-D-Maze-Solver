@@ -7,17 +7,23 @@
 
 #include "../../include/header_amazed.h"
 
-static path_t *add_path_node(path_t **path_list, room_t *room)
+static path_t *add_path_node(path_t **head, room_t *room)
 {
-    path_t *new_node = malloc(sizeof(path_t) * 1);
+    path_t *headcpy = *head;
+    path_t *path = malloc(sizeof(path_t));
 
-    if (new_node == NULL) {
+    if (path == NULL)
         return NULL;
+    path->room = room;
+    path->next = NULL;
+    if (headcpy == NULL) {
+        *head = path;
+        return path;
     }
-    new_node->room = room;
-    new_node->next = *path_list;
-    *path_list = new_node;
-    return new_node;
+    while (headcpy->next != NULL)
+        headcpy = headcpy->next;
+    headcpy->next = path;
+    return path;
 }
 
 static void free_path_list(path_t *path_list)
@@ -94,7 +100,7 @@ move_t *find_moves(maze_t *maze, int current_id)
         }
         next = select_best_path(current, maze->end, move_list, current_id);
         if (next != NULL) {
-            add_new_move(&move_list, current_id, i, next);
+            make_move(i, next, current_id, maze);
         }
         current = current->next;
     }
