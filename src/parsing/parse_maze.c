@@ -63,13 +63,10 @@ static int read_room(char *line, maze_t **maze)
         end_or_start = 1;
     }
     if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0) {
-        if ((*maze != NULL && ((*maze)->end != NULL || (*maze)->start == NULL))
-            || end_or_start != 0)
+        if ((*maze != NULL && (*maze)->end != NULL) || end_or_start != 0)
             return ERROR;
         end_or_start = 2;
     }
-    if (*maze == NULL)
-        return ERROR;
     if (line[0] == '#')
         return SUCCESS;
     return parse_room(*maze, line, &end_or_start);
@@ -84,7 +81,6 @@ static int read_tunnel(char *line, maze_t **maze, case_t cs)
     if (parse_tunnel(*maze, line) == ERROR) {
         if (cs == MAIN)
             return ERROR;
-        return ERROR;
     }
     return SUCCESS;
 }
