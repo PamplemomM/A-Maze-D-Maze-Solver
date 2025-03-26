@@ -24,11 +24,6 @@
 
 // -------- A-MAZE-D STRUCTURES --------
 
-typedef enum {
-    MAIN,
-    VIEWER
-} case_t;
-
 typedef struct room_s {
     char *name;
     int x;
@@ -76,7 +71,7 @@ void free_maze(maze_t **maze);
 
 // --- parse_maze.c ---
 tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze);
-maze_t *parse_maze(case_t cs);
+maze_t *parse_maze(void);
 
 // --- parse_room.c ---
 room_t *get_room(char *name, maze_t *maze);

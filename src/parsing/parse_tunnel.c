@@ -48,9 +48,8 @@ static int connect_rooms(room_t *r1, room_t *r2)
 int parse_tunnel(maze_t *maze, char *line)
 {
     int i = 0;
-    int j = 0;
     char *name1 = get_name(line, &i, " -\n");
-    char *name2 = get_name(&line[i], &j, " -\n");
+    char *name2 = get_name(line, &i, " -\n");
     room_t *r1 = get_room(name1, maze);
     room_t *r2 = get_room(name2, maze);
 

@@ -60,15 +60,16 @@ static int add_room(char *name, int x, int y, maze_t *maze)
 char *get_name(char *line, int *i, char const *separators)
 {
     char *name = NULL;
+    int tmp = *i;
 
     while (!char_in_str(line[*i], separators) && line[*i] != '\0')
         (*i)++;
     name = malloc(sizeof(char) * (*i + 1));
     if (name == NULL)
         return NULL;
-    for (int j = 0; j < *i; j++)
-        name[j] = line[j];
-    name[*i] = '\0';
+    for (int j = tmp; j < *i; j++)
+        name[j - tmp] = line[j];
+    name[*i - tmp] = '\0';
     while (char_in_str(line[*i], separators) && line[*i] != '\0')
         (*i)++;
     return name;
