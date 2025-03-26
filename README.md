@@ -14,15 +14,16 @@ Then execute the program using
 ```
 
 ## 💰 **Bonus** 💰
-You can also use the visualiser in the folder `bonus`.
+You can also use the visualizer in the folder `bonus`.
 For this, use :
 ```bash
-make remake re
+make re
 ```
 Then go to the directory bonus and compile it with
 ```bash
 cd bonus/ ;
 make re ;
+make clean ;
 cd ..
 ```
 Then launch the program with the bonus with :
