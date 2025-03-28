@@ -68,7 +68,7 @@ vwr_robot_t *make_robot(int id)
 
     if (name == NULL)
         return NULL;
-    sprite = make_sprite(name, "guy", 150 + (id - 1) * (500 / (MAZE->nb_robots - 1)), 285); // tmp position // fails if only 1 robot
+    sprite = make_sprite(name, "guy", MAZE->start->x * 50, MAZE->start->y * 50); // tmp position // fails if only 1 robot
     if (sprite == NULL)
         return OMNIFREE(name, 1);
     OMNIFREE(name, 1);

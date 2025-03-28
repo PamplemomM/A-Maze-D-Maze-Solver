@@ -5,28 +5,15 @@
 ##start
 0 1 2
 ##end
-1 9 2
+lalaa 9 2
 3 5 4
 #tunnels
 0-2
 0-3
-2-1
-3-1
+2-lalaa
+3-lalaa
 2-3
 #moves
-P1-2
-P2-3
-P1-1 P2-1 P3-2
-P3-1
-P1-2
-P2-3
-P1-1 P2-1 P3-2
-P3-1
-P1-2
-P2-3
-P1-1 P2-1 P3-2
-P3-1
-P1-2
-P2-3
-P1-1 P2-1 P3-2
-P3-1
+P1-2 P2-3
+P1-lalaa P2-lalaa P3-2
+P3-lalaa

@@ -74,8 +74,7 @@ int do_move(vwr_robot_t *robot, room_t *room, float speed)
     tmp[my_strlen(tmp) - 1] = 'y';
     make_tween(tmp, &robot->sprite->pos.y, room->y * 50, 1.0 / speed)->method = EASEOUT;
     OMNIFREE(tmp, 1);
-    play_sound("move", 50.0 + 50.0 / speed, 0.8 * speed);
-    make_tween("camtilt", &CAM->angle, diceroll(-10, 10) / 20.0 * speed, 2.0 / speed)->method = EASEOUT;
+    play_sound("move", 50.0 + 50.0 / speed, 0.8 + speed / 5.0);
     robot->room = room;
     return SUCCESS;
 }
@@ -84,9 +83,9 @@ void start_sim(void)
 {
     static float id = 0.0;
     vwr_robot_t *robot = *get_robotlist();
-    int tmp = 0;
 
-    make_tween("id", &id, GAME->nb_moves + 0.1, GAME->nb_moves / 2.0)->method = EASEINOUT;
+    id = -0.5;
+    make_tween("id", &id, GAME->nb_moves + 0.5, sqrt(GAME->nb_moves))->method = EASEINOUT;
     while (robot != NULL) {
         do_move(robot, MAZE->start, 10);
         robot = robot->next;
@@ -99,13 +98,14 @@ int move_robots(void) // called as long as 'get_tween("id") != NULL'
     float curid = *(get_tween("id")->value);
     float speed = 1 + sin(curid / GAME->nb_moves * M_PI) * GAME->nb_moves / 7.0;
 
-    if (move == NULL)
+    if (move == NULL || curid <= 0)
         move = MAZE->moves;
     if (get_timer("mvcooldown") == NULL && move->id <= curid) {
         if (do_move(get_robot(move->robot), move->dest, speed) == ERROR)
             return ERROR;
         move = move->next;
-        run_timer("mvcooldown", diceroll(5, 15) / 10.0 / speed);
+        run_timer("mvcooldown", diceroll(5, 10) / 40.0 / speed);
+        get_tween("id")->tend += get_timer("mvcooldown")->tend - TIME;
     }
     if (move == NULL)
         DESTROY(get_tween("id"), get_tweenlist, free_tween); // end the loop
@@ -156,6 +156,8 @@ void update_stuff(void)
     update_cam();
     if (get_tween("id") != NULL)
         move_robots();
+    if (get_tween("id") != NULL)
+        printf("%.1f%%\n", ((*get_tween("id")->value) - get_tween("id")->start) / get_tween("id")->dest * 100.0);
 }
 
 void run(void)
