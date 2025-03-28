@@ -11,6 +11,7 @@ SRC	=	$(shell find src/ -type f -name '*.c')
 SRC	+=	$(shell find ../src/parsing/ -type f -name '*.c')	\
 		$(shell find ../src/lib/ -type f -name '*.c')	\
 		../src/path_finding/make_move.c	\
+		../src/print_maze.c	\
 		../src/free_maze.c	\
 
 LIBS	=	-l csfml-graphics -l csfml-system -l csfml-audio	\
