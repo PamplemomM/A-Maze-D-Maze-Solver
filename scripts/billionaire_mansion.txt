@@ -1,0 +1,23 @@
+# Hello and welcome to my humble abode.
+103 # The guests are plentiful today!
+##start
+entrance 0 5
+##end
+backdoor 13 0
+living_room 5 2
+kitchen 8 2
+bathroom 4 8
+vent_1 5 9
+vent_2 7 7
+vent_3 9 6
+vent_4 11 4
+vent_5 13 2
+entrance-living_room
+living_room-kitchen
+living_room-bathroom
+bathroom-vent_1
+vent_1-vent_2
+vent_2-vent_3
+vent_3-vent_4
+vent_4-vent_5
+vent_5-backdoor
