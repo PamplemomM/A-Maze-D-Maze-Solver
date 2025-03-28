@@ -25,12 +25,13 @@ val	:
 		gcc -o $(NAME) $(SRCS) $(CFLAGS) -g3
 
 viewer	:
-		cd bonus ; make ; make clean ; mv viewer .. ; cd ..
+		cd bonus ; make ; mv viewer .. ; cd ..
 		ln -sf bonus/assets .
 
-viewer_clean	:
+viewer_fclean	:
 		rm -rf viewer
 		rm -rf assets
+		cd bonus ; make fclean ; cd ..
 
 tests_run	:
 		gcc -o unit_tests $(SRCTEST) -Iinclude -lcriterion --coverage
@@ -39,7 +40,7 @@ tests_run	:
 clean	:
 		rm -rf $(OBJS)
 
-fclean	:	clean viewer_clean
+fclean	:	clean
 		rm -rf $(NAME)
 
 re	:	fclean all
