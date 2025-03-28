@@ -122,6 +122,7 @@ void start(void)
 }
 
 // the CSFML itself leaks 226,396 bytes of memory on its own
+// music can add to the memory leaks as well
 int main(int ac, char **av)
 {
     if (ac > 1 && strcmp(av[1], "-h") == 0)

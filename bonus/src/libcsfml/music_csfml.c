@@ -33,6 +33,7 @@ static void setup_music(music_t *music)
 {
     music->time = 0.0;
     sfMusic_play(music->music);
+    *get_music() = music;
     update_music();
 }
 
@@ -44,7 +45,7 @@ music_t *play_music(char *name, char *file, float volume, float pitch)
     destroy_music();
     if (music == NULL)
         return NULL;
-    path = merge_music_path(name);
+    path = merge_music_path(file);
     if (path == NULL)
         return OMNIFREE(music, 1);
     music->name = strdup(name);

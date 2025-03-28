@@ -32,6 +32,9 @@ static int init_sounds(void)
 
 static int init_music(void)
 {
+    if (play_music("Parade", "K.K. Parade", 50, 1.0) == NULL)
+        return ERROR;
+    sfMusic_setLoop((*get_music())->music, sfTrue);
     return SUCCESS;
 }
 
