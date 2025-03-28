@@ -79,6 +79,7 @@ void free_maze(maze_t **maze);
 // --- parse_maze.c ---
 int give_up(char const *message, maze_t **maze);
 tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze);
+int end_of_file(int return_value, char **line);
 maze_t *parse_maze(int viewer);
 
 // --- parse_room.c ---

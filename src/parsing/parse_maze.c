@@ -130,7 +130,7 @@ static int setup_maze(maze_t **maze, char *line, size_t len, int viewer)
     return SUCCESS;
 }
 
-static int end_of_file(int return_value, char **line)
+int end_of_file(int return_value, char **line)
 {
     if (return_value == -1) {
         OMNIFREE(*line, 1);
