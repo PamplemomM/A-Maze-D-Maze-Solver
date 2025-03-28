@@ -2,10 +2,10 @@
 ## EPITECH PROJECT, 2025
 ## Makefile
 ## File description:
-## Makefile for the A-Maze-d visualizer.
+## Makefile for the A-Maze-d viewer.
 ##
 
-NAME	=	visualizer
+NAME	=	viewer
 
 SRC	=	$(shell find src/ -type f -name '*.c')
 SRC	+=	$(shell find ../src/parsing/ -type f -name '*.c')	\
