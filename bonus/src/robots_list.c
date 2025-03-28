@@ -54,9 +54,8 @@ static void setup_robot(vwr_robot_t *robot)
     sprite_t *sprite = robot->sprite;
 
     gender_reveal(sprite);
-    //sprite->scale = (sfVector2f){0.3, 0.3};
-    sfSprite_setOrigin(sprite->sprite,
-        (sfVector2f){sprite->rect.width / 2.0, sprite->rect.height / 2.0});
+    sprite->scale = (sfVector2f){0.2, 0.2};
+    center_sprite_origin(sprite, 0.5, 0.95);
     robot->next = *get_robotlist();
     *get_robotlist() = robot;
 }

@@ -16,11 +16,34 @@ static int init_robots(void)
     return SUCCESS;
 }
 
+static int init_rooms(void)
+{
+    room_t *room = MAZE->rooms;
+    char *name = NULL;
+
+    while (room != NULL) {
+        name = merge_str("room_", room->name);
+        if (name == NULL)
+            return ERROR;
+        if (make_sprite(name, "jonkler", room->x * 50, room->y * 50) == NULL) {
+            OMNIFREE(name, 1);
+            return ERROR;
+        }
+        center_sprite_origin(get_sprite(name), 0.5, 0.5);
+        OMNIFREE(name, 1);
+        room = room->next;
+    }
+    return SUCCESS;
+}
+
 static int init_sprites(void)
 {
     if (init_robots() == ERROR)
         return ERROR;
-    make_sprite("bg", "bg", -100, -50);
+    if (init_rooms() == ERROR)
+        return ERROR;
+    if (make_sprite("bg", "bg", -100, -50) == NULL)
+        return ERROR;
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
     return SUCCESS;
 }

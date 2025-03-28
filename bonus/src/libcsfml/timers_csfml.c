@@ -31,7 +31,7 @@ timers_t *run_timer(char *name, float dur)
     timers_t *timer = get_timer(name);
 
     if (timer == NULL) {
-        timer = malloc(sizeof(timer_t));
+        timer = malloc(sizeof(timers_t));
         if (timer == NULL)
             return NULL;
         timer->name = strdup(name);
@@ -48,12 +48,12 @@ timers_t *run_timer(char *name, float dur)
 void update_timers(void)
 {
     timers_t *timer = *get_timerlist();
-    timers_t *tmp;
+    timers_t *tmp = NULL;
 
     while (timer != NULL) {
         tmp = timer->next;
         if (TIME >= timer->tend)
-            DESTROY(timer->name, get_timerlist, free_timer);
+            DESTROY(timer, get_timerlist, free_timer);
         timer = tmp;
     }
 }

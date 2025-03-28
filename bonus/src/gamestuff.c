@@ -23,10 +23,11 @@ int init_gamestuff(void)
         return ERROR;
     GAME->hue = diceroll(0, 360);
     GAME->nb_moves = 0;
-    while (move != NULL) {
-        GAME->nb_moves++;
+    if (move == NULL)
+        return ERROR;
+    while (move->next != NULL)
         move = move->next;
-    }
+    GAME->nb_moves = move->id;
     return SUCCESS;
 }
 
