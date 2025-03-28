@@ -63,7 +63,7 @@ typedef struct maze_s {
 
 // --------- A-MAZE-D FUNCTIONS --------
 
-// --- main_amazed.c ---
+// --- print_maze.c ---
 void print_maze(maze_t *maze);
 
 // --- free_maze.c ---
