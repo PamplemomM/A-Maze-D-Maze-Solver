@@ -7,9 +7,9 @@
 
 #include "../../include/header_amazed.h"
 
-static int add_tunnel(room_t *r1, room_t *r2, maze_t *maze)
+static int add_tunnel(room_t *r1, room_t *r2, maze_t **maze)
 {
-    tunnel_t *headcpy = maze->tunnels;
+    tunnel_t *headcpy = (*maze)->tunnels;
     tunnel_t *tunnel = malloc(sizeof(tunnel_t));
 
     if (tunnel == NULL)
@@ -19,7 +19,7 @@ static int add_tunnel(room_t *r1, room_t *r2, maze_t *maze)
     tunnel->val = -1;
     tunnel->next = NULL;
     if (headcpy == NULL) {
-        maze->tunnels = tunnel;
+        (*maze)->tunnels = tunnel;
         return SUCCESS;
     }
     while (headcpy->next != NULL)
@@ -52,16 +52,23 @@ static int connect_rooms(room_t *r1, room_t *r2)
     return SUCCESS;
 }
 
-int parse_tunnel(maze_t *maze, char *line)
+int parse_tunnel(maze_t **maze, char *line)
 {
     int i = 0;
     char *name1 = get_name(line, &i, " -\n");
     char *name2 = get_name(line, &i, " -\n");
-    room_t *r1 = get_room(name1, maze);
-    room_t *r2 = get_room(name2, maze);
+    room_t *r1 = get_room(name1, *maze);
+    room_t *r2 = get_room(name2, *maze);
 
+    if (name1 == NULL || name2 == NULL) {
+        OMNIFREE(name1, 1);
+        OMNIFREE(name1, 1);
+        return ERROR;
+    }
     OMNIFREE(name1, 1);
     OMNIFREE(name2, 1);
+    if (r1 == NULL || r2 == NULL)
+        return give_up("Tunnel between non-existent rooms.", maze);
     if (connect_rooms(r1, r2) == ERROR
         || add_tunnel(r1, r2, maze) == ERROR)
         return ERROR;

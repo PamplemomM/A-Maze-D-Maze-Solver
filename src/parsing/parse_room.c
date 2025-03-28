@@ -46,12 +46,12 @@ static void link_room(room_t *room, maze_t *maze)
     headcpy->next = room;
 }
 
-static int add_room(char *name, int x, int y, maze_t *maze)
+static int add_room(char *name, int x, int y, maze_t **maze)
 {
-    room_t *room = check_valid_room(name, x, y, maze);
+    room_t *room = check_valid_room(name, x, y, *maze);
 
     if (room != NULL)
-        return ERROR;
+        return give_up("Multiple rooms with same name or coordinates.", maze);
     else {
         room = malloc(sizeof(room_t));
         if (room == NULL)
@@ -66,7 +66,7 @@ static int add_room(char *name, int x, int y, maze_t *maze)
     room->y = y;
     room->links = NULL;
     room->next = NULL;
-    link_room(room, maze);
+    link_room(room, *maze);
     return SUCCESS;
 }
 
@@ -75,6 +75,8 @@ char *get_name(char *line, int *i, char const *separators)
     char *name = NULL;
     int tmp = *i;
 
+    if (line == NULL)
+        return NULL;
     while (!char_in_str(line[*i], separators) && line[*i] != '\0')
         (*i)++;
     name = malloc(sizeof(char) * (*i + 1));
@@ -93,6 +95,8 @@ static int get_coords(char *line, int *i)
     int nbr = 0;
     int tmp = *i;
 
+    if (line == NULL)
+        return -1;
     while (line[*i] >= '0' && line[*i] <= '9') {
         nbr = nbr * 10 + line[*i] - '0';
         (*i)++;
@@ -113,7 +117,7 @@ static void handle_room(maze_t *maze, char *name, int *start_or_end)
     *start_or_end = 0;
 }
 
-int parse_room(maze_t *maze, char *line, int *special)
+int parse_room(maze_t **maze, char *line, int *special)
 {
     char *name = NULL;
     int x = 0;
@@ -122,14 +126,17 @@ int parse_room(maze_t *maze, char *line, int *special)
 
     name = get_name(line, &i, " ");
     if (name == NULL)
-        return ERROR;
+        return give_up("Invalid room name.", maze);
     x = get_coords(line, &i);
     y = get_coords(line, &i);
-    if (x == -1 || y == -1 || add_room(name, x, y, maze) == ERROR) {
+    if (x == -1 || y == -1) {
         OMNIFREE(name, 1);
-        return -1;
+        return ERROR;
+    } else if (add_room(name, x, y, maze) == ERROR) {
+        OMNIFREE(name, 1);
+        return ERROR;
     }
-    handle_room(maze, name, special);
+    handle_room(*maze, name, special);
     OMNIFREE(name, 1);
     return SUCCESS;
 }
