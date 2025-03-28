@@ -1,34 +1,39 @@
 # **A-maze-d**
 
 ## ✨ **Description** ✨
-The goal of the A-Maze-d project is to move a set of robots through a maze from the entrance to the exit.
+**The A-Maze-d project consists in moving a set of robots through a maze, from its entrance to its exit.**
+It reads data representing the layout of a maze: the disposition of its rooms, the number of robots in it, and the tunnels linking the rooms together.
+After this, a pathfinding algorithm is ran through the maze in order to guide each robot to the end room efficiently.
+Once all robots have reached the exit, the results are displayed, showing each set of moves that were executed, in their respective order.
 
 ## 🛠️ **Usage** 🛠️
-To compile the project, use in a terminal :
+To compile the program, open a terminal at the root of the project's repository, and type in this command:
 ```bash
 make re
 ```
-Then execute the program using
+Then, to execute the program, you must send your maze layout as follows:
 ```bash
-./amazed < script/pdf.txt
+./amazed < [FILE]
 ```
+*In case you are missing maze layout files of your own, you can find sample files inside of the `scripts` folder.*
 
 ## 💰 **Bonus** 💰
-You can also use the visualizer in the folder `bonus`.
-For this, use :
+**This repository comes with a bonus viewer!**
+It acts as a visualizer for the A-Maze-d program, and reads its input data the exact same way as its counterpart.
+This viewer and its source files are located inside of the `bonus` directory, but moving to this directory is not necessary.
+
+To compile the viewer, make sure you are at the root of the project's repository, then run this command:
 ```bash
-make re
+make viewer
 ```
-Then go to the directory bonus and compile it with
+This rule automatically moves the viewer's compiled binary (as well as a symbolic link to its `assets` directory) outside of the `bonus` directory.
+Then, to execute the viewer, you can send your maze layout to it through the A-Maze-d program, like so:
 ```bash
-cd bonus/ ;
-make re ;
-make clean ;
-cd ..
+./amazed < [FILE] | ./viewer
 ```
-Then launch the program with the bonus with :
+Furthermore, the viewer's usage can be displayed by executing it with the `-h` option:
 ```bash
-./amazed < scripts/pdf.txt | ./bonus/visualizer
+./viewer -h
 ```
 
-📝 Project developed as part of the B-CPE-200 module by AntothP, Pathie and PamplemomM.
+<sup>📝 EPITECH project developed as part of the B-CPE-200 module by AntothP, Pathie and PamplemomM.</sup>
