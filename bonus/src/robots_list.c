@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** robots_list
+** robots_list.c
 ** File description:
 ** Functions to manipulate the robots list.
 */

@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** tweens_csfml
+** tweens_csfml.c
 ** File description:
 ** Tween related functions.
 */

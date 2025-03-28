@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** init_assets
+** init_assets.c
 ** File description:
 ** Functions to initialize the program's assets.
 */
@@ -32,7 +32,7 @@ static int init_sounds(void)
 
 static int init_music(void)
 {
-    if (play_music("Parade", "K.K. Parade", 50, 1.0) == NULL)
+    if (play_music("Parade", "K.K. Parade", 0, 1.0) == NULL) // put the volume back up to 50
         return ERROR;
     sfMusic_setLoop((*get_music())->music, sfTrue);
     return SUCCESS;
@@ -40,7 +40,7 @@ static int init_music(void)
 
 int init_assets(void)
 {
-    create_window(800, 600, "A-MAZING!");
+    create_window(800, 600, "A-MAZE-D VIEWER!");
     *get_clock() = sfClock_create();
     if (init_cam() == NULL)
         return ERROR;

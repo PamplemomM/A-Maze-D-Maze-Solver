@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** window_csfml
+** window_csfml.c
 ** File description:
 ** Window related functions.
 */

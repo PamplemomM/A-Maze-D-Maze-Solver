@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** amazed_data
+** amazed_data.c
 ** File description:
 ** Functions to manipulate and store the received maze data.
 */

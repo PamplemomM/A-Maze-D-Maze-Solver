@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** time_csfml
+** time_csfml.c
 ** File description:
 ** Time related functions.
 */

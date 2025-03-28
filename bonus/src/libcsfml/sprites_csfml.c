@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** sprites_csfml
+** sprites_csfml.c
 ** File description:
 ** Sprite related functions.
 */

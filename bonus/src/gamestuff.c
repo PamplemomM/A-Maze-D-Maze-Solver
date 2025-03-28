@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** gamestuff
+** gamestuff.c
 ** File description:
 ** Functions to manipulate the 'game_t' struct.
 */

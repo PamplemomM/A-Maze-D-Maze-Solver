@@ -1,0 +1,34 @@
+
+USAGE:
+	[MAZE] | ./viewer
+	cat [FILE] | ./viewer
+	./viewer < [FILE]
+
+	MAZE: data of a solved maze.
+	FILE: a file containing data of a solved maze.
+
+A-MAZE-D VIEWER:
+	This program acts as a visualizer for the A-Maze-d project.
+	It reads, on the standard input, the data of a maze, parsed
+	and solved by the A-Maze-d program.
+	It will display a representation of the given maze, with all
+	of its rooms and tunnels, and simulate the robots' movements
+	from the start to the end of the maze.
+
+USER INTERACTIONS:
+	Focus on a robot...............	'LMB'
+	Focus on next robot............	'Right arrow'
+	Focus on previous robot........	'Left arrow'
+	Disable focus..................	'Down arrow'
+
+	Fast forward...................	'ENTER'
+	Rewind.........................	'BACKSPACE'
+	Pause..........................	'SPACEBAR'
+
+	Toggle freecam.................	'F' or any of the following
+	Move camera....................	'LMB' + 'Mouse move'
+	Zoom camera in.................	'Up scroll'
+	Zoom camera out................	'Down scroll'
+
+	Quit program...................	'ESCAPE'
+

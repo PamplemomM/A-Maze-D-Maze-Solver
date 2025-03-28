@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** timers_csfml
+** timers_csfml.c
 ** File description:
 ** Timer related functions.
 */

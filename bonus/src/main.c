@@ -1,15 +1,15 @@
 /*
 ** EPITECH PROJECT, 2025
-** main
+** main.c
 ** File description:
-** Main file for the A-Maze-d visualizer.
+** Main file for the A-Maze-d viewer.
 */
 
 #include "../include/header_viewer.h"
 
 int usage_print(void)
 {
-    FILE *file = fopen("usage.txt", "r");
+    FILE *file = fopen("assets/usage.txt", "r");
     char *line = NULL;
     size_t len = 0;
     ssize_t read = 0;
@@ -79,20 +79,14 @@ void events(void)
 
 void hue_shift(void)
 {
-    sprite_t *sprite = *get_spritelist();
-    int tmp = 0;
-    int i = 0;
+    vwr_robot_t *robot = *get_robotlist();
 
     GAME->hue += HUESHIFT;
     if (GAME->hue >= 360)
         GAME->hue -= 360;
-    while (sprite != NULL && i < MAZE->nb_robots) {
-        tmp = strcmp(sprite->name, "P0");
-        if (tmp > 0 && tmp < 10) {
-            sprite->color = color_from_hue(360 / MAZE->nb_robots * i + GAME->hue, 255, 225, 255); // REDO THIS
-            i++;
-        }
-        sprite = sprite->next;
+    while (robot != NULL) {
+        robot->sprite->color = color_from_hue(360 / MAZE->nb_robots * robot->id + GAME->hue, 255, 225, 255); // REDO THIS
+        robot = robot->next;
     }
 }
 
@@ -125,7 +119,7 @@ void start(void)
 // music can add to the memory leaks as well
 int main(int ac, char **av)
 {
-    if (ac > 1 && strcmp(av[1], "-h") == 0)
+    if (ac != 1)
         return usage_print();
     if (read_maze() == ERROR)
         return ERROR;

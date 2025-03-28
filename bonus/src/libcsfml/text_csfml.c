@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** text_csfml
+** text_csfml.c
 ** File description:
 ** Text related functions.
 */

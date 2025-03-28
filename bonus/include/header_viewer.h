@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** header_viewer.h
 ** File description:
-** Header for the A-Maze-d visualizer.
+** Header for the A-Maze-d viewer.
 */
 
 #ifndef AMAZEDVIS_H
