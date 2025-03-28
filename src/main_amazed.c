@@ -46,8 +46,10 @@ void print_maze(maze_t *maze)
 
 int main(void)
 {
-    maze_t *maze = parse_maze();
+    maze_t *maze = parse_maze(0);
 
+    if (maze == NULL)
+        return ERROR;
     print_maze(maze);
     find_solved_maze(maze);
     free_maze(&maze);

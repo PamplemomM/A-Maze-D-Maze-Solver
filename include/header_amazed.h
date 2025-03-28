@@ -63,6 +63,9 @@ typedef struct maze_s {
 
 // --------- A-MAZE-D FUNCTIONS --------
 
+// --- main_amazed.c ---
+void print_maze(maze_t *maze);
+
 // --- free_maze.c ---
 void free_rooms(room_t *room);
 void free_tunnels(tunnel_t *tunnel);
@@ -74,7 +77,7 @@ void free_maze(maze_t **maze);
 
 // --- parse_maze.c ---
 tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze);
-maze_t *parse_maze(void);
+maze_t *parse_maze(int viewer);
 
 // --- parse_room.c ---
 room_t *get_room(char *name, maze_t *maze);

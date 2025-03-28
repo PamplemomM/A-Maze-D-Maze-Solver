@@ -7,6 +7,13 @@
 
 #include "../../include/header_amazed.h"
 
+static int give_up(maze_t **maze)
+{
+    print_maze(*maze);
+    free_maze(maze);
+    return ERROR;
+}
+
 tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze)
 {
     tunnel_t *tunnel = maze->tunnels;
@@ -44,12 +51,12 @@ static int check_possible_path(room_t *r1, room_t *r2, maze_t *maze)
     return ERROR;
 }
 
-static int check_valid_maze(maze_t *maze)
+static int check_valid_maze(maze_t **maze)
 {
-    if (maze == NULL || maze->nb_robots <= 0 || maze->tunnels == NULL)
-        return ERROR;
-    if (check_possible_path(maze->start, maze->end, maze) == ERROR)
-        return ERROR;
+    if (*maze == NULL || (*maze)->nb_robots <= 0 || (*maze)->tunnels == NULL)
+        return give_up(maze);
+    if (check_possible_path((*maze)->start, (*maze)->end, *maze) == ERROR)
+        return give_up(maze);
     return SUCCESS;
 }
 
@@ -59,12 +66,12 @@ static int read_room(char *line, maze_t **maze)
 
     if (line[0] == '#' && my_strncmp(line, "##start", 7) == 0) {
         if ((*maze != NULL && (*maze)->start != NULL) || end_or_start != 0)
-            return ERROR;
+            return give_up(maze);
         end_or_start = 1;
     }
     if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0) {
         if ((*maze != NULL && (*maze)->end != NULL) || end_or_start != 0)
-            return ERROR;
+            return give_up(maze);
         end_or_start = 2;
     }
     if (line[0] == '#')
@@ -72,16 +79,16 @@ static int read_room(char *line, maze_t **maze)
     return parse_room(*maze, line, &end_or_start);
 }
 
-static int read_tunnel(char *line, maze_t **maze)
+static int read_tunnel(char *line, maze_t **maze, int viewer)
 {
     if (*maze == NULL)
         return ERROR;
-    if (my_strncmp(line, "#moves", 6) == 0)
+    if (viewer && my_strncmp(line, "#moves", 6) == 0)
         return ERROR;
     if (line[0] == '#')
         return SUCCESS;
     if (parse_tunnel(*maze, line) == ERROR)
-        return ERROR;
+        return give_up(maze);
     return SUCCESS;
 }
 
@@ -102,7 +109,7 @@ static int setup_maze(maze_t *maze, char *line, size_t len)
     return SUCCESS;
 }
 
-maze_t *parse_maze(void)
+maze_t *parse_maze(int viewer)
 {
     char *line = NULL;
     size_t len = 0;
@@ -116,11 +123,11 @@ maze_t *parse_maze(void)
             break;
     }
     do {
-        if (read_tunnel(line, &maze) != SUCCESS)
+        if (read_tunnel(line, &maze, viewer) != SUCCESS)
             break;
     } while (getline(&line, &len, stdin) != -1);
     OMNIFREE(line, 1);
-    if (check_valid_maze(maze) == ERROR)
-        return maze;
+    if (check_valid_maze(&maze) == ERROR)
+        return NULL;
     return maze;
 }
