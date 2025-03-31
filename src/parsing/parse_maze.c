@@ -88,6 +88,8 @@ static int read_room(char *line, maze_t **maze)
     if (line[0] == '#' && my_strncmp(line, "##end", 5) == 0) {
         if ((*maze != NULL && (*maze)->end != NULL) || end_or_start != 0)
             return give_up("Multiple end rooms.", maze);
+        if ((*maze != NULL && (*maze)->start == NULL))
+            return give_up("Room end given before start.", maze);
         end_or_start = 2;
     }
     if (line[0] == '#')
