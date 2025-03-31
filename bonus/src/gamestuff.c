@@ -21,6 +21,7 @@ int init_gamestuff(void)
     GAME = malloc(sizeof(game_t));
     if (GAME == NULL)
         return ERROR;
+    GAME->state = PAUSE;
     GAME->hue = diceroll(0, 360);
     GAME->move_id = 0;
     GAME->nb_moves = 0;

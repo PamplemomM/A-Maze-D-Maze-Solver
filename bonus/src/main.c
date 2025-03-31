@@ -84,7 +84,7 @@ int do_move(vwr_robot_t *robot, room_t *room, float speed)
     make_tween(tmp, &robot->sprite->scale.y, 0.2, 1.0 / speed / 2.0)->method = EASEINOUT;
 
     OMNIFREE(tmp, 1);
-    play_sound("move", 10.0 + 90.0 / speed, 0.8 + speed / 7.0);
+    play_sound("move", 70.0 / speed, diceroll(80, 90) / 100.0 + speed / 50.0);
     robot->room = room;
     robot->move_to = NULL;
     return SUCCESS;
@@ -156,26 +156,52 @@ void move_robots(float speed)
     }
 }
 
+void toggle_gamestate(gamestate_t state)
+{
+    if (GAME->state == state)
+        return;
+    GAME->state = state;
+    if (state == PLAY) {
+        text_jumpscare("UNPAUSED!", 1);
+        play_sound("play", 75, diceroll(90, 110) / 100.0);
+        start_sim(GAME->move_id);
+    }
+    if (state == PAUSE) {
+        text_jumpscare("PAUSED!", 1);
+        play_sound("pause", 75, diceroll(80, 90) / 100.0);
+        DESTROY(get_tween("id"), get_tweenlist, free_tween);
+    }
+    if (state == REWIND) {
+        text_jumpscare("REWIND!", 1);
+        play_sound("rewind", 75, diceroll(90, 110) / 100.0);
+        make_tween("id", &GAME->move_id, 0.0, sqrt(GAME->move_id))->method = EASEOUT;
+    }
+}
+
 void interact_time(void)
 {
+    if (GAME->state == REWIND && GAME->move_id <= 0.2)
+        DESTROY(get_tween("id"), get_tweenlist, free_tween);
+    if (get_tween("id") == NULL)
+        toggle_gamestate(PAUSE);
     if (KEYPRESS(sfKeyBackspace) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.5);
-        text_jumpscare("RESET!", 2);
-        make_tween("id", &GAME->move_id, 0.0, sqrt(GAME->move_id))->method = EASEOUT;
+        if (GAME->move_id <= 1.0) {
+            text_jumpscare("too early bro </3", 1);
+            return;
+        }
+        toggle_gamestate(REWIND);
     }
     if (KEYPRESS(sfKeySpace) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
         if (GAME->move_id >= GAME->nb_moves) {
-            text_jumpscare("its already over bro </3", 2);
+            text_jumpscare("its already over bro </3", 1);
             return;
         }
-        if (get_tween("id") == NULL) {
-            text_jumpscare("UNPAUSED!", 2);
-            start_sim(GAME->move_id);
-        } else {
-            text_jumpscare("PAUSED!", 2);
-            DESTROY(get_tween("id"), get_tweenlist, free_tween);
-        }
+        if (get_tween("id") == NULL)
+            toggle_gamestate(PLAY);
+        else
+            toggle_gamestate(PAUSE);
     }
     if (KEYPRESS(sfKeyAdd) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);

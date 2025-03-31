@@ -18,10 +18,16 @@
     #define MAZE (*get_maze())
 
     // values:
-    #define HUESHIFT 0.5
+    #define HUESHIFT 0.25
 
 
 // --------- VIEWER STRUCTURES ---------
+
+typedef enum game_states_s {
+    PLAY,
+    PAUSE,
+    REWIND
+} gamestate_t;
 
 typedef struct vwr_robot_s {
     struct vwr_robot_s *next;
@@ -32,6 +38,7 @@ typedef struct vwr_robot_s {
 } vwr_robot_t; // robot structure for the viewer
 
 typedef struct game {
+    gamestate_t state;
     float hue;
     float move_id;
     int nb_moves;
