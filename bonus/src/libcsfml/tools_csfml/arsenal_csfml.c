@@ -65,17 +65,18 @@ void text_jumpscare(char *str, float dur)
     char *jumpscare[3] = {"jumpscare1", "jumpscare2", "jumpscare3"};
     static int i = 0;
     text_t *txt = get_text(jumpscare[i]);
+    sfVector2f pos = {CAM->center.x + diceroll(-30, 30),
+        CAM->center.y + diceroll(-20, 20)};
 
     if (txt == NULL) {
-        txt = make_text(jumpscare[i], str, 400 + diceroll(-30, 30),
-        300 + diceroll(-20, 20));
+        txt = make_text(jumpscare[i], str, pos.x, pos.y);
     } else {
         OMNIFREE(txt->str, 1);
         txt->str = strdup(str);
         sfText_setString(txt->text, txt->str);
+        txt->pos = pos;
     }
     sfText_setOrigin(txt->text, (sfVector2f){strlen(str) * 10, 30});
-    txt->scale = (sfVector2f){1, 1};
     txt->angle = diceroll(-75, 75) / 10.0;
     txt->alpha = 1;
     txt->color = sfWhite;
