@@ -16,14 +16,15 @@ A-MAZE-D VIEWER:
 	from the start to the end of the maze.
 
 USER INTERACTIONS:
+	Play / Pause...................	'SPACEBAR'
+	Rewind to start................	'BACKSPACE'
+	Next move......................	'+'
+	Previous move..................	'-'
+
 	Focus on a robot...............	'LMB'
 	Focus on next robot............	'Right arrow'
 	Focus on previous robot........	'Left arrow'
 	Disable focus..................	'Down arrow'
-
-	Fast forward...................	'ENTER'
-	Rewind.........................	'BACKSPACE'
-	Pause..........................	'SPACEBAR'
 
 	Toggle freecam.................	'F' or any of the following
 	Move camera....................	'LMB' + 'Mouse move'
