@@ -28,10 +28,12 @@ typedef struct vwr_robot_s {
     int id;
     sprite_t *sprite;
     room_t *room;
+    room_t *move_to;
 } vwr_robot_t; // robot structure for the viewer
 
 typedef struct game {
     float hue;
+    float move_id;
     int nb_moves;
 } game_t; // miscellaneous data that needs to be globalized
 

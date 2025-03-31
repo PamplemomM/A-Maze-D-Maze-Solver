@@ -50,12 +50,14 @@ static int init_sprites(void)
 
 static int init_sounds(void)
 {
+    if (load_sound("move") == NULL)
+        return ERROR;
     return SUCCESS;
 }
 
 static int init_music(void)
 {
-    if (play_music("Parade", "K.K. Parade", 50, 1.0) == NULL) // put the volume back up to 50
+    if (play_music("Parade", "K.K. Parade", 0, 1.0) == NULL) // put the volume back up to 50
         return ERROR;
     sfMusic_setLoop((*get_music())->music, sfTrue);
     return SUCCESS;
