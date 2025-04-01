@@ -1,11 +1,15 @@
 # Hello and welcome to my humble abode.
-103 # The guests are plentiful today!
+103
 ##start
 entrance 0 5
 ##end
 backdoor 13 0
 living_room 5 2
 kitchen 8 2
+sewers 4 5
+garage 3 1
+garden 7 4
+balcony 11 3
 bathroom 4 8
 vent_1 5 9
 vent_2 7 7
@@ -13,11 +17,27 @@ vent_3 9 6
 vent_4 11 4
 vent_5 13 2
 entrance-living_room
+entrance-sewers
+entrance-garage
+entrance-vent_1
+sewers-garden
+sewers-garage
+garage-garden
+garage-vent_4
 living_room-kitchen
 living_room-bathroom
-bathroom-vent_1
+living_room-garden
+kitchen-vent_3
+kitchen-balcony
+bathroom-vent_2
+bathroom-vent_4
+balcony-backdoor
+garden-vent_5
 vent_1-vent_2
+vent_1-vent_3
 vent_2-vent_3
+vent_2-vent_4
+vent_3-kitchen
 vent_3-vent_4
 vent_4-vent_5
 vent_5-backdoor
