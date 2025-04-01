@@ -241,7 +241,9 @@ void hue_shift(void)
     if (GAME->hue >= 360)
         GAME->hue -= 360;
     while (robot != NULL) {
-        robot->sprite->color = color_from_hue(360 / MAZE->nb_robots * robot->id + GAME->hue, 255, 225, 255); // REDO THIS
+        robot->sprite->color =
+            color_from_hue(360 / MAZE->nb_robots * robot->id + GAME->hue,
+            255, 240, 255);
         robot = robot->next;
     }
 }

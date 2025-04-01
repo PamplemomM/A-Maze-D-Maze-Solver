@@ -54,8 +54,10 @@ static void setup_robot(vwr_robot_t *robot)
     sprite_t *sprite = robot->sprite;
 
     gender_reveal(sprite);
-    sprite->scale = (sfVector2f){0.2, 0.2};
     center_sprite_origin(sprite, 0.5, 1.0);
+    sprite->scale = (sfVector2f){0.2, 0.2};
+    robot->room = MAZE->start;
+    robot->move_to = NULL;
     robot->next = *get_robotlist();
     *get_robotlist() = robot;
 }
@@ -68,7 +70,8 @@ vwr_robot_t *make_robot(int id)
 
     if (name == NULL)
         return NULL;
-    sprite = make_sprite(name, "guy", MAZE->start->x * 50, MAZE->start->y * 50); // tmp position // fails if only 1 robot
+    sprite = make_sprite(name, "guy",
+        MAZE->start->x * 50, MAZE->start->y * 50);
     if (sprite == NULL)
         return OMNIFREE(name, 1);
     OMNIFREE(name, 1);
@@ -79,8 +82,6 @@ vwr_robot_t *make_robot(int id)
     }
     robot->sprite = sprite;
     robot->id = id;
-    robot->room = MAZE->start;
-    robot->move_to = NULL;
     setup_robot(robot);
     return robot;
 }
