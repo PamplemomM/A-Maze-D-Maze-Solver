@@ -9,50 +9,81 @@
 
 static int init_robots(void)
 {
+    vwr_robot_t **list = malloc(sizeof(vwr_robot_t *) * (MAZE->nb_robots + 1));
+
+    if (list == NULL)
+        return ERROR;
     for (int i = 1; i <= MAZE->nb_robots; i++) {
         if (make_robot(i) == NULL)
             return ERROR;
+        list[MAZE->nb_robots - i] = get_robot(i);
     }
+    list[MAZE->nb_robots] = NULL;
+    GAME->robots_order = list;
     return SUCCESS;
+}
+
+static void setup_camera(sfIntRect bounds)
+{
+    int max_diff = MAX(bounds.width - bounds.left, bounds.height - bounds.top);
+
+    printf("%d, %d, %d, %d\n", bounds.left, bounds.top, bounds.width, bounds.height);
+    CAM->center.x = (bounds.left + bounds.width) / 2.0;
+    CAM->center.y = (bounds.top + bounds.height) / 2.0;
+    make_tween("camzoom", &CAM->zoom, 1 / (max_diff / 500.0), 2.0)->method = EASEOUT;
 }
 
 static int init_rooms(void)
 {
     room_t *room = MAZE->rooms;
     char *name = NULL;
+    sfIntRect bounds = {-1, -1, -1, -1};
 
     while (room != NULL) {
         name = merge_str("room_", room->name);
         if (name == NULL)
             return ERROR;
-        if (make_sprite(name, "jonkler", room->x * 50, room->y * 50) == NULL) {
+        room->x *= 50;
+        room->y *= 50;
+
+        if (bounds.left == -1 || room->x < bounds.left)
+            bounds.left = room->x;
+        if (bounds.top == -1 || room->y < bounds.top)
+            bounds.top = room->y;
+        if (bounds.width == -1 || room->x > bounds.width)
+            bounds.width = room->x;
+        if (bounds.height == -1 || room->y > bounds.height)
+            bounds.height = room->y;
+
+        if (make_sprite(name, "jonkler", room->x, room->y - 15) == NULL) {
             OMNIFREE(name, 1);
             return ERROR;
         }
+        get_sprite(name)->type = ROOM;
         center_sprite_origin(get_sprite(name), 0.5, 0.5);
         OMNIFREE(name, 1);
         room = room->next;
     }
+    setup_camera(bounds);
     return SUCCESS;
 }
 
 static int init_sprites(void)
 {
-    if (init_robots() == ERROR)
-        return ERROR;
     if (init_rooms() == ERROR)
+        return ERROR;
+    if (init_robots() == ERROR)
         return ERROR;
     if (make_sprite("bg", "bg", -100, -50) == NULL)
         return ERROR;
+    get_sprite("bg")->type = NONE;
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
     return SUCCESS;
 }
 
 static int init_sounds(void)
 {
-    if (load_sound("move") == NULL)
-        return ERROR;
-    return SUCCESS;
+    return precache_sounds();
 }
 
 static int init_music(void)

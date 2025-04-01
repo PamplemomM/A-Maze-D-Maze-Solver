@@ -49,6 +49,7 @@ static void setup_sprite(sprite_t *sprite)
     sprite->color = sfWhite;
     sprite->rect = (sfIntRect){0, 0, sfTexture_getSize(sprite->texture).x,
     sfTexture_getSize(sprite->texture).y};
+    sprite->type = NONE;
     sprite->draw = 1;
     sprite->next = *get_spritelist();
     *get_spritelist() = sprite;
