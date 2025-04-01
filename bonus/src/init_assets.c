@@ -26,11 +26,12 @@ static int init_robots(void)
 static void setup_camera(sfIntRect bounds)
 {
     int max_diff = MAX(bounds.width - bounds.left, bounds.height - bounds.top);
+    float cam_zoom = 1.5 / (max_diff / 300.0);
 
-    printf("%d, %d, %d, %d\n", bounds.left, bounds.top, bounds.width, bounds.height);
     CAM->center.x = (bounds.left + bounds.width) / 2.0;
     CAM->center.y = (bounds.top + bounds.height) / 2.0;
-    make_tween("camzoom", &CAM->zoom, 1 / (max_diff / 500.0), 2.0)->method = EASEOUT;
+    CAM->zoom = cam_zoom * 1.2;
+    make_tween("camzoom", &CAM->zoom, cam_zoom, 1.7)->method = EASEOUT;
 }
 
 static int init_rooms(void)
@@ -74,10 +75,13 @@ static int init_sprites(void)
         return ERROR;
     if (init_robots() == ERROR)
         return ERROR;
-    if (make_sprite("bg", "bg", -100, -50) == NULL)
+    if (make_sprite("bg", "bg", CAM->center.x, CAM->center.y) == NULL)
         return ERROR;
+    get_sprite("bg")->scale =
+        (sfVector2f){0.6 / CAM->zoom * 2, 0.6 / CAM->zoom * 2};
     get_sprite("bg")->type = NONE;
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
+    center_sprite_origin(get_sprite("bg"), 0.5, 0.5);
     return SUCCESS;
 }
 
@@ -109,6 +113,7 @@ int init_assets(void)
     return SUCCESS;
 }
 
+// DESTROY THEM ALL !! (Like in the casino of my grandmother)
 void destroy_assets(void)
 {
     while (*get_robotlist())

@@ -26,68 +26,92 @@ int usage_print(void)
     return SUCCESS;
 }
 
-void move_cam(void)
+void cam_move_mouse(sfMouseMoveEvent mouse)
+{
+    static sfMouseMoveEvent mouseold;
+
+    if (MOUSEPRESS(sfMouseLeft)) {
+        DESTROY(get_tween("camvert"), get_tweenlist, free_tween);
+        DESTROY(get_tween("camlat"), get_tweenlist, free_tween);
+        CAM->center.x += (mouseold.x - mouse.x) / CAM->zoom;
+        CAM->center.y += (mouseold.y - mouse.y) / CAM->zoom;
+    }
+    mouseold = mouse;
+}
+
+void cam_zoom_mouse(sfMouseWheelScrollEvent mouse)
+{
+    tween_t *tween = get_tween("camzoom");
+    float tmp = CAM->zoom;
+
+    if (tween != NULL)
+        tmp = tween->dest;
+    tween = make_tween("camzoom", &CAM->zoom, tmp, 0.5);
+    tween->method = EASEOUT;
+    tmp += mouse.delta * tmp / 10;
+    if (tmp > 100)
+        tmp = 100;
+    else if (tmp < 0.1)
+        tmp = 0.1;
+    tween->dest = tmp;
+}
+
+void cam_move_keys(void)
 {
     float fact = 1.0;
 
     if (KEYPRESS(sfKeyLShift))
         fact = 1.5;
+    if (KEYPRESS(sfKeyUp)) {
+        if (get_tween("camrot") != NULL)
+            CAM->angle -= 0.2 * (CAM->angle / MAX(fabs(CAM->angle), 1));
+        make_tween("camvert", &CAM->center.y, CAM->center.y - 50 / CAM->zoom * fact, 1)->method = EASEOUT;
+    } else if (KEYPRESS(sfKeyDown)) {
+        if (get_tween("camrot") != NULL)
+            CAM->angle += 0.2 * (CAM->angle / MAX(fabs(CAM->angle), 1));
+        make_tween("camvert", &CAM->center.y, CAM->center.y + 50 / CAM->zoom * fact, 1)->method = EASEOUT;
+    }
     if (KEYPRESS(sfKeyLeft)) {
         make_tween("camlat", &CAM->center.x, CAM->center.x - 50 / CAM->zoom * fact, 1)->method = EASEOUT;
-        CAM->angle -= 0.5 * fact;
+        CAM->angle -= 0.4 * fact;
         make_tween("camrot", &CAM->angle, 0, 1)->method = EASEOUT;
-    }
-    if (KEYPRESS(sfKeyRight)) {
+    } else if (KEYPRESS(sfKeyRight)) {
         make_tween("camlat", &CAM->center.x, CAM->center.x + 50 / CAM->zoom * fact, 1)->method = EASEOUT;
-        CAM->angle += 0.5 * fact;
+        CAM->angle += 0.4 * fact;
         make_tween("camrot", &CAM->angle, 0, 1)->method = EASEOUT;
-    }
-    if (KEYPRESS(sfKeyUp)) {
-        if (get_tween("camvert") == NULL || TIME - get_tween("camvert")->tstart > 0.1) {
-            CAM->angle += diceroll(-10, 10) / 10.0 * fact;
-            make_tween("camrot", &CAM->angle, 0, 1)->method = EASEOUT;
-        }
-        make_tween("camvert", &CAM->center.y, CAM->center.y - 50 / CAM->zoom * fact, 1)->method = EASEOUT;
-    }
-    if (KEYPRESS(sfKeyDown)) {
-        if (get_tween("camvert") == NULL || TIME - get_tween("camvert")->tstart > 0.1) {
-            CAM->angle += diceroll(-10, 10) / 10.0 * fact;
-            make_tween("camrot", &CAM->angle, 0, 1)->method = EASEOUT;
-        }
-        make_tween("camvert", &CAM->center.y, CAM->center.y + 50 / CAM->zoom * fact, 1)->method = EASEOUT;
     }
     if (KEYPRESS(sfKeyP)) {
         make_tween("camzoom", &CAM->zoom, MIN(CAM->zoom * (1.2 + (fact - 1) / 2.0), 100), 1)->method = EASEOUT;
-    }
-    if (KEYPRESS(sfKeyM)) {
+    } else if (KEYPRESS(sfKeyM)) {
         make_tween("camzoom", &CAM->zoom, MAX(CAM->zoom / (1.2 + (fact - 1) / 2.0), 0.1), 1)->method = EASEOUT;
     }
 }
 
 int do_move(vwr_robot_t *robot, room_t *room, float speed)
 {
-    char *tmp = merge_str(robot->sprite->name, "x");
+    sprite_t *sprite = robot->sprite;
+    char *tmp = merge_str(sprite->name, "x");
 
     if (tmp == NULL)
         return ERROR;
-    make_tween(tmp, &robot->sprite->pos.x, room->x, 0.8 / speed / 1.5)->method = EASEOUT;
+    make_tween(tmp, &sprite->pos.x, room->x, 0.8 / speed / 1.5)->method = EASEOUT;
 
     tmp[my_strlen(tmp) - 1] = 'y';
-    make_tween(tmp, &robot->sprite->pos.y, room->y, 0.8 / speed / 1.5)->method = EASEOUT;
+    make_tween(tmp, &sprite->pos.y, room->y, 0.8 / speed / 1.5)->method = EASEOUT;
 
     tmp[my_strlen(tmp) - 1] = 'r';
-    robot->sprite->angle += (room->x - robot->sprite->pos.x) / 10.0 * (robot->sprite->pos.y - room->y + 75) / 100.0;
-    robot->sprite->angle = MAX(MIN(robot->sprite->angle, 80), -80);
-    make_tween(tmp, &robot->sprite->angle, 0, 0.8 / speed / 1.7)->method = EASEINOUT;
+    sprite->angle += (room->x - sprite->pos.x) / 10.0;
+    sprite->angle = MAX(MIN(sprite->angle, 80), -80);
+    make_tween(tmp, &sprite->angle, 0, 0.8 / speed / 1.7)->method = EASEINOUT;
 
     tmp[my_strlen(tmp) - 1] = 's';
-    robot->sprite->scale.y += abs(room->y - robot->sprite->pos.y) / 3000.0;
-    robot->sprite->scale.y = MIN(robot->sprite->scale.y, 0.35);
-    make_tween(tmp, &robot->sprite->scale.y, 0.2, 0.8 / speed / 1.45)->method = EASEINOUT;
+    sprite->scale.y += abs(room->y - sprite->pos.y) / 3000.0;
+    sprite->scale.y = MIN(sprite->scale.y, 0.35);
+    make_tween(tmp, &sprite->scale.y, 0.2, 0.8 / speed / 1.45)->method = EASEINOUT;
 
     OMNIFREE(tmp, 1);
     play_sound("move", 70.0 / speed, diceroll(80, 90) / 100.0 + speed / 50.0);
-    run_timer("moving", 0.8 / speed / 1.6);
+    run_timer("moving", 0.8 / speed / 1.5);
     robot->room = room;
     robot->move_to = NULL;
     return SUCCESS;
@@ -104,6 +128,7 @@ int move_allrobots_to(room_t *room)
     return SUCCESS;
 }
 
+// IF YOU SEE THIS, YOU'RE AMNESIC
 void update_robots_rooms(int id)
 {
     vwr_robot_t *robot = *get_robotlist();
@@ -134,9 +159,23 @@ void start_sim(float start)
     update_robots_rooms((int)start);
 }
 
+int count_remaining_moves(void)
+{
+    vwr_robot_t *robot = *get_robotlist();
+    int cnt = 0;
+
+    while (robot != NULL) {
+        if (robot->move_to)
+            cnt++;
+        robot = robot->next;
+    }
+    return cnt;
+}
+
 void move_robots(float speed)
 {
     static vwr_robot_t *robot = NULL;
+    static int moves_cnt = 0;
     static int curr_id = 0;
     int diff_id = (int)GAME->move_id - curr_id;
 
@@ -148,13 +187,16 @@ void move_robots(float speed)
         curr_id += diff_id / abs(diff_id);
         printf("move set %d is now in action!\n", curr_id);
         update_robots_rooms(curr_id);
+        moves_cnt = count_remaining_moves();
     }
     if (get_timer("mvcooldown") == NULL && robot != NULL) {
-        if (robot->move_to) {
-            printf("move P%d-%s\n", robot->id, robot->move_to->name);
-            do_move(robot, robot->move_to, speed);
-            run_timer("mvcooldown", diceroll(5, 10) / 70.0 / speed);
-        }
+        while (robot != NULL && robot->move_to == NULL)
+            robot = robot->next;
+        if (robot == NULL)
+            return;
+        printf("move P%d-%s\n", robot->id, robot->move_to->name);
+        do_move(robot, robot->move_to, speed);
+        run_timer("mvcooldown", (diceroll(5, 10) / 40.0 / speed) / (1 + moves_cnt / 5.0));
         robot = robot->next;
     }
 }
@@ -181,11 +223,11 @@ void toggle_gamestate(gamestate_t state)
     }
 }
 
-void interact_time(void)
+void interact_sim(void)
 {
     if (GAME->state == REWIND && GAME->move_id <= 0.2)
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
-    if (get_tween("id") == NULL)
+    if (get_tween("id") == NULL && get_timer("moving") == NULL)
         toggle_gamestate(PAUSE);
     if (KEYPRESS(sfKeyBackspace) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.5);
@@ -211,14 +253,11 @@ void interact_time(void)
         if ((int)GAME->move_id < GAME->nb_moves)
             GAME->move_id++;
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
-        printf("%d\n", (int)GAME->move_id);
-    }
-    if (KEYPRESS(sfKeySubtract) && get_timer("actcooldown") == NULL) {
+    } else if (KEYPRESS(sfKeySubtract) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
         if ((int)GAME->move_id > 0)
             GAME->move_id--;
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
-        printf("%d\n", (int)GAME->move_id);
     }
 }
 
@@ -226,9 +265,13 @@ void events(void)
 {
     sfEvent event;
 
-    move_cam();
-    interact_time();
+    cam_move_keys();
+    interact_sim();
     while (sfRenderWindow_pollEvent(WINDOW, &event)) {
+        if (event.type == sfEvtMouseMoved)
+            cam_move_mouse(event.mouseMove);
+        if (event.type == sfEvtMouseWheelScrolled)
+            cam_zoom_mouse(event.mouseWheelScroll);
         if (event.type == sfEvtKeyPressed && event.key.code == sfKeyEscape)
             sfRenderWindow_close(WINDOW);
         if (event.type == sfEvtClosed)
@@ -306,6 +349,7 @@ void update_stuff(void)
     draw_robots();
     draw_alltexts();
     update_cam();
+    events();
 }
 
 void run(void)
@@ -313,7 +357,6 @@ void run(void)
     while (sfRenderWindow_isOpen(WINDOW)) {
         sfRenderWindow_clear(WINDOW, color_from_hue(0, 75, 0, 255));
         update_stuff();
-        events();
         sfRenderWindow_display(WINDOW);
     }
 }

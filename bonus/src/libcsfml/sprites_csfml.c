@@ -90,6 +90,7 @@ void draw_sprite(sprite_t *sprite)
     }
 }
 
+// oopsy, I left a fart here...
 void free_sprite(sprite_t *sprite)
 {
     sfSprite_destroy(sprite->sprite);
