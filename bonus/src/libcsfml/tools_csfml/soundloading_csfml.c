@@ -73,12 +73,10 @@ int precache_sounds(void)
         }
         name[strlen(name) - strlen(FORMAT_SFX)] = '\0';
         if (load_sound(name) == NULL) {
-            OMNIFREE(name, 1);
             closedir(dr);
             return ERROR;
         }
         buff = readdir(dr);
     }
-    OMNIFREE(name, 1);
     closedir(dr);
 }
