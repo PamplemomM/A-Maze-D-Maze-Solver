@@ -39,6 +39,7 @@ typedef struct vwr_robot_s {
 
 typedef struct game {
     gamestate_t state;
+    vwr_robot_t **robots_order;
     float hue;
     float move_id;
     int nb_moves;

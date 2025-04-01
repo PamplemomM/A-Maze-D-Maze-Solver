@@ -22,6 +22,7 @@ int init_gamestuff(void)
     if (GAME == NULL)
         return ERROR;
     GAME->state = PAUSE;
+    GAME->robots_order = NULL;
     GAME->hue = diceroll(0, 360);
     GAME->move_id = 0;
     GAME->nb_moves = 0;
@@ -37,5 +38,6 @@ void destroy_gamestuff(void)
 {
     if (GAME == NULL)
         return;
+    OMNIFREE(GAME->robots_order, 1);
     OMNIFREE(GAME, 1);
 }

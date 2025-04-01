@@ -70,21 +70,24 @@ int do_move(vwr_robot_t *robot, room_t *room, float speed)
 
     if (tmp == NULL)
         return ERROR;
-    make_tween(tmp, &robot->sprite->pos.x, room->x * 50, 1.0 / speed / 2.0)->method = EASEOUT;
+    make_tween(tmp, &robot->sprite->pos.x, room->x, 0.8 / speed / 1.5)->method = EASEOUT;
 
     tmp[my_strlen(tmp) - 1] = 'y';
-    make_tween(tmp, &robot->sprite->pos.y, room->y * 50, 1.0 / speed / 2.0)->method = EASEOUT;
+    make_tween(tmp, &robot->sprite->pos.y, room->y, 0.8 / speed / 1.5)->method = EASEOUT;
 
     tmp[my_strlen(tmp) - 1] = 'r';
-    robot->sprite->angle += (room->x * 50 - robot->sprite->pos.x) / 10.0 * (robot->sprite->pos.y - room->y * 50 + 50) / 100.0;
-    make_tween(tmp, &robot->sprite->angle, 0, 1.0 / speed / 2.2)->method = EASEINOUT;
+    robot->sprite->angle += (room->x - robot->sprite->pos.x) / 10.0 * (robot->sprite->pos.y - room->y + 75) / 100.0;
+    robot->sprite->angle = MAX(MIN(robot->sprite->angle, 80), -80);
+    make_tween(tmp, &robot->sprite->angle, 0, 0.8 / speed / 1.7)->method = EASEINOUT;
 
     tmp[my_strlen(tmp) - 1] = 's';
-    robot->sprite->scale.y += abs(room->y * 50 - robot->sprite->pos.y) / 3000.0;
-    make_tween(tmp, &robot->sprite->scale.y, 0.2, 1.0 / speed / 2.0)->method = EASEINOUT;
+    robot->sprite->scale.y += abs(room->y - robot->sprite->pos.y) / 3000.0;
+    robot->sprite->scale.y = MIN(robot->sprite->scale.y, 0.35);
+    make_tween(tmp, &robot->sprite->scale.y, 0.2, 0.8 / speed / 1.45)->method = EASEINOUT;
 
     OMNIFREE(tmp, 1);
     play_sound("move", 70.0 / speed, diceroll(80, 90) / 100.0 + speed / 50.0);
+    run_timer("moving", 0.8 / speed / 1.6);
     robot->room = room;
     robot->move_to = NULL;
     return SUCCESS;
@@ -265,15 +268,44 @@ void update_robots(void)
     return;
 }
 
+void reorder_robots(void)
+{
+    vwr_robot_t **list = GAME->robots_order;
+    vwr_robot_t *tmp = NULL;
+
+    for (int i = 1; list[i] != NULL; i++) {
+        if (list[i - 1]->sprite->pos.y > list[i]->sprite->pos.y) {
+            tmp = list[i];
+            list[i] = list[i - 1];
+            list[i - 1] = tmp;
+            reorder_robots();
+        }
+    }
+}
+
+void draw_robots(void)
+{
+    vwr_robot_t **list = GAME->robots_order;
+
+    if (list == NULL)
+        return;
+    if (get_timer("moving") != NULL)
+        reorder_robots();
+    for (int i = 0; list[i] != NULL; i++)
+        draw_sprite(list[i]->sprite);
+}
+
 void update_stuff(void)
 {
     update_tweens();
     update_timers();
+    update_robots();
     hue_shift();
-    draw_allsprites();
+    draw_allsprites(NONE);
+    draw_allsprites(ROOM);
+    draw_robots();
     draw_alltexts();
     update_cam();
-    update_robots();
 }
 
 void run(void)
