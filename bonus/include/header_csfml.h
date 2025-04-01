@@ -46,6 +46,13 @@
 
 // ------- CSFML LIB STRUCTURES --------
 
+typedef enum sprite_types {
+    NONE,
+    ROOM,
+    ROBOT,
+    ANY
+} sprite_type_t;
+
 typedef enum tween_methods {
     LINEAR,
     EASEIN,
@@ -75,6 +82,7 @@ typedef struct sprite_s {
     float angle;
     sfColor color;
     sfIntRect rect;
+    sprite_type_t type;
     int draw;
 } sprite_t; // linked list for sprites
 
@@ -198,7 +206,7 @@ void destroy_clock(void);
 // ----- CSFML LIB TOOL FUNCTIONS ------
 
 // --- spritetools_csfml.c ---
-void draw_allsprites(void);
+void draw_allsprites(sprite_type_t type);
 void center_sprite_origin(sprite_t *sprite, float xfact, float yfact);
 
 // --- soundloading_csfml.c ---

@@ -7,12 +7,13 @@
 
 #include "../../../include/header_csfml.h"
 
-void draw_allsprites(void)
+void draw_allsprites(sprite_type_t type)
 {
     sprite_t *sprite = *get_spritelist();
 
     while (sprite != NULL) {
-        draw_sprite(sprite);
+        if (type == ANY || sprite->type == type)
+            draw_sprite(sprite);
         sprite = sprite->next;
     }
 }
