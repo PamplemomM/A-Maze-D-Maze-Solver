@@ -9,7 +9,7 @@
 
 int move_robots(path_t **good_path, maze_t *maze)
 {
-    path_t *path = good_path;
+    path_t *path = *good_path;
 
     while (path != NULL) {
         for (int i = 1; i < maze->nb_robots + 1; i++)
@@ -18,3 +18,84 @@ int move_robots(path_t **good_path, maze_t *maze)
     }
     return SUCCESS;
 }
+//
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+////
+//
+//
+//
+//
+//
+//
+//
+//
