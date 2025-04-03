@@ -103,7 +103,8 @@ int find_solved_maze(maze_t *maze)
     }
     path = good_path;
     while (path != NULL) {
-        mini_printf("P%d-%s\n", 1, path->name);
+        for (int i = 1; i < maze->nb_robots + 1; i++)
+            mini_printf("P%d-%s\n", i, path->name);
         path = path->next;
     }
     free_paths(&good_path);
