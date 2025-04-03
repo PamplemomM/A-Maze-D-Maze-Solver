@@ -106,6 +106,7 @@ int find_solved_maze(maze_t *maze)
         mini_printf("P%d-%s\n", 1, path->name);
         path = path->next;
     }
+    free_paths(&good_path);
     return SUCCESS;
 }
 
