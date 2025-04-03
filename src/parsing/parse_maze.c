@@ -55,7 +55,18 @@ static int check_possible_path(room_t *r1, room_t *r2, maze_t *maze)
     return ERROR;
 }
 
-static int check_valid_maze(maze_t **maze)
+static int check_valid_tunnels(maze_t **maze)
+{
+    if (*maze == NULL)
+        return ERROR;
+    if ((*maze)->tunnels == NULL)
+        return give_up("No tunnels.", maze);
+    if (check_possible_path((*maze)->start, (*maze)->end, *maze) == ERROR)
+        return give_up("End room cannot be reached.", maze);
+    return SUCCESS;
+}
+
+static int check_valid_rooms(maze_t **maze)
 {
     if (*maze == NULL)
         return ERROR;
@@ -67,10 +78,6 @@ static int check_valid_maze(maze_t **maze)
         return give_up("No start room.", maze);
     if ((*maze)->end == NULL)
         return give_up("No end room.", maze);
-    if ((*maze)->tunnels == NULL)
-        return give_up("No tunnels.", maze);
-    if (check_possible_path((*maze)->start, (*maze)->end, *maze) == ERROR)
-        return give_up("End room cannot be reached.", maze);
     return SUCCESS;
 }
 
@@ -151,12 +158,14 @@ maze_t *parse_maze(int viewer)
         if (read_room(line, &maze) != SUCCESS)
             break;
     }
+    if (check_valid_rooms(&maze) == ERROR)
+        return NULL;
     do {
         if (read_tunnel(line, &maze) != SUCCESS)
             break;
     } while (getline(&line, &len, stdin) != -1);
     OMNIFREE(line, 1);
-    if (check_valid_maze(&maze) == ERROR)
+    if (check_valid_tunnels(&maze) == ERROR)
         return NULL;
     return maze;
 }
