@@ -33,6 +33,7 @@ typedef struct room_s {
 } room_t;
 
 typedef struct path_s {
+    char *name;
     room_t *room;
     struct path_s *next;
 } path_t;
