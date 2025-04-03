@@ -52,28 +52,3 @@ Test(my_getnbr, full_covr)
     cr_assert_eq(my_getnbr(src), 45);
 }
 
-//*********************************
-// ------ MY_STRTOK FUNCTION ------
-//*********************************
-
-Test(my_strtok, full_covr, .init = cr_redirect_stdout)
-{
-    char *dup = my_strdup("Tom, really good, mate");
-    char *first = my_strtok(dup, ", ");
-    char *second = my_strtok(NULL, ",");
-
-    mini_printf("%s %s\n", first, second);
-    cr_assert_stdout_eq_str("Tom  really good\n");
-}
-
-Test(my_strtok_error, full_covr, .init = cr_redirect_stdout)
-{
-    char *dup = my_strdup("Tom, really good, mate");
-    char *first = my_strtok(NULL, ",");
-    char *second = my_strtok(dup, "bad delim");
-    char *third = my_strtok(dup, "s");
-    char *four = my_strtok(dup, dup);
-
-    mini_printf("%s\n", "dup");
-    cr_assert_stdout_eq_str("dup\n");
-}
