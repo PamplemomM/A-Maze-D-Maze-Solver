@@ -7,18 +7,25 @@
 
 #include "../../include/header_amazed.h"
 
-static char **dup_pathlist(path_t **good_path, maze_t *maze)
+static int my_linked_size(path_t **node)
 {
-    path_t *current = *good_path;
     int size = 0;
-    int i = 0;
-    char **path = NULL;
+    path_t *current = *node;
 
     while (current != NULL) {
         size++;
         current = current->next;
     }
-    path = malloc(sizeof(char *) * (size + 1));
+    return size;
+}
+
+static char **dup_pathlist(path_t **good_path, maze_t *maze)
+{
+    path_t *current = *good_path;
+    int size = my_linked_size(good_path);
+    int i = 0;
+    char **path = malloc(sizeof(char *) * (size + 1));
+
     if (path == NULL)
         return NULL;
     current = *good_path;
@@ -35,17 +42,19 @@ int display_robots_move(path_t **good_path, maze_t *maze)
 {
     path_t *pathlist = *good_path;
     char **path = dup_pathlist(good_path, maze);
+    int max_id = my_linked_size(good_path) * maze->nb_robots;
+    int id = 0;
 
     if (path == NULL)
         return ERROR;
-    for (int i = 0; path[i] != NULL; i++) {
-        for (int j = 1; j < maze->nb_robots + 1; j++)
-            mini_printf("P%d-%s\n", j, path[i]);
+    for (int rbt = 1; rbt < maze->nb_robots + 1; rbt++) {
+        if (id < rbt)
+            continue;
+        mini_printf("P%d-%s\n", rbt, path[rbt + id]);
     }
-    while (pathlist != NULL) {
-        for (int i = 1; i < maze->nb_robots + 1; i++)
-            mini_printf("P%d-%s\n", i, pathlist->name);
-        pathlist = pathlist->next;
+    for (int i = 0; path[i] != NULL; i++) {
+        for (int rbt = 1; rbt < maze->nb_robots + 1; rbt++)
+            mini_printf("P%d-%s\n", rbt, path[i]);
     }
     OMNIFREE(path, 2);
     return SUCCESS;
