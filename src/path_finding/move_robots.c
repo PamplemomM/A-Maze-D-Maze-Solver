@@ -9,13 +9,17 @@
 
 int move_robots(path_t **good_path, maze_t *maze)
 {
-    path_t *path = *good_path;
+    path_t *pathlist = *good_path;
+    int size = 0;
+    char **path
 
-    while (path != NULL) {
+    while (pathlist != NULL) {
+        size++;
         for (int i = 1; i < maze->nb_robots + 1; i++)
             mini_printf("P%d-%s\n", i, path->name);
-        path = path->next;
+        pathlist = pathlist->next;
     }
+    path = malloc(sizeof(char *) * (size + 1));
     return SUCCESS;
 }
 
