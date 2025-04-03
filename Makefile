@@ -10,7 +10,10 @@ NAME    =	amazed
 SRCS	=	$(shell find src/ -type f -name '*.c')
 
 SRCTEST	=	$(shell find src/lib -type f -name '*.c')
+SRCTEST	+=	$(shell find src/parsing -type f -name '*.c')
 SRCTEST	+=	$(shell find tests/ -type f -name '*.c')
+SRCTEST	+=	src/free_maze.c	\
+		src/print_maze.c
 
 CFLAGS	=	-Wall -Wextra -Wshadow -I./../include
 

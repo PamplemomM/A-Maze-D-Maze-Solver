@@ -41,7 +41,8 @@ static int find_robot_move(room_t *current, maze_t *maze, int robot)
         tunnel = get_tunnel(current, current->links[i], maze);
         if (tunnel == NULL)
             continue;
-        if (tunnel->val == 1) {
+        if (tunnel->val == robot || tunnel->val == 1) {
+            tunnel->val = robot + 1;
             mini_printf("P%d-%s\n", robot, current->links[i]->name);
             find_robot_move(current->links[i], maze, robot);
             break;
