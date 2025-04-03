@@ -80,9 +80,9 @@ void cam_move_keys(void)
         CAM->angle += 0.4 * fact;
         make_tween("camrot", &CAM->angle, 0, 1)->method = EASEOUT;
     }
-    if (KEYPRESS(sfKeyP)) {
+    if (KEYPRESS(sfKeyC)) {
         make_tween("camzoom", &CAM->zoom, MIN(CAM->zoom * (1.2 + (fact - 1) / 2.0), 100), 1)->method = EASEOUT;
-    } else if (KEYPRESS(sfKeyM)) {
+    } else if (KEYPRESS(sfKeyX)) {
         make_tween("camzoom", &CAM->zoom, MAX(CAM->zoom / (1.2 + (fact - 1) / 2.0), 0.1), 1)->method = EASEOUT;
     }
 }
@@ -248,12 +248,12 @@ void interact_sim(void)
         else
             toggle_gamestate(PAUSE);
     }
-    if (KEYPRESS(sfKeyAdd) && get_timer("actcooldown") == NULL) {
+    if ((KEYPRESS(sfKeyAdd) || KEYPRESS(sfKeyN)) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
         if ((int)GAME->move_id < GAME->nb_moves)
             GAME->move_id++;
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
-    } else if (KEYPRESS(sfKeySubtract) && get_timer("actcooldown") == NULL) {
+    } else if ((KEYPRESS(sfKeySubtract) || KEYPRESS(sfKeyB)) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
         if ((int)GAME->move_id > 0)
             GAME->move_id--;

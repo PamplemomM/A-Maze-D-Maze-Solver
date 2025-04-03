@@ -18,8 +18,8 @@ A-MAZE-D VIEWER:
 USER INTERACTIONS:
 	Play / Pause...................	'SPACEBAR'
 	Rewind to start................	'BACKSPACE'
-	Next move......................	'+'
-	Previous move..................	'-'
+	Next move......................	'N' or '+'
+	Previous move..................	'B' or '-'
 
 	Focus on a robot...............	'LMB'
 	Focus on next robot............	'Right arrow'
@@ -27,9 +27,10 @@ USER INTERACTIONS:
 	Disable focus..................	'Down arrow'
 
 	Toggle freecam.................	'F' or any of the following
-	Move camera....................	'LMB' + 'Mouse move'
-	Zoom camera in.................	'Up scroll'
-	Zoom camera out................	'Down scroll'
+	Move camera....................	'Arrow keys' or 'LMB' + 'Mouse move'
+	Zoom camera in.................	'C' or 'Up scroll'
+	Zoom camera out................	'X' or 'Down scroll'
+	Speed up....................... 'LSHIFT'
 
 	Quit program...................	'ESCAPE'
 
