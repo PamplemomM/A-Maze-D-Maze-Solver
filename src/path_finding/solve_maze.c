@@ -9,6 +9,16 @@
 
 static int free_paths(path_t **paths)
 {
+    path_t *current = *paths;
+    path_t *next = NULL;
+
+    while (current != NULL) {
+        next = current->next;
+        OMNIFREE(current->name, 1);
+        OMNIFREE(current, 1);
+        current = next;
+    }
+    *paths = NULL;
     return SUCCESS;
 }
 
