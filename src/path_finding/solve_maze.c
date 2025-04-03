@@ -100,7 +100,7 @@ int find_solved_maze(maze_t *maze)
     for (int i = 1; i <= maze->nb_robots; i++) {
         find_robot_move(maze->start, maze, i, &good_path);
     }
-    move_robots(&good_path, maze);
+    display_robots_move(&good_path, maze);
     free_paths(&good_path);
     return SUCCESS;
 }
