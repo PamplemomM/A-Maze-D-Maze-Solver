@@ -100,6 +100,9 @@ move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
 // --- find_moves.c ---
 move_t *find_moves(maze_t *maze, int current_id);
 
+// --- move_robots.c ---
+int move_robots(path_t **good_path, maze_t *maze);
+
 // --- solve_maze.c ---
 int solve_maze(maze_t *maze);
 int find_solved_maze(maze_t *maze);

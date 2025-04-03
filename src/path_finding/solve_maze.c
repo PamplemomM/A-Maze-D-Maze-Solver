@@ -94,19 +94,13 @@ static int find_robot_move(room_t *current, maze_t *maze, int robot,
 int find_solved_maze(maze_t *maze)
 {
     path_t *good_path = NULL;
-    path_t *path = NULL;
 
     if (maze == NULL)
         return ERROR;
     for (int i = 1; i <= maze->nb_robots; i++) {
         find_robot_move(maze->start, maze, i, &good_path);
     }
-    path = good_path;
-    while (path != NULL) {
-        for (int i = 1; i < maze->nb_robots + 1; i++)
-            mini_printf("P%d-%s\n", i, path->name);
-        path = path->next;
-    }
+    move_robots(&good_path, maze);
     free_paths(&good_path);
     return SUCCESS;
 }
