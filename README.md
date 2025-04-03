@@ -41,4 +41,25 @@ Furthermore, the viewer's usage can be displayed by executing it with the `-h` o
 ./viewer -h
 ```
 
+
+**You can also generate a brand new script!**
+
+It will generate a simple script to give in input for the program. You can also combine it with the viewer!
+
+To use it, please make sure you have the compiled version of the program with `make re`.
+If it is the case, you can now use at the root of the project a command following this pattern :
+```bash
+./gen.sh [NB_ROBOTS] [SIZE] [POSITION] | ./amazed
+```
+
+To explore the best experience with the viewer, be sure you've compile the viewer with `make viewer`, then use this pattern of command :
+```bash
+./gen.sh [NB_ROBOTS] [SIZE] [POSITION] | ./amazed | ./viewer
+```
+
+Here is an example usage :
+```bash
+./gen.sh 2 5 6 | ./amazed | ./viewer
+```
+
 <sup>📝 EPITECH project developed as part of the B-CPE-200 module by AntothP, Pathie and PamplemomM.</sup>
