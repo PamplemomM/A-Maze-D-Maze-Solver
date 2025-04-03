@@ -205,22 +205,33 @@ void toggle_gamestate(gamestate_t state)
 {
     if (GAME->state == state)
         return;
-    GAME->state = state;
     if (state == PLAY) {
+        if (GAME->move_id >= GAME->nb_moves) {
+            text_jumpscare("its already over bro </3", 1);
+            return;
+        }
+        GAME->state = state;
         text_jumpscare("UNPAUSED!", 1);
         play_sound("play", 75, diceroll(90, 110) / 100.0);
         start_sim(GAME->move_id);
     }
     if (state == PAUSE) {
+        GAME->state = state;
         text_jumpscare("PAUSED!", 1);
         play_sound("pause", 75, diceroll(80, 90) / 100.0);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     }
     if (state == REWIND) {
+        if (GAME->move_id <= 1.0) {
+            text_jumpscare("too early bro </3", 1);
+            return;
+        }
+        GAME->state = state;
         text_jumpscare("REWIND!", 1);
         play_sound("rewind", 75, diceroll(90, 110) / 100.0);
         make_tween("id", &GAME->move_id, 0.0, sqrt(GAME->move_id))->method = EASEOUT;
     }
+    return;
 }
 
 void interact_sim(void)
@@ -231,18 +242,10 @@ void interact_sim(void)
         toggle_gamestate(PAUSE);
     if (KEYPRESS(sfKeyBackspace) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.5);
-        if (GAME->move_id <= 1.0) {
-            text_jumpscare("too early bro </3", 1);
-            return;
-        }
         toggle_gamestate(REWIND);
     }
     if (KEYPRESS(sfKeySpace) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
-        if (GAME->move_id >= GAME->nb_moves) {
-            text_jumpscare("its already over bro </3", 1);
-            return;
-        }
         if (get_tween("id") == NULL)
             toggle_gamestate(PLAY);
         else
@@ -252,12 +255,16 @@ void interact_sim(void)
         run_timer("actcooldown", 0.2);
         if ((int)GAME->move_id < GAME->nb_moves)
             GAME->move_id++;
+        else if (GAME->state == PAUSE)
+            text_jumpscare("no more moves blud </3", 1);
         toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     } else if ((KEYPRESS(sfKeySubtract) || KEYPRESS(sfKeyB)) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
         if ((int)GAME->move_id > 0)
             GAME->move_id--;
+        else if (GAME->state == PAUSE)
+            text_jumpscare("wrong way dawg </3", 1);
         toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     }
