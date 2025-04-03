@@ -96,6 +96,7 @@ int parse_tunnel(maze_t **maze, char *line);
 // --------- PATH_FINDING FOLDER ---------
 
 // --- display_robots_move.c ---
+int my_linked_size(path_t **node);
 int display_robots_move(path_t **good_path, maze_t *maze);
 
 // --- make_move.c ---

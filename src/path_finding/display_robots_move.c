@@ -7,7 +7,7 @@
 
 #include "../../include/header_amazed.h"
 
-static int my_linked_size(path_t **node)
+int my_linked_size(path_t **node)
 {
     int size = 0;
     path_t *current = *node;
