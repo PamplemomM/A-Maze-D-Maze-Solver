@@ -47,6 +47,7 @@ int display_robots_move(path_t **good_path, maze_t *maze)
             mini_printf("P%d-%s\n", i, pathlist->name);
         pathlist = pathlist->next;
     }
+    OMNIFREE(path, 2);
     return SUCCESS;
 }
 
