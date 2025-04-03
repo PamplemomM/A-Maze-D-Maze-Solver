@@ -252,11 +252,13 @@ void interact_sim(void)
         run_timer("actcooldown", 0.2);
         if ((int)GAME->move_id < GAME->nb_moves)
             GAME->move_id++;
+        toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     } else if ((KEYPRESS(sfKeySubtract) || KEYPRESS(sfKeyB)) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
         if ((int)GAME->move_id > 0)
             GAME->move_id--;
+        toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     }
 }
