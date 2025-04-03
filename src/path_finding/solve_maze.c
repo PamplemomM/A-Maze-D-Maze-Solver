@@ -7,6 +7,11 @@
 
 #include "../../include/header_amazed.h"
 
+static int free_paths(path_t **paths)
+{
+    return SUCCESS;
+}
+
 int solve_maze(maze_t *maze)
 {
     return SUCCESS;
@@ -31,7 +36,7 @@ static int find_mult_robot_move(room_t *current, maze_t *maze, int robot)
     return SUCCESS;
 }
 
-int add_new_path(path_t **node, char *room)
+static int add_new_path(path_t **node, char *room)
 {
     path_t *new_path = malloc(sizeof(path_t) * 1);
     path_t *current = *node;
