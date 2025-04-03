@@ -44,20 +44,19 @@ Furthermore, the viewer's usage can be displayed by executing it with the `-h` o
 
 **You can also generate a brand new script!**
 
-It will generate a simple script to give in input for the program. You can also combine it with the viewer!
+It will generate a simple script to give as input for the program. You can also combine it with the viewer!
 
 To use it, please make sure you have the compiled version of the program with `make re`.
-If it is the case, you can now use at the root of the project a command following this pattern :
+If that's the case, you can now use at the root of the project a command following this pattern :
 ```bash
 ./gen.sh [NB_ROBOTS] [SIZE] [POSITION] | ./amazed
 ```
 
-To explore the best experience with the viewer, be sure you've compile the viewer with `make viewer`, then use this pattern of command :
+To enjoy the best experience with the viewer, ensure you’ve compiled the viewer with `make viewer`, then use this pattern:
 ```bash
 ./gen.sh [NB_ROBOTS] [SIZE] [POSITION] | ./amazed | ./viewer
 ```
-
-Here is an example usage :
+Here is an *example usage* :
 ```bash
 ./gen.sh 2 5 6 | ./amazed | ./viewer
 ```
