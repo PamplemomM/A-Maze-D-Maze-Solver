@@ -19,7 +19,7 @@ static int my_linked_size(path_t **node)
     return size;
 }
 
-static char **dup_pathlist(path_t **good_path, maze_t *maze)
+static char **dup_pathlist(path_t **good_path)
 {
     path_t *current = *good_path;
     int size = my_linked_size(good_path);
@@ -40,22 +40,39 @@ static char **dup_pathlist(path_t **good_path, maze_t *maze)
 
 int display_robots_move(path_t **good_path, maze_t *maze)
 {
-    path_t *pathlist = *good_path;
-    char **path = dup_pathlist(good_path, maze);
-    int max_id = my_linked_size(good_path) * maze->nb_robots;
-    int id = 0;
+    char **path = dup_pathlist(good_path);
+    int id_size = my_linked_size(good_path);
+    int max_id = id_size + maze->nb_robots - 2;
+    //int id = 0;
 
     if (path == NULL)
         return ERROR;
-    for (int rbt = 1; rbt < maze->nb_robots + 1; rbt++) {
+    for (int id = 0; id <= max_id; id++) {
+        for (int rbt = 1; rbt < maze->nb_robots + 1; rbt++) {
+            if (rbt <= id + 1 && abs(rbt - (id + 1)) < id_size)
+                //mini_printf("Id=%d ; move=%d ; path_num=%d ; room %s\n",
+                    //id, rbt, abs(rbt - (id + 1)),
+                    //path[abs(rbt - (id + 1))]);
+                mini_printf("P%d-%s ", rbt, path[abs(rbt - (id + 1))]);
+        }
+        mini_printf("\n");
+    }
+    
+    
+    
+    
+    
+    
+    /*for (int rbt = 1; rbt < maze->nb_robots + 1; rbt++) {
         if (id < rbt)
             continue;
         mini_printf("P%d-%s\n", rbt, path[rbt + id]);
+        id++;
     }
     for (int i = 0; path[i] != NULL; i++) {
         for (int rbt = 1; rbt < maze->nb_robots + 1; rbt++)
             mini_printf("P%d-%s\n", rbt, path[i]);
-    }
+    }*/
     OMNIFREE(path, 2);
     return SUCCESS;
 }
