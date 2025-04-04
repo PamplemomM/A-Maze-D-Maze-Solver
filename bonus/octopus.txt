@@ -38,9 +38,6 @@ Z-o
 Z-p
 #moves
 P1-a
-P1-Z P1-i
-P1-Z P1-g
-P1-Z P1-o
 P2-b
 P3-c
 P4-d

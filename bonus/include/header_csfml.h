@@ -50,6 +50,7 @@ typedef enum sprite_types {
     NONE,
     ROOM,
     ROBOT,
+    TUNNEL,
     ANY
 } sprite_type_t;
 

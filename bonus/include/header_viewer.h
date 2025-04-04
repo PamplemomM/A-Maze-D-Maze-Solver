@@ -61,6 +61,9 @@ void destroy_gamestuff(void);
 int init_assets(void);
 void destroy_assets(void);
 
+// --- main_maker.c ---
+int start_maker(void);
+
 // --- robots_list.c ---
 vwr_robot_t **get_robotlist(void);
 vwr_robot_t *get_robot(int id);

@@ -54,7 +54,7 @@ static void setup_robot(vwr_robot_t *robot)
     sprite_t *sprite = robot->sprite;
 
     gender_reveal(sprite);
-    center_sprite_origin(sprite, 0.5, 1.2);
+    center_sprite_origin(sprite, 0.5, 1.0);
     sprite->scale = (sfVector2f){0.2, 0.2};
     sprite->type = ROBOT;
     robot->room = MAZE->start;

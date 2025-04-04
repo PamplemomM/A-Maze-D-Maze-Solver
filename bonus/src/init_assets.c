@@ -34,6 +34,34 @@ static void setup_camera(sfIntRect bounds)
     make_tween("camzoom", &CAM->zoom, cam_zoom, 1.7)->method = EASEOUT;
 }
 
+static void update_bounds(sfIntRect *bounds, room_t *room)
+{
+    if (bounds->left == -1 || room->x < bounds->left)
+        bounds->left = room->x;
+    if (bounds->top == -1 || room->y < bounds->top)
+        bounds->top = room->y;
+    if (bounds->width == -1 || room->x > bounds->width)
+        bounds->width = room->x;
+    if (bounds->height == -1 || room->y > bounds->height)
+        bounds->height = room->y;
+}
+
+static char *get_room_texture(room_t *room)
+{
+    if (room == MAZE->start)
+        return "room_start";
+    if (room == MAZE->end)
+        return "room_end";
+    return "room_default";
+}
+
+static void setup_room(sprite_t *sprite)
+{
+    sprite->color = color_from_hue(0, 150, 0, 255);
+    sprite->type = ROOM;
+    center_sprite_origin(sprite, 0.5, 0.5);
+}
+
 static int init_rooms(void)
 {
     room_t *room = MAZE->rooms;
@@ -46,22 +74,12 @@ static int init_rooms(void)
             return ERROR;
         room->x *= 50;
         room->y *= 50;
-
-        if (bounds.left == -1 || room->x < bounds.left)
-            bounds.left = room->x;
-        if (bounds.top == -1 || room->y < bounds.top)
-            bounds.top = room->y;
-        if (bounds.width == -1 || room->x > bounds.width)
-            bounds.width = room->x;
-        if (bounds.height == -1 || room->y > bounds.height)
-            bounds.height = room->y;
-
-        if (make_sprite(name, "jonkler", room->x, room->y - 15) == NULL) {
+        update_bounds(&bounds, room);
+        if (make_sprite(name, get_room_texture(room), room->x, room->y) == NULL) {
             OMNIFREE(name, 1);
             return ERROR;
         }
-        get_sprite(name)->type = ROOM;
-        center_sprite_origin(get_sprite(name), 0.5, 0.5);
+        setup_room(get_sprite(name));
         OMNIFREE(name, 1);
         room = room->next;
     }
@@ -69,12 +87,55 @@ static int init_rooms(void)
     return SUCCESS;
 }
 
+static void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest)
+{
+    int diffx = dest->x - start->x;
+    int diffy = dest->y - start->y;
+    int diffd = sqrt(pow(diffx, 2) + pow(diffy, 2)) - 25;
+    float traj = atan2f(diffx, -diffy) * 180.0 / M_PI;
+
+    sprite->scale.y = diffd / (float)sprite->rect.height;
+    sprite->scale.x = (10.0 / sprite->scale.y) / (float)sprite->rect.width;
+    sprite->angle = traj;
+    sprite->color = color_from_hue(0, 255, 0, 100);
+    sprite->type = TUNNEL;
+    center_sprite_origin(sprite, 0.5, 1.0);
+}
+
+static int init_tunnels(void)
+{
+    tunnel_t *tunnel = MAZE->tunnels;
+    char *path = NULL;
+    char *name = NULL;
+
+    while (tunnel != NULL) {
+        path = merge_str(tunnel->r1->name, tunnel->r2->name);
+        if (path == NULL)
+            return ERROR;
+        name = merge_str("tunnel_", path);
+        OMNIFREE(path, 1);
+        if (name == NULL)
+            return ERROR;
+        if (make_sprite(name, "tunnel", tunnel->r1->x, tunnel->r1->y) == NULL) {
+            OMNIFREE(name, 1);
+            return ERROR;
+        }
+        setup_tunnel(get_sprite(name), tunnel->r1, tunnel->r2);
+        OMNIFREE(name, 1);
+        tunnel = tunnel->next;
+    }
+    return SUCCESS;
+}
+
 static int init_sprites(void)
 {
     if (init_rooms() == ERROR)
         return ERROR;
+    if (init_tunnels() == ERROR)
+        return ERROR;
     if (init_robots() == ERROR)
         return ERROR;
+    return SUCCESS;
     if (make_sprite("bg", "bg", CAM->center.x, CAM->center.y) == NULL)
         return ERROR;
     get_sprite("bg")->scale =
@@ -92,7 +153,7 @@ static int init_sounds(void)
 
 static int init_music(void)
 {
-    if (play_music("Parade", "K.K. Parade", 50, 1.0) == NULL) // put the volume back up to 50
+    if (play_music("Parade", "K.K. Parade", 0, 1.0) == NULL) // put the volume back up to 50
         return ERROR;
     sfMusic_setLoop((*get_music())->music, sfTrue);
     return SUCCESS;

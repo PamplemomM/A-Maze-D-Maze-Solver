@@ -87,6 +87,18 @@ void cam_move_keys(void)
     }
 }
 
+sprite_t *get_room_sprite(room_t *room) // possibly useless
+{
+    sprite_t *sprite = NULL;
+    char *name = merge_str("room_", room->name);
+
+    if (name == NULL)
+        return OMNIFREE(name, 1);
+    sprite = get_sprite(name);
+    OMNIFREE(name, 1);
+    return sprite;
+}
+
 int do_move_tweens(sprite_t *sprite, room_t *room, float speed)
 {
     char *tmp = merge_str(sprite->name, "0");
@@ -260,7 +272,7 @@ void interact_sim(void)
     }
     if (KEYPRESS(sfKeySpace) && get_timer("actcooldown") == NULL) {
         run_timer("actcooldown", 0.2);
-        if (get_tween("id") == NULL)
+        if (GAME->state == PAUSE)
             toggle_gamestate(PLAY);
         else
             toggle_gamestate(PAUSE);
@@ -368,6 +380,7 @@ void update_stuff(void)
     update_robots();
     hue_shift();
     draw_allsprites(NONE);
+    draw_allsprites(TUNNEL);
     draw_allsprites(ROOM);
     draw_robots();
     draw_alltexts();
@@ -384,24 +397,29 @@ void run(void)
     }
 }
 
-void start(void)
+int start_simulator(void)
 {
+    int retval = SUCCESS;
+
+    if (read_maze() == ERROR)
+        return ERROR;
     if (init_gamestuff() != ERROR && init_assets() != ERROR)
         run();
+    else
+        retval = ERROR;
     destroy_assets();
+    free_maze(&MAZE);
+    return retval;
 }
 
 // the CSFML itself leaks 226,396 bytes of memory on its own
-// music can add to the memory leaks as well
+// music and sounds can add to the memory leaks as well
 int main(int ac, char **av)
 {
-    if (ac != 1)
-        return usage_print();
-    if (read_maze() == ERROR)
-        return ERROR;
     srand(time(NULL));
-    //MAZE->nb_robots = diceroll(2, 7); // tmp
-    start();
-    free_maze(&MAZE);
-    return SUCCESS;
+    if (ac == 2 && strcmp(av[1], "-c") == 0)
+        return start_maker();
+    else if (ac != 1)
+        return usage_print();
+    return start_simulator();
 }
