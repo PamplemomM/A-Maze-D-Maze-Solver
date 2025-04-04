@@ -27,7 +27,7 @@ success() {
 
 dispE() {
     echo "" >> tests/testerEresult
-    echo "$1" >> tests/testerEresult
+    echo -e "$1" >> tests/testerEresult
     echo "" >> tests/testerEresult
 }
 
@@ -147,7 +147,7 @@ dispE "[Test 09] - Error exit Status : SUCCESS"
 delimE
 sleep 0.8
 
-dispE "[Test 10] - Testing with end rooms :"
+dispE "[Test 10] - Testing with multiple end rooms :"
 echo -e "3\n##start \n1 2 2 \n##end \n2 2 3 \n##end \n3 3 3 \n 1-2" > data
 error ./amazed < data
 dispE "[Test 10] - Error exit Status : SUCCESS"
@@ -169,44 +169,64 @@ echo "-------------------------------------------"
 sleep 1.2
 
 delimS
-success dispS "[Test 01] - Testing usage : "
-success ./109titration -h
+dispS "[Test 01] - Testing with 50 Horizontal : "
+success ./amazed < scripts/50horizontal.txt
 dispS "[Test 01] - Exit Status : SUCCESS"
 delimS
 sleep 1.3
 
-success dispS "[Test 02] - Testing with good values : "
-success ./109titration folder/values.csv
+dispS "[Test 02] - Testing with Billionaire mansion : "
+success ./amazed < scripts/billionaire_mansion.txt
 dispS "[Test 02] - Exit Status : SUCCESS"
 delimS
 sleep 0.3
 
-success dispS "[Test 03] - Testing usage : "
-success ./109titration -h
+dispS "[Test 03] - Testing with Simple House : "
+success ./amazed < scripts/house.txt
 sleep 0.1
 sleep 0.05
 dispS "[Test 03] - Exit Status : SUCCESS"
 delimS
 sleep 0.1
 
-success dispS "[Test 04] - Testing with good values : "
-success ./109titration folder/dataset_1.csv
+dispS "[Test 04] - Testing with Long : "
+success ./amazed < scripts/long.txt
 sleep 1.5
 dispS "[Test 04] - Exit Status : SUCCESS"
 delimS
 sleep 1.55
 
-success dispS "[Test 05] - Testing with good values : "
-success ./109titration folder/dataset_2.csv
+dispS "[Test 05] - Testing with pick_your_path : "
+success ./amazed < scripts/pick_your_path.txt
 dispS "[Test 05] - Exit Status : SUCCESS"
 delimS
 sleep 0.3
 
-success dispS "[Test 06] - Testing with good values : "
-success ./109titration folder/dataset_3.csv
+dispS "[Test 06] - Testing with a simple line : "
+success ./amazed < scripts/simple-line.txt
 dispS "[Test 06] - Exit Status : SUCCESS"
 delimS
 sleep 0.3
+
+dispS "[Test 07] - Testing with Spaceship : "
+success ./amazed < scripts/spaceship.txt
+dispS "[Test 07] - Exit Status : SUCCESS"
+delimS
+sleep 0.3
+
+dispS "[Test 08] - Testing with a stupid algorithm : "
+success ./amazed < scripts/stupid_algo.txt
+dispS "[Test 08] - Exit Status : SUCCESS"
+delimS
+sleep 0.3
+
+dispS "[Test 09] - Testing with a last test : "
+success ./amazed < scripts/test.txt
+dispS "[Test 09] - Exit Status : SUCCESS"
+delimS
+sleep 0.3
+
+
 
 
 sleep 1
