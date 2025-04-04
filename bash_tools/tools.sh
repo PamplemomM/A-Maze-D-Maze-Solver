@@ -53,3 +53,14 @@ load_animation() {
     echo -n "."
     sleep 0.05
 }
+
+reset_file() {
+    local file
+
+    if [[ -n "$1" ]]; then
+        file=$1
+    else
+        echo -e "reset_file: Argument needed."
+        exit 1
+    fi
+}
