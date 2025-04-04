@@ -25,11 +25,14 @@ static int init_robots(void)
 
 static void setup_camera(sfIntRect bounds)
 {
-    int max_diff = MAX(bounds.width - bounds.left, bounds.height - bounds.top);
-    float cam_zoom = 1.5 / (max_diff / 300.0);
+    float cam_zoom;
 
-    CAM->center.x = (bounds.left + bounds.width) / 2.0;
-    CAM->center.y = (bounds.top + bounds.height) / 2.0;
+    bounds.width -= bounds.left;
+    bounds.height -= bounds.top;
+    cam_zoom = 2.0 / ((float)MAX(bounds.width, bounds.height) / 200.0);
+    GAME->bounds = (sfIntRect){bounds.left - 200, bounds.top - 200, bounds.width + 400, bounds.height + 400};
+    CAM->center.x = bounds.left + bounds.width / 2.0;
+    CAM->center.y = bounds.top + bounds.height / 2.0;
     CAM->zoom = cam_zoom * 1.2;
     make_tween("camzoom", &CAM->zoom, cam_zoom, 1.7)->method = EASEOUT;
 }
@@ -127,22 +130,55 @@ static int init_tunnels(void)
     return SUCCESS;
 }
 
-static int init_sprites(void)
+static int init_compass(void)
 {
-    if (init_rooms() == ERROR)
+    if (make_sprite("cmpa", "compass_arrow", CAM->center.x,
+        CAM->center.y) == NULL || make_sprite("cmpp", "compass_pivot",
+        CAM->center.x, CAM->center.y) == NULL)
         return ERROR;
-    if (init_tunnels() == ERROR)
-        return ERROR;
-    if (init_robots() == ERROR)
-        return ERROR;
+    get_sprite("cmpa")->rect.width = 45;
+    get_sprite("cmpa")->color.a = 0;
+    get_sprite("cmpp")->color.a = 0;
+    get_sprite("cmpa")->type = HUD;
+    get_sprite("cmpp")->type = HUD;
+    center_sprite_origin(get_sprite("cmpa"), 0.5, 4.0);
+    center_sprite_origin(get_sprite("cmpp"), 0.5, 0.5);
     return SUCCESS;
-    if (make_sprite("bg", "bg", CAM->center.x, CAM->center.y) == NULL)
+}
+
+static int init_logs(void)
+{
+    if (make_sprite("logs", "AWESOME_PIXEL", 0, 0) == NULL)
         return ERROR;
-    get_sprite("bg")->scale =
-        (sfVector2f){0.6 / CAM->zoom * 2, 0.6 / CAM->zoom * 2};
+    get_sprite("logs")->color = color_from_hue(0, 0, 0, 150);
+    get_sprite("logs")->type = HUD;
+    return SUCCESS;
+}
+
+static int init_bg(void)
+{
+    float scalex;
+    float scaley;
+
+    if (make_sprite("bg", "bg", GAME->bounds.left, GAME->bounds.top) == NULL)
+        return ERROR;
+    scalex = (float)GAME->bounds.width / (float)get_sprite("bg")->rect.width;
+    scaley = (float)GAME->bounds.height / (float)get_sprite("bg")->rect.height;
+    get_sprite("bg")->scale = (sfVector2f){scalex, scaley};
     get_sprite("bg")->type = NONE;
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
-    center_sprite_origin(get_sprite("bg"), 0.5, 0.5);
+    return SUCCESS;
+}
+
+static int init_sprites(void)
+{
+    int inits[6] = {init_rooms(), init_tunnels(), init_robots(),
+        init_compass(), init_logs(), init_bg()};
+
+    for (int i = 0; i < 6; i++) {
+        if (inits[i] == ERROR)
+            return ERROR;
+    }
     return SUCCESS;
 }
 

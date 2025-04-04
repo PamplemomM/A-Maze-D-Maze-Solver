@@ -28,9 +28,9 @@ int usage_print(void)
 
 void cam_move_mouse(sfMouseMoveEvent mouse)
 {
-    static sfMouseMoveEvent mouseold;
+    static sfMouseMoveEvent mouseold = {sfEvtMouseMoved, 0, 0};
 
-    if (MOUSEPRESS(sfMouseLeft)) {
+    if (MOUSEPRESS(sfMouseLeft) && (mouseold.x != 0 && mouseold.y != 0)) {
         DESTROY(get_tween("camvert"), get_tweenlist, free_tween);
         DESTROY(get_tween("camlat"), get_tweenlist, free_tween);
         CAM->center.x += (mouseold.x - mouse.x) / CAM->zoom;
@@ -63,21 +63,23 @@ void cam_move_keys(void)
     if (KEYPRESS(sfKeyLShift))
         fact = 1.5;
     if (KEYPRESS(sfKeyUp)) {
-        if (get_tween("camrot") != NULL)
+        if (get_tween("camrot") != NULL && !GAME->logs)
             CAM->angle -= 0.2 * (CAM->angle / MAX(fabs(CAM->angle), 1));
-        make_tween("camvert", &CAM->center.y, CAM->center.y - 50 / CAM->zoom * fact, 1)->method = EASEOUT;
+        make_tween("camvert", &CAM->center.y, CAM->center.y - 50 / CAM->zoom * pow(fact, 2), 1)->method = EASEOUT;
     } else if (KEYPRESS(sfKeyDown)) {
-        if (get_tween("camrot") != NULL)
+        if (get_tween("camrot") != NULL && !GAME->logs)
             CAM->angle += 0.2 * (CAM->angle / MAX(fabs(CAM->angle), 1));
-        make_tween("camvert", &CAM->center.y, CAM->center.y + 50 / CAM->zoom * fact, 1)->method = EASEOUT;
+        make_tween("camvert", &CAM->center.y, CAM->center.y + 50 / CAM->zoom * pow(fact, 2), 1)->method = EASEOUT;
     }
     if (KEYPRESS(sfKeyLeft)) {
-        make_tween("camlat", &CAM->center.x, CAM->center.x - 50 / CAM->zoom * fact, 1)->method = EASEOUT;
-        CAM->angle -= 0.4 * fact;
+        make_tween("camlat", &CAM->center.x, CAM->center.x - 50 / CAM->zoom * pow(fact, 2), 1)->method = EASEOUT;
+        if (!GAME->logs)
+            CAM->angle -= 0.4 * fact;
         make_tween("camrot", &CAM->angle, 0, 1)->method = EASEOUT;
     } else if (KEYPRESS(sfKeyRight)) {
-        make_tween("camlat", &CAM->center.x, CAM->center.x + 50 / CAM->zoom * fact, 1)->method = EASEOUT;
-        CAM->angle += 0.4 * fact;
+        make_tween("camlat", &CAM->center.x, CAM->center.x + 50 / CAM->zoom * pow(fact, 2), 1)->method = EASEOUT;
+        if (!GAME->logs)
+            CAM->angle += 0.4 * fact;
         make_tween("camrot", &CAM->angle, 0, 1)->method = EASEOUT;
     }
     if (KEYPRESS(sfKeyC)) {
@@ -294,6 +296,20 @@ void interact_sim(void)
         toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     }
+    if (KEYPRESS(sfKeyTab) && get_timer("actcooldown") == NULL) {
+        run_timer("actcooldown", 0.2);
+        if (GAME->logs) {
+            make_tween("camlat", &CAM->center.x, CAM->center.x + 100 / (CAM->zoom / 1.2), 1.0)->method = EASEOUT;
+            make_tween("camzoom", &CAM->zoom, CAM->zoom / 0.7, 1.0)->method = EASEOUT;
+            make_tween("logs", &get_sprite("logs")->pos.x, -200, 1.0)->method = EASEOUT;
+            GAME->logs = 0;
+        } else {
+            make_tween("camlat", &CAM->center.x, CAM->center.x - 100 / (CAM->zoom * 0.58), 1.0)->method = EASEOUT;
+            make_tween("camzoom", &CAM->zoom, CAM->zoom * 0.7, 1.0)->method = EASEOUT;
+            make_tween("logs", &get_sprite("logs")->pos.x, 0, 1.0)->method = EASEOUT;
+            GAME->logs = 1;
+        }
+    }
 }
 
 void events(void)
@@ -373,11 +389,61 @@ void draw_robots(void)
         draw_sprite(list[i]->sprite);
 }
 
+void update_compass_arrow(void)
+{
+    sprite_t *arrow = get_sprite("cmpa");
+    sfVector2i center = {(GAME->bounds.left + GAME->bounds.width)
+        / 2.0, (GAME->bounds.top + GAME->bounds.height) / 2.0};
+    int diffx = center.x - arrow->pos.x;
+    int diffy = center.y - arrow->pos.y;
+    int diffd = sqrt(pow(diffx, 2) + pow(diffy, 2)) - 25;
+    float traj = atan2f(diffx, -diffy) * 180.0 / M_PI;
+
+    arrow->angle = traj;
+    arrow->rect.left = (arrow->rect.left + 45) % 180;
+}
+
+void update_compass(void)
+{
+    sprite_t *arrow = get_sprite("cmpa");
+    sprite_t *pivot = get_sprite("cmpp");
+    float fact = 0.2 + cos(TIME * 2.0) * 0.07;
+    sfIntRect bounds = GAME->bounds;
+
+    arrow->pos = CAM->center;
+    pivot->pos = CAM->center;
+    arrow->scale = (sfVector2f){0.4 / CAM->zoom + 0.2, 0.4 / CAM->zoom + 0.2};
+    pivot->scale = (sfVector2f){fact / CAM->zoom + 0.1, fact / CAM->zoom + 0.1};
+    if (CAM->center.x > bounds.left - 100.0 && CAM->center.y > bounds.top - 100.0 &&
+        CAM->center.x < bounds.left + bounds.width + 100.0 && CAM->center.y < bounds.top + bounds.height + 100.0) {
+        arrow->color.a /= 1.2;
+        pivot->color.a /= 1.2;
+    } else {
+        arrow->color.a = 255 + (arrow->color.a - 255) / 1.05;
+        pivot->color.a = fact * 255;
+    }
+    if (get_timer("cmpcooldown") == NULL) {
+        update_compass_arrow();
+        run_timer("cmpcooldown", 0.1);
+    }
+}
+
+void update_logs(void)
+{
+    sprite_t *logs = get_sprite("logs");
+
+    logs->pos.x = CAM->center.x - 400 / CAM->zoom;
+    logs->pos.y = CAM->center.y - 300 / CAM->zoom;
+    logs->scale = (sfVector2f){250 / CAM->zoom, 600 / CAM->zoom};
+}
+
 void update_stuff(void)
 {
     update_tweens();
     update_timers();
     update_robots();
+    update_compass();
+    update_logs();
     hue_shift();
     draw_allsprites(NONE);
     draw_allsprites(TUNNEL);
@@ -385,13 +451,14 @@ void update_stuff(void)
     draw_robots();
     draw_alltexts();
     update_cam();
+    draw_allsprites(HUD);
     events();
 }
 
 void run(void)
 {
     while (sfRenderWindow_isOpen(WINDOW)) {
-        sfRenderWindow_clear(WINDOW, color_from_hue(0, 75, 0, 255));
+        sfRenderWindow_clear(WINDOW, color_from_hue(0, 60, 0, 255));
         update_stuff();
         sfRenderWindow_display(WINDOW);
     }

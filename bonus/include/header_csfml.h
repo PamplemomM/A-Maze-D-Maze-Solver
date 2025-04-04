@@ -48,6 +48,7 @@
 
 typedef enum sprite_types {
     NONE,
+    HUD,
     ROOM,
     ROBOT,
     TUNNEL,

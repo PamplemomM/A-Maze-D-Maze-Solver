@@ -22,8 +22,10 @@ int init_gamestuff(void)
     if (GAME == NULL)
         return ERROR;
     GAME->state = PAUSE;
-    GAME->robots_order = NULL;
+    GAME->logs = 0;
+    GAME->bounds = (sfIntRect){0, 0, 800, 600};
     GAME->hue = diceroll(0, 360);
+    GAME->robots_order = NULL;
     GAME->move_id = 0;
     GAME->nb_moves = 0;
     if (move == NULL)

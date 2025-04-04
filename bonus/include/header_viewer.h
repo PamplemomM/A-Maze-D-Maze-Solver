@@ -39,8 +39,10 @@ typedef struct vwr_robot_s {
 
 typedef struct game {
     gamestate_t state;
-    vwr_robot_t **robots_order;
+    int logs;
+    sfIntRect bounds;
     float hue;
+    vwr_robot_t **robots_order;
     float move_id;
     int nb_moves;
 } game_t; // miscellaneous data that needs to be globalized
