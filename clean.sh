@@ -10,11 +10,11 @@ touch unit_tests_test
 rm unit_tests* > data
 rm coding-style-reports.log -f > data
 sleep 0.4
-echo -n -e "\b \b"
+echo -n -e "\b \b\b \b\b \b"
 rm a.out -f > data
 sleep 0.2
 make fclean > data
-echo -n -e "\b \b"
+echo -n -e "."
 sleep 0.7
 echo -n "."
 sleep 0.3
@@ -23,9 +23,13 @@ echo -n "."
 cd bonus/
 make fclean > data
 cd ..
-sleep 0.6
-echo -n -e "\b \b"
-sleep 0.4
+sleep 0.2
+echo -n -e "\b \b\b \b\b \b"
+sleep 0.2
+echo -n "."
+sleep 0.2
+echo -n "."
+sleep 0.05
 echo -n -e "\b \b\b \b\b \b\b \b\b \b"
 echo -n -e "\b \b\b \b\b \b\b \b\b \b"
 echo -n -e "\b \b\b \b\b \b\b \b\b \b"
