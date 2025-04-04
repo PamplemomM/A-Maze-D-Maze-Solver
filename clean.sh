@@ -9,13 +9,11 @@ echo -e -n "\e[1;34mCLEANER\e[0m: Cleaning project."
 
 load_animation
 
-touch data
 touch unit_tests_test
 rm unit_tests* > cleaner
+
 rm coding-style-reports.log -f > cleaner
 
-rm a.out -f > cleaner
-sleep 0.2
 make fclean > cleaner
 
 make viewer_fclean > cleaner

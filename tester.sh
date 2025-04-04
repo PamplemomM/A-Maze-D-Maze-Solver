@@ -4,10 +4,14 @@
 [ -f "./bash_tools/tools.sh" ] && source "./bash_tools/tools.sh" || echo "tester.sh : Tools unfound!"
 
 
+readonly ERR_FILE=tests/testerEresult
+readonly SUC_FILE=tests/testerSresult
+
+
 error_counter=0
 error() {
     ((error_counter++))
-    "$@" >> tests/testerEresult
+    "$@" >> $ERR_FILE
     value=$?
     if [ "$value" -eq 84 ]; then
         echo -e "[Test $(printf "%02d" $error_counter)] : \e[1;32mSUCCESS\e[0m                       |"
@@ -19,7 +23,7 @@ error() {
 success_counter=0
 success() {
     ((success_counter++))
-    "$@" >> tests/testerSresult
+    "$@" >> $SUC_FILE
     value=$?
     if [ "$value" -eq 0 ]; then
         echo -e "[Test $(printf "%02d" $success_counter)] : \e[1;32mSUCCESS\e[0m                       |"
@@ -30,27 +34,27 @@ success() {
 
 
 dispE() {
-    echo "" >> tests/testerEresult
-    echo -e "$1" >> tests/testerEresult
-    echo "" >> tests/testerEresult
+    echo "" >> $ERR_FILE
+    echo -e "$1" >> $ERR_FILE
+    echo "" >> $ERR_FILE
 }
 
 dispS() {
-    echo "" >> tests/testerSresult
-    echo "$1" >> tests/testerSresult
-    echo "" >> tests/testerSresult
+    echo "" >> $SUC_FILE
+    echo "$1" >> $SUC_FILE
+    echo "" >> $SUC_FILE
 }
 
 
 delimE() {
-    my_putstr "-" 39 >> tests/testerEresult
-    echo "" >> tests/testerEresult
+    my_putstr "-" 39 >> $ERR_FILE
+    echo "" >> $ERR_FILE
 }
 
 
 delimS() {
-    my_putstr "-" 39 >> tests/testerSresult
-    echo "" >> tests/testerSresult
+    my_putstr "-" 39 >> $SUC_FILE
+    echo "" >> $SUC_FILE
 }
 
 
@@ -58,9 +62,9 @@ delimS() {
 value=$1
 if [ "$value" = "clean" ]; then
     touch data
-    rm tests/testerEresult > data 2>&1
+    rm $ERR_FILE > data 2>&1
     result1=$?
-    rm tests/testerSresult > data 2>&1
+    rm $SUC_FILE > data 2>&1
     result2=$?
     rm data
 
@@ -89,10 +93,10 @@ touch data
 
 # RESET the logs
 
-touch tests/testerEresult
-touch tests/testerSresult
-echo "" > tests/testerEresult
-echo "" > tests/testerSresult
+touch $ERR_FILE
+touch $SUC_FILE
+echo "" > $ERR_FILE
+echo "" > $SUC_FILE
 
 
 delimE
