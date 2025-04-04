@@ -79,7 +79,7 @@ echo -e "\e[1;33mTESTING\e[0m: Testing with error values        |"
 echo "-------------------------------------------"
 sleep 1.3
 
-touch datas
+touch data
 
 # RESET the logs
 
@@ -160,6 +160,8 @@ error ./amazed < data
 dispE "[Test 11] - Error exit Status : SUCCESS"
 delimE
 sleep 0.8
+
+rm data
 
 
 sleep 0.1
