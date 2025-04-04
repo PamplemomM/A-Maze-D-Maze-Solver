@@ -63,6 +63,6 @@ reset_file() {
         echo -e "reset_file: Argument needed."
         exit 1
     fi
-    touch file
-    echo "" > file
+    touch $file
+    echo "" > $file
 }
