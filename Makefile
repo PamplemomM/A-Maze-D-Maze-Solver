@@ -10,10 +10,7 @@ NAME    =	amazed
 SRCS	=	$(shell find src/ -type f -name '*.c')
 
 SRCTEST	=	$(shell find src/lib -type f -name '*.c')
-SRCTEST	+=	$(shell find src/parsing -type f -name '*.c')
 SRCTEST	+=	$(shell find tests/ -type f -name '*.c')
-SRCTEST	+=	src/free_maze.c	\
-		src/print_maze.c
 
 CFLAGS	=	-Wall -Wextra -Wshadow -I./../include
 
@@ -22,28 +19,44 @@ OBJS	=	$(SRCS:.c=.o)
 all	:	$(NAME)
 
 $(NAME)	:
-		gcc -o $(NAME) $(SRCS)
+		@echo "Searching the sources."
+		@gcc -o $(NAME) $(SRCS)
+		@echo "Compiled successfully!"
 
 val	:
-		gcc -o $(NAME) $(SRCS) $(CFLAGS) -g3
+		@gcc -o $(NAME) $(SRCS) $(CFLAGS) -g3
+		@echo "Compiled for valgrind successfully!"
 
 viewer	:
-		cd bonus ; make ; mv viewer .. ; cd ..
-		ln -sf bonus/assets .
+		@echo "Searching bonus sources files."
+		@cd bonus ; make ; cd ..
+		@echo "Copying viewer to the root."
+		@mv bonus/viewer .
+		@ln -sf bonus/assets .
+		@echo "Created a linked folder of the assets."
 
 viewer_fclean	:
-		rm -rf viewer
-		rm -rf assets
-		cd bonus ; make fclean ; cd ..
+		@echo "Removing the viewer."
+		@rm -rf viewer
+		@echo "Removing the assets."
+		@rm -rf assets
+		@cd bonus ; make fclean ; cd ..
 
 tests_run	:
-		gcc -o unit_tests $(SRCTEST) -Iinclude -lcriterion --coverage
-		./unit_tests
+		@gcc -o unit_tests $(SRCTEST) -Iinclude -lcriterion --coverage
+		@echo "Compiled unit tests."
+		@echo "Executing unit tests."
+		@./unit_tests
 
 clean	:
-		rm -rf $(OBJS)
+		@rm -rf $(OBJS)
+		@echo "Removed objects files."
 
 fclean	:	clean
-		rm -rf $(NAME)
+		@rm -rf $(NAME)
+		@echo "Removed compiled executable."
 
 re	:	fclean all
+
+cleaner	:
+		@./clean.sh
