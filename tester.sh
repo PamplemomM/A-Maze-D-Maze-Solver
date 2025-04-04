@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# import my_putstr(char c, int size), load_animation(void), remove(size)
+# import my_putstr(char c, int size), load_animation(void), remove(size), reset_file(void)
 [ -f "./bash_tools/tools.sh" ] && source "./bash_tools/tools.sh" || echo "tester.sh : Tools unfound!"
 
 
@@ -77,26 +77,28 @@ if [ "$value" = "clean" ]; then
 fi
 
 
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 echo -e "\e[1;31mTESTING\e[0m: Compilation                      |"
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 sleep 0.3
 
 make re
 
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 echo -e "\e[1;33mTESTING\e[0m: Testing with error values        |"
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 sleep 1.3
 
 touch data
 
 # RESET the logs
 
-touch $ERR_FILE
-touch $SUC_FILE
-echo "" > $ERR_FILE
-echo "" > $SUC_FILE
+reset_file $ERR_FILE
+reset_file $SUC_FILE
 
 
 delimE
@@ -175,9 +177,11 @@ rm data
 
 
 sleep 0.1
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 echo -e "\e[1;34mTESTING\e[0m: Testing with success values      |"
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 sleep 1.2
 
 delimS
@@ -242,7 +246,9 @@ sleep 0.3
 
 
 sleep 1
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 echo -e "\e[1;32mTESTING\e[0m: Every test has been executed     |"
-echo "-------------------------------------------"
+my_putstr "-" 43
+echo ""
 
