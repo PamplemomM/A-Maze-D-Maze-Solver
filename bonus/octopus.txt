@@ -1,0 +1,58 @@
+16
+#rooms
+##start
+Z 10 10
+a 10 5
+b 12 6
+c 13 7
+d 14 8
+e 15 10
+f 14 12
+g 13 13
+h 12 14
+i 10 15
+j 8 14
+k 7 13
+l 6 12
+##end
+m 5 10
+n 6 8
+o 7 7
+p 8 6
+#tunnels
+Z-a
+Z-b
+Z-c
+Z-d
+Z-e
+Z-f
+Z-g
+Z-h
+Z-i
+Z-j
+Z-k
+Z-l
+Z-m
+Z-n
+Z-o
+Z-p
+#moves
+P1-a
+P1-Z P1-i
+P1-Z P1-g
+P1-Z P1-o
+P2-b
+P3-c
+P4-d
+P5-e
+P6-f
+P7-g
+P8-h
+P9-i
+P10-j
+P11-k
+P12-l
+P13-m
+P14-n
+P15-o
+P16-p

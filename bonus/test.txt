@@ -7,13 +7,16 @@
 ##end
 lalaa 15 18
 3 5 4
+caca 30 2
 #tunnels
 0-2
 0-3
 2-lalaa
 3-lalaa
 2-3
+lalaa-caca
 #moves
-P1-2 P2-3
-P1-lalaa P2-lalaa P3-2
-P3-lalaa
+P1-2
+P1-3
+P1-lalaa
+P1-caca
