@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# import disp_delim, load_animation, remove
+# import my_putstr(char c, int size), load_animation(void), remove(size)
 [ -f "./bash_tools/tools.sh" ] && source "./bash_tools/tools.sh" || echo "clean.sh : Tools unfound!"
 
 sleep 0.1

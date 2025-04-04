@@ -1,19 +1,24 @@
 #!/bin/bash
 
 
-disp_delim() {
+my_putstr() {
     local size
+    local char
 
     if [[ -n "$1" ]]; then
-        size=$1
+        char=$1
+    else
+        char="-"
+    fi
+    if [[ -n "$2" ]]; then
+        size=$2
     else
         size=10
     fi
 
     for ((i = 0; i < size; i++)); do
-        echo  -n "-"
+        echo -e -n "$char"
     done
-    echo ""
 }
 
 remove() {
@@ -25,9 +30,7 @@ remove() {
         size=0
     fi
 
-    for ((i = 0; i < size; i++)); do
-        echo -e -n "\b \b"
-    done
+    my_putstr "\b \b" $size
 }
 
 load_animation() {

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# import disp_delim, load_animation, remove
+# import my_putstr(char c, int size), load_animation(void), remove(size)
 [ -f "./bash_tools/tools.sh" ] && source "./bash_tools/tools.sh" || echo "tester.sh : Tools unfound!"
 
 
@@ -43,12 +43,14 @@ dispS() {
 
 
 delimE() {
-    disp_delim 39 >> tests/testerEresult
+    my_putstr "-" 39 >> tests/testerEresult
+    echo "" >> tests/testerEresult
 }
 
 
 delimS() {
-    disp_delim 39 >> tests/testerSresult
+    my_putstr "-" 39 >> tests/testerSresult
+    echo "" >> tests/testerSresult
 }
 
 
