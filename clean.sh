@@ -20,6 +20,9 @@ echo -n "."
 sleep 0.3
 make viewer_fclean > data
 echo -n "."
+cd bonus/
+make fclean > data
+cd ..
 sleep 0.6
 echo -n -e "\b \b"
 sleep 0.4
