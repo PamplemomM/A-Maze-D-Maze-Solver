@@ -36,11 +36,12 @@ viewer	:
 		@echo "Created a linked folder of the assets."
 
 viewer_fclean	:
-		@echo "Removing the viewer."
+		@echo "Removing compiled viewer executable."
 		@rm -rf viewer
 		@echo "Removing the assets."
 		@rm -rf assets
 		@cd bonus ; make fclean ; cd ..
+		@echo "Removed the viewer."
 
 tests_run	:
 		@gcc -o unit_tests $(SRCTEST) -Iinclude -lcriterion --coverage

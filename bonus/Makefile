@@ -21,13 +21,20 @@ OBJ	=	$(SRC:.c=.o)
 
 all	:	$(NAME)
 
+%.o	:	%.c
+		@gcc -c $< -o $@
+
 $(NAME)	:	$(OBJ)
-		gcc $(OBJ) $(LIBS) -o $(NAME)
+		@echo "Compiled viewer sources into objects."
+		@gcc $(OBJ) $(LIBS) -o $(NAME)
+		@echo "Compiled the viewer"
 
 clean	:
-		rm -rf $(OBJ)
+		@rm -rf $(OBJ)
+		@echo "Removed viewer object files."
 
 fclean	:	clean
-		rm -rf $(NAME)
+		@rm -rf $(NAME)
+		@echo "Removed compiled viewer."
 
 re	:	fclean all
