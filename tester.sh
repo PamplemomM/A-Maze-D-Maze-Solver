@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# import disp_delim, load_animation, remove
+[ -f "./bash_tools/tools.sh" ] && source "./bash_tools/tools.sh" || echo "tester.sh : Tools unfound!"
+
+
 error_counter=0
 error() {
     ((error_counter++))
@@ -39,12 +43,12 @@ dispS() {
 
 
 delimE() {
-    echo "---------------------------------------" >> tests/testerEresult
+    disp_delim 39 >> tests/testerEresult
 }
 
 
 delimS() {
-    echo "---------------------------------------" >> tests/testerSresult
+    disp_delim 39 >> tests/testerSresult
 }
 
 
