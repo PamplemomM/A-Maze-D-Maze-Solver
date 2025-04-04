@@ -77,20 +77,16 @@ if [ "$value" = "clean" ]; then
 fi
 
 
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 echo -e "\e[1;31mTESTING\e[0m: Compilation                      |"
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 sleep 0.3
 
 make re
 
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 echo -e "\e[1;33mTESTING\e[0m: Testing with error values        |"
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 sleep 1.3
 
 touch data
@@ -177,11 +173,9 @@ rm data
 
 
 sleep 0.1
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 echo -e "\e[1;34mTESTING\e[0m: Testing with success values      |"
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 sleep 1.2
 
 delimS
@@ -246,9 +240,7 @@ sleep 0.3
 
 
 sleep 1
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 echo -e "\e[1;32mTESTING\e[0m: Every test has been executed     |"
-my_putstr "-" 43
-echo ""
+my_putstr "-" 43 " "
 

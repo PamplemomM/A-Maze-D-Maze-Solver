@@ -19,6 +19,9 @@ my_putstr() {
     for ((i = 0; i < size; i++)); do
         echo -e -n "$char"
     done
+    if [[ -n "$3" ]]; then
+        echo -e "$3"
+    fi
 }
 
 remove() {
