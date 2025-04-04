@@ -1,0 +1,72 @@
+20
+##start
+SQ 10 9
+#left wing
+lw0 2 7
+lw1 3 12
+lwF 5 3
+#left side of hull
+lh0 6 9
+lh1 7 11
+lh2 8 14
+lhF 8 5
+#cafeteria
+CAF 10 12
+#right side of hull
+rhF 12 5
+rh2 12 14
+rh1 13 11
+rh0 14 9
+#right wing
+rwF 15 3
+rw1 17 12
+rw0 18 7
+##end
+COCKPIT 10 0
+#halls
+#
+lwF-COCKPIT
+rwF-COCKPIT
+#
+lhF-lwF
+lhF-COCKPIT
+rhF-COCKPIT
+rhF-rwF
+#
+lw0-lwF
+lw0-lhF
+rw0-rhF
+rw0-rwF
+#
+lh0-lw1
+rh0-rw1
+#
+SQ-lh0
+SQ-lh1
+SQ-CAF
+SQ-rh1
+SQ-rh0
+#
+CAF-lh1
+CAF-lh2
+CAF-rh2
+CAF-rh1
+#
+lh1-lw0
+lh1-lw1
+lh1-lh2
+lh1-CAF
+rh1-CAF
+rh1-rh2
+rh1-rh1
+rh1-rh0
+#
+lw1-lw0
+lw1-lwF
+rw1-rwF
+rw1-rw0
+#
+lh2-lh1
+lh2-lhF
+rh2-rhF
+rh2-rh1
