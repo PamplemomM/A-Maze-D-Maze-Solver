@@ -87,29 +87,43 @@ void cam_move_keys(void)
     }
 }
 
-int do_move(vwr_robot_t *robot, room_t *room, float speed)
+int do_move_tweens(sprite_t *sprite, room_t *room, float speed)
 {
-    sprite_t *sprite = robot->sprite;
-    char *tmp = merge_str(sprite->name, "x");
+    char *tmp = merge_str(sprite->name, "0");
 
     if (tmp == NULL)
         return ERROR;
+    tmp[my_strlen(tmp) - 1] = 'x'; // x axis
     make_tween(tmp, &sprite->pos.x, room->x, 0.8 / speed / 1.5)->method = EASEOUT;
-
-    tmp[my_strlen(tmp) - 1] = 'y';
-    make_tween(tmp, &sprite->pos.y, room->y, 0.8 / speed / 1.5)->method = EASEOUT;
-
-    tmp[my_strlen(tmp) - 1] = 'r';
-    sprite->angle += (room->x - sprite->pos.x) / 10.0;
-    sprite->angle = MAX(MIN(sprite->angle, 80), -80);
+    tmp[my_strlen(tmp) - 1] = 'r'; // rotation
     make_tween(tmp, &sprite->angle, 0, 0.8 / speed / 1.7)->method = EASEINOUT;
-
-    tmp[my_strlen(tmp) - 1] = 's';
-    sprite->scale.y += abs(room->y - sprite->pos.y) / 3000.0;
-    sprite->scale.y = MIN(sprite->scale.y, 0.35);
+    tmp[my_strlen(tmp) - 1] = 'y'; // y axis
+    make_tween(tmp, &sprite->pos.y, room->y, 0.8 / speed / 1.5)->method = EASEOUT;
+    tmp[my_strlen(tmp) - 1] = 'w'; // width
+    make_tween(tmp, &sprite->scale.x, 0.2, 0.8 / speed / 1.45)->method = EASEINOUT;
+    tmp[my_strlen(tmp) - 1] = 'h'; // height
     make_tween(tmp, &sprite->scale.y, 0.2, 0.8 / speed / 1.45)->method = EASEINOUT;
-
     OMNIFREE(tmp, 1);
+    return SUCCESS;
+}
+
+int do_move(vwr_robot_t *robot, room_t *room, float speed)
+{
+    sprite_t *sprite = robot->sprite;
+    int diffx = room->x - sprite->pos.x;
+    int diffy = room->y - sprite->pos.y;
+    int diffd = sqrt(pow(diffx, 2) + pow(diffy, 2));
+    float traj = atan2f(diffx, fabs(diffy - 80.0)) * 180.0 / M_PI;
+    float angle = MAX(MIN(sqrt(abs(diffx)) * ((float)(diffx + 1) / (float)(abs(diffx) + 1)) * 1.5, 80), -80);
+    float diffa = fabs(traj - angle);
+    float squish_factor = ((diffa + 25.0) / 50.0 - 1.0) * (diffd / 1000.0) + 1.0;
+
+    sprite->angle = angle;
+    sprite->pos.y += pow(MAX(diffy / 60.0, 0), 2) * squish_factor;
+    sprite->scale.x *= squish_factor;
+    sprite->scale.y /= squish_factor;
+    if (do_move_tweens(robot->sprite, room, speed) == ERROR)
+        return ERROR;
     play_sound("move", 70.0 / speed, diceroll(80, 90) / 100.0 + speed / 50.0);
     run_timer("moving", 0.8 / speed / 1.5);
     robot->room = room;
@@ -134,7 +148,7 @@ void update_robots_rooms(int id)
     vwr_robot_t *robot = *get_robotlist();
     move_t *move = MAZE->moves;
 
-    printf("updating to... %d\n", id);
+    //printf("updating to... %d\n", id);
     while (robot != NULL) {
         robot->move_to = MAZE->start;
         robot = robot->next;
@@ -185,7 +199,7 @@ void move_robots(float speed)
     if (robot == NULL && diff_id != 0) {
         robot = *get_robotlist();
         curr_id += diff_id / abs(diff_id);
-        printf("move set %d is now in action!\n", curr_id);
+        //printf("move set %d is now in action!\n", curr_id);
         update_robots_rooms(curr_id);
         moves_cnt = count_remaining_moves();
     }
@@ -194,7 +208,7 @@ void move_robots(float speed)
             robot = robot->next;
         if (robot == NULL)
             return;
-        printf("move P%d-%s\n", robot->id, robot->move_to->name);
+        //printf("move P%d-%s\n", robot->id, robot->move_to->name);
         do_move(robot, robot->move_to, speed);
         run_timer("mvcooldown", (diceroll(5, 10) / 40.0 / speed) / (1 + moves_cnt / 5.0));
         robot = robot->next;
