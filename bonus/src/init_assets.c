@@ -173,10 +173,10 @@ static int init_progbar(void)
         return ERROR;
     if (make_sprite("barbg", "AWESOME_PIXEL", 148, 538) == NULL)
         return ERROR;
-    get_sprite("barbg")->scale = (sfVector2f){504, 29};
+    get_sprite("barbg")->scale = (sfVector2f){504, 28.5};
     get_sprite("barbg")->color = color_from_hue(0, 255, 0, 100);
     get_sprite("barbg")->type = HUD;
-    get_sprite("barbuff")->scale = (sfVector2f){0, 25};
+    get_sprite("barbuff")->scale = (sfVector2f){0, 24.5};
     get_sprite("barbuff")->color = color_from_hue(GAME->hue + 120, 255, 255, 255);
     get_sprite("barbuff")->type = HUD;
     get_sprite("barprog")->scale = (sfVector2f){3, 36};
@@ -203,13 +203,11 @@ static int init_bg(void)
     get_sprite("bg")->scale = (sfVector2f){scalex, scaley};
     get_sprite("bg")->type = NONE;
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
-
     diag = sqrt(pow(GAME->bounds.width, 2) + pow(GAME->bounds.height, 2));
     get_sprite("shadow")->scale = (sfVector2f){diag - 0.2, 10000};
     get_sprite("shadow")->angle = -atan2f(GAME->bounds.height,
         GAME->bounds.width) * 180.0 / M_PI;
     get_sprite("shadow")->color = color_from_hue(0, 0, 0, 75);
-
     get_sprite("light")->scale = (sfVector2f){15, 20};
     get_sprite("light")->color = color_from_hue(GAME->hue, 255, 255, 255);
     center_sprite_origin(get_sprite("light"), 0.5, 0.5);

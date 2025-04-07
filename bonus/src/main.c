@@ -180,13 +180,23 @@ void start_sim(float start)
     update_robots_rooms((int)start);
 }
 
-void update_progbar(int id)
+void update_progbar(void)
+{
+    sprite_t *prog = get_sprite("barprog");
+
+    make_tween("barprog", &prog->pos.x, (int)GAME->move_id / (float)GAME->nb_moves * 500.0 + 150, 0.2)->method = EASEOUT;
+    prog->scale.x = MIN(prog->scale.x + 3, 15);
+    prog->scale.y = MAX(prog->scale.y - 3, 30);
+    make_tween("barprogw", &prog->scale.x, 3, 0.2)->method = EASEINOUT;
+    make_tween("barprogh", &prog->scale.y, 36, 0.2)->method = EASEINOUT;
+    play_sound("progbar", prog->scale.x * 2, 0.7 + prog->scale.x / 50.0);
+}
+
+void update_progbuff(int id)
 {
     sprite_t *buff = get_sprite("barbuff");
-    sprite_t *progaa = get_sprite("barprog");
 
     make_tween("barbuff", &buff->scale.x, id / (float)GAME->nb_moves * 500.0, 2.0)->method = EASEOUT;
-    make_tween("barprog", &progaa->pos.x, (int)GAME->move_id / (float)GAME->nb_moves * 500.0 + 150, 0.1)->method = EASEOUT;
 }
 
 int count_remaining_moves(void)
@@ -219,6 +229,7 @@ int move_robots(float speed)
             return ERROR;
         //printf("move set %d is now in action!\n", curr_id);
         update_robots_rooms(curr_id);
+        update_progbuff(curr_id);
         moves_cnt = count_remaining_moves();
     }
     if (get_timer("mvcooldown") == NULL && robot != NULL) {
@@ -230,7 +241,6 @@ int move_robots(float speed)
             return ERROR;
         //printf("move P%d-%s\n", robot->id, robot->move_to->name);
         do_move(robot, robot->move_to, speed);
-        update_progbar(curr_id);
         run_timer("mvcooldown", (diceroll(5, 10) / 40.0 / speed) / (1 + moves_cnt / 5.0));
         robot = robot->next;
     }
@@ -370,8 +380,10 @@ int update_robots(void)
         length_id = fabs(tween_id->dest - tween_id->start);
         speed = 1 + sin(fabs((*tween_id->value) - tween_id->start) / length_id * M_PI) * sqrt(length_id);
     }
-    if ((int)GAME->move_id != prev_id)
+    if ((int)GAME->move_id != prev_id) {
         prev_id = (int)GAME->move_id;
+        update_progbar();
+    }
     return move_robots(speed);
 }
 
