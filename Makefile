@@ -32,16 +32,16 @@ increment_counter:
 
 %.o	:	%.c
 		@$(MAKE) increment_counter --no-print-directory
-		@gcc -c $< -o $@
+		@mkdir -p .build/$(dir $@)
+		@gcc -c $< -o .build/$@
 
 
 $(NAME)	:	$(OBJS)
 		@echo ""
 		@rm .counter
 		@echo "Compiled sources into objects."
-		@gcc $(OBJS) $(LIBS) -o $(NAME)
+		@gcc $(shell find .build/ -type f -name '*.o') $(LIBS) -o $(NAME)
 		@echo "Compiled successfully!"
-		@mv $(OBJS) .build
 		@echo "Moved object files into .build"
 
 val	:
@@ -72,7 +72,8 @@ tests_run	:
 
 clean	:
 		@rm -rf $(OBJS)
-		@rm -rf .build/*.o
+		@rm -rf $(shell find .build/ -type f -name '*.o')
+		@rmdir $(shell find .build/ -type d) -p --ignore-fail-on-non-empty
 		@echo "Removed objects files."
 
 fclean	:	clean
