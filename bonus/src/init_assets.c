@@ -165,6 +165,27 @@ static int init_logs(void)
     return SUCCESS;
 }
 
+static int init_progbar(void)
+{
+    if (make_sprite("barprog", "AWESOME_PIXEL", 150, 552) == NULL)
+        return ERROR;
+    if (make_sprite("barbuff", "AWESOME_PIXEL", 150, 540) == NULL)
+        return ERROR;
+    if (make_sprite("barbg", "AWESOME_PIXEL", 148, 538) == NULL)
+        return ERROR;
+    get_sprite("barbg")->scale = (sfVector2f){504, 29};
+    get_sprite("barbg")->color = color_from_hue(0, 255, 0, 100);
+    get_sprite("barbg")->type = HUD;
+    get_sprite("barbuff")->scale = (sfVector2f){0, 25};
+    get_sprite("barbuff")->color = color_from_hue(5, 225, 255, 255);
+    get_sprite("barbuff")->type = HUD;
+    get_sprite("barprog")->scale = (sfVector2f){3, 36};
+    get_sprite("barprog")->color = color_from_hue(0, 255, 0, 255);
+    get_sprite("barprog")->type = HUD;
+    center_sprite_origin(get_sprite("barprog"), 0.5, 0.5);
+    return SUCCESS;
+}
+
 static int init_bg(void)
 {
     float scalex;
@@ -182,10 +203,10 @@ static int init_bg(void)
 
 static int init_sprites(void)
 {
-    int inits[6] = {init_rooms(), init_tunnels(), init_robots(),
-        init_compass(), init_logs(), init_bg()};
+    int inits[7] = {init_rooms(), init_tunnels(), init_robots(),
+        init_compass(), init_logs(), init_progbar(), init_bg()};
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
         if (inits[i] == ERROR)
             return ERROR;
     }

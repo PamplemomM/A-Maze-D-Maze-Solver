@@ -180,6 +180,15 @@ void start_sim(float start)
     update_robots_rooms((int)start);
 }
 
+void update_progbar(int id)
+{
+    sprite_t *buff = get_sprite("barbuff");
+    sprite_t *progaa = get_sprite("barprog");
+
+    make_tween("barbuff", &buff->scale.x, id / (float)GAME->nb_moves * 500.0, 2.0)->method = EASEOUT;
+    make_tween("barprog", &progaa->pos.x, GAME->move_id / (float)GAME->nb_moves * 500.0 + 150, 1.0)->method = EASEOUT;
+}
+
 int count_remaining_moves(void)
 {
     vwr_robot_t *robot = *get_robotlist();
@@ -221,6 +230,7 @@ int move_robots(float speed)
             return ERROR;
         //printf("move P%d-%s\n", robot->id, robot->move_to->name);
         do_move(robot, robot->move_to, speed);
+        update_progbar(curr_id);
         run_timer("mvcooldown", (diceroll(5, 10) / 40.0 / speed) / (1 + moves_cnt / 5.0));
         robot = robot->next;
     }
@@ -297,7 +307,7 @@ void interact_sim(void)
     if (KEYPRESS(sfKeyTab) && get_timer("logs_cdwn") == NULL) {
         run_timer("logs_cdwn", 0.5);
         if (GAME->logs) {
-            make_tween("camlat", &CAM->center.x, CAM->center.x + 100 / (CAM->zoom / 1.2), 1.0)->method = EASEOUT;
+            make_tween("camlog", &CAM->offset.x, 0, 1.0)->method = EASEOUT;
             make_tween("camzoom", &CAM->zoom, CAM->zoom / 0.7, 1.0)->method = EASEOUT;
             make_tween("logs", &get_sprite("logs")->pos.x, -250, 1.0)->method = EASEOUT;
             make_tween("logstitle", &get_text("logstitle")->pos.x, -170, 1.0)->method = EASEOUT;
@@ -305,11 +315,11 @@ void interact_sim(void)
             play_sound("logs_toggle", 75, diceroll(80, 90) / 100.0);
             GAME->logs = 0;
         } else {
-            make_tween("camlat", &CAM->center.x, CAM->center.x - 100 / (CAM->zoom * 0.58), 1.0)->method = EASEOUT;
+            make_tween("camlog", &CAM->offset.x, -125, 1.0)->method = EASEOUT;
             make_tween("camzoom", &CAM->zoom, CAM->zoom * 0.7, 1.0)->method = EASEOUT;
-            make_tween("logs", &get_sprite("logs")->pos.x, 0, 1.0)->method = EASEOUT;
-            make_tween("logstitle", &get_text("logstitle")->pos.x, 80, 1.0)->method = EASEOUT;
-            make_tween("logstxt", &get_text("logstxt")->pos.x, 7, 1.0)->method = EASEOUT;
+            make_tween("logs", &get_sprite("logs")->pos.x, -125, 1.0)->method = EASEOUT;
+            make_tween("logstitle", &get_text("logstitle")->pos.x, -45, 1.0)->method = EASEOUT;
+            make_tween("logstxt", &get_text("logstxt")->pos.x, -118, 1.0)->method = EASEOUT;
             play_sound("logs_toggle", 75, diceroll(90, 110) / 100.0);
             GAME->logs = 1;
         }
