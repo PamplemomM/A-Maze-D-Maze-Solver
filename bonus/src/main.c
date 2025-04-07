@@ -294,19 +294,23 @@ void interact_sim(void)
         toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     }
-    if (KEYPRESS(sfKeyTab) && get_timer("actcooldown") == NULL) {
-        run_timer("actcooldown", 0.2);
+    if (KEYPRESS(sfKeyTab) && get_timer("logs_cdwn") == NULL) {
+        run_timer("logs_cdwn", 0.5);
         if (GAME->logs) {
             make_tween("camlat", &CAM->center.x, CAM->center.x + 100 / (CAM->zoom / 1.2), 1.0)->method = EASEOUT;
             make_tween("camzoom", &CAM->zoom, CAM->zoom / 0.7, 1.0)->method = EASEOUT;
             make_tween("logs", &get_sprite("logs")->pos.x, -250, 1.0)->method = EASEOUT;
+            make_tween("logstitle", &get_text("logstitle")->pos.x, -170, 1.0)->method = EASEOUT;
             make_tween("logstxt", &get_text("logstxt")->pos.x, -243, 1.0)->method = EASEOUT;
+            play_sound("logs_toggle", 75, diceroll(80, 90) / 100.0);
             GAME->logs = 0;
         } else {
             make_tween("camlat", &CAM->center.x, CAM->center.x - 100 / (CAM->zoom * 0.58), 1.0)->method = EASEOUT;
             make_tween("camzoom", &CAM->zoom, CAM->zoom * 0.7, 1.0)->method = EASEOUT;
             make_tween("logs", &get_sprite("logs")->pos.x, 0, 1.0)->method = EASEOUT;
+            make_tween("logstitle", &get_text("logstitle")->pos.x, 80, 1.0)->method = EASEOUT;
             make_tween("logstxt", &get_text("logstxt")->pos.x, 7, 1.0)->method = EASEOUT;
+            play_sound("logs_toggle", 75, diceroll(90, 110) / 100.0);
             GAME->logs = 1;
         }
     }

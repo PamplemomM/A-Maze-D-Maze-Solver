@@ -16,7 +16,7 @@ int add_to_logs(char *entry)
     for (int i = 0; logs->str[i] != '\0'; i++) {
         if (logs->str[i] == '\n')
             cnt++;
-        if (cnt >= 32) {
+        if (cnt >= 35) {
             logs->str[i + 1] = '\0';
             break;
         }

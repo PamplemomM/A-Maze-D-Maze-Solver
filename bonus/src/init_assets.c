@@ -149,11 +149,16 @@ static int init_logs(void)
 {
     if (make_sprite("logs", "AWESOME_PIXEL", -250, 0) == NULL)
         return ERROR;
-    if (make_text("logstxt", "fart", -243, 100) == NULL)
+    if (make_text("logstitle", "LOGS", -170, 1) == NULL)
+        return ERROR;
+    if (make_text("logstxt", "program launched", -243, 55) == NULL)
         return ERROR;
     get_sprite("logs")->scale = (sfVector2f){250, 600};
     get_sprite("logs")->color = color_from_hue(0, 0, 0, 150);
     get_sprite("logs")->type = HUD;
+    get_text("logstitle")->scale = (sfVector2f){0.8, 0.7};
+    get_text("logstitle")->color = color_from_hue(0, 255, 0, 255);
+    get_text("logstitle")->type = HUD;
     get_text("logstxt")->scale = (sfVector2f){0.25, 0.25};
     get_text("logstxt")->color = color_from_hue(0, 255, 0, 255);
     get_text("logstxt")->type = HUD;
@@ -194,7 +199,7 @@ static int init_sounds(void)
 
 static int init_music(void)
 {
-    if (play_music("Parade", "K.K. Parade", 0, 1.0) == NULL) // put the volume back up to 50
+    if (play_music("Parade", "K.K. Parade", 50, 1.0) == NULL) // put the volume back up to 50
         return ERROR;
     sfMusic_setLoop((*get_music())->music, sfTrue);
     return SUCCESS;
