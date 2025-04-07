@@ -21,9 +21,6 @@ OBJ	=	$(SRC:.c=.o)
 
 all	:	$(NAME)
 
-
-.PHONY: increment_counter
-
 increment_counter:
 	@if [ ! -f .counter ]; then echo -n "Compiled sources: [00]" ; \
 	echo 0 > .counter; fi; \
