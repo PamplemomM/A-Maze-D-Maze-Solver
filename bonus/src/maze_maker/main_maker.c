@@ -5,7 +5,19 @@
 ** Main file for the A-Maze-d script maker.
 */
 
-#include "../include/header_viewer.h"
+#include "../../include/header_viewer.h"
+
+sprite_t *get_room_sprite(room_t *room) // possibly useless
+{
+    sprite_t *sprite = NULL;
+    char *name = merge_str("room_", room->name);
+
+    if (name == NULL)
+        return OMNIFREE(name, 1);
+    sprite = get_sprite(name);
+    OMNIFREE(name, 1);
+    return sprite;
+}
 
 void events_maker(void)
 {

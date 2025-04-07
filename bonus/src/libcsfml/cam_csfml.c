@@ -35,7 +35,8 @@ void update_cam(void)
 {
     if (CAM == NULL)
         return;
-    sfView_setCenter(CAM->view, (sfVector2f){CAM->center.x + CAM->offset.x / CAM->zoom, CAM->center.y + CAM->offset.y / CAM->zoom});
+    sfView_setCenter(CAM->view, (sfVector2f){CAM->center.x + CAM->offset.x
+        / CAM->zoom, CAM->center.y + CAM->offset.y / CAM->zoom});
     sfView_setSize(CAM->view, (sfVector2f){CAM->size.x / CAM->zoom,
         CAM->size.y / CAM->zoom});
     sfView_setRotation(CAM->view, CAM->angle);

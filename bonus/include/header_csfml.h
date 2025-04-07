@@ -36,8 +36,7 @@
     #define CAM (*get_cam())
     #define KEYPRESS(key) sfKeyboard_isKeyPressed(key)
     #define MOUSEPRESS(button) sfMouse_isButtonPressed(button)
-    #define DESTROY(thing, list_func, free_func) destroy_thing((void *)thing, \
-        (void **(*)(void))(list_func), (void (*)(void *))(free_func))
+    #define DESTROY(thing, list_func, free_func) destroy_thing((void *)thing, (void **(*)(void))(list_func), (void (*)(void *))(free_func))
 
     // tools:
     #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -114,7 +113,7 @@ typedef struct tween_s {
     float tend;
     method_t method;
 } tween_t; // linked list for tweens
-           // a tween is used to ease a value into a destination
+// a tween is used to ease a value into a destination
 
 typedef struct timer_s {
     struct timer_s *next;

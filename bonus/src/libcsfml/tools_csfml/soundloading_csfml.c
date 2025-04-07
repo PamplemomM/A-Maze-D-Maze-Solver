@@ -67,7 +67,8 @@ int precache_sounds(void)
     buff = readdir(dr);
     while (buff != NULL) {
         name = buff->d_name;
-        if (strcmp(&(name)[strlen(name) - strlen(FORMAT_SFX)], FORMAT_SFX) != 0) {
+        if (strcmp(&(name)[strlen(name) - strlen(FORMAT_SFX)],
+            FORMAT_SFX) != 0) {
             buff = readdir(dr);
             continue;
         }

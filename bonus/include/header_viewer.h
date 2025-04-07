@@ -50,6 +50,35 @@ typedef struct game {
 
 // --------- VIEWER FUNCTIONS ----------
 
+// --- move_robots.c ---
+int move_allrobots_to(room_t *room);
+void update_robots_rooms(int id);
+int move_robots(float speed);
+
+// --- interact_sim.c ---
+void toggle_gamestate(gamestate_t state);
+void start_sim(float start);
+void interact_sim(void);
+
+// --- interact_cam.c ---
+void cam_move_mouse(sfMouseMoveEvent mouse);
+void cam_zoom_mouse(sfMouseWheelScrollEvent mouse);
+void cam_move_keys(void);
+
+// --- logs.c ---
+int add_to_logs(char *entry);
+int add_logs_move(vwr_robot_t *robot, room_t *dest);
+
+// --- update_robots.c ---
+void hue_shift(void);
+int update_robots(void);
+void draw_robots(void);
+
+// --- update_hud.c ---
+void update_progbar(void);
+void update_progbuff(int id);
+void update_compass(void);
+
 // --- amazed_data.c ---
 maze_t **get_maze(void);
 int read_maze(void);
@@ -63,8 +92,16 @@ void destroy_gamestuff(void);
 int init_assets(void);
 void destroy_assets(void);
 
-// --- main_maker.c ---
-int start_maker(void);
+// --- init_maze_assets.c ---
+int init_robots(void);
+int init_rooms(void);
+int init_tunnels(void);
+
+// --- init_misc_assets.c ---
+int init_compass(void);
+int init_logs(void);
+int init_progbar(void);
+int init_bg(void);
 
 // --- robots_list.c ---
 vwr_robot_t **get_robotlist(void);
@@ -72,8 +109,7 @@ vwr_robot_t *get_robot(int id);
 vwr_robot_t *make_robot(int id);
 void free_robot(vwr_robot_t *robot);
 
-// --- logs.c ---
-int add_to_logs(char *entry);
-int add_logs_move(vwr_robot_t *robot, room_t *dest);
+// --- main_maker.c ---
+int start_maker(void);
 
 #endif /* AMAZEDVIS_H */

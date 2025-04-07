@@ -22,7 +22,7 @@ OBJ	=	$(SRC:.c=.o)
 all	:	$(NAME)
 
 increment_counter:
-	@if [ ! -f .counter ]; then echo -n "Compiled sources: [00]" ; \
+	@if [ ! -f .counter ]; then echo -n "Compiling source files: [00]" ; \
 	echo 0 > .counter; fi; \
 	count=$$(cat .counter); \
 	new_count=$$((count + 1)); \
@@ -30,7 +30,9 @@ increment_counter:
 	for i in $$(seq 1 4); do \
 		printf "\b \b"; \
 	done; \
-	if [ $$new_count -lt 10 ]; then printf "[0$$new_count]"; else printf "[$$new_count]"; fi;
+	if [ $$new_count -lt 10 ]; \
+	then printf "[0$$new_count]"; \
+	else printf "[$$new_count]"; fi;
 
 
 %.o	:	%.c
@@ -40,16 +42,16 @@ increment_counter:
 $(NAME)	:	$(OBJ)
 		@echo ""
 		@rm .counter
-		@echo "Compiled viewer sources into objects."
+		@echo "Compiled source files into object files."
 		@gcc $(OBJ) $(LIBS) -o $(NAME)
-		@echo "Compiled the viewer"
+		@echo "Compiled viewer binary."
 
 clean	:
 		@rm -rf $(OBJ)
-		@echo "Removed viewer object files."
+		@echo "Removed object files."
 
 fclean	:	clean
 		@rm -rf $(NAME)
-		@echo "Removed compiled viewer."
+		@echo "Removed viewer binary."
 
 re	:	fclean all
