@@ -41,6 +41,7 @@ Furthermore, the viewer's usage can be displayed by executing it with the `-h` o
 ./viewer -h
 ```
 
+---------------------------------------------------------------------------
 
 **You can also generate a brand new script!**
 
