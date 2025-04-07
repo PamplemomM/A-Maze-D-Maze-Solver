@@ -463,7 +463,7 @@ int update_stuff(void)
 void run(void)
 {
     while (sfRenderWindow_isOpen(WINDOW)) {
-        sfRenderWindow_clear(WINDOW, color_from_hue(0, 60, 0, 255));
+        sfRenderWindow_clear(WINDOW, sfBlack);
         if (update_stuff() == ERROR) {
             sfRenderWindow_close(WINDOW);
             return;

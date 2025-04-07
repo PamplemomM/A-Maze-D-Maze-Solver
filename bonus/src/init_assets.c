@@ -190,14 +190,29 @@ static int init_bg(void)
 {
     float scalex;
     float scaley;
+    float diag;
 
     if (make_sprite("bg", "bg", GAME->bounds.left, GAME->bounds.top) == NULL)
+        return ERROR;
+    if (make_sprite("shadow", "AWESOME_PIXEL", GAME->bounds.left, GAME->bounds.top + GAME->bounds.height) == NULL)
+        return ERROR;
+    if (make_sprite("light", "gradient", CAM->center.x, CAM->center.y) == NULL)
         return ERROR;
     scalex = (float)GAME->bounds.width / (float)get_sprite("bg")->rect.width;
     scaley = (float)GAME->bounds.height / (float)get_sprite("bg")->rect.height;
     get_sprite("bg")->scale = (sfVector2f){scalex, scaley};
     get_sprite("bg")->type = NONE;
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
+
+    diag = sqrt(pow(GAME->bounds.width, 2) + pow(GAME->bounds.height, 2));
+    get_sprite("shadow")->scale = (sfVector2f){diag - 0.2, 10000};
+    get_sprite("shadow")->angle = -atan2f(GAME->bounds.height,
+        GAME->bounds.width) * 180.0 / M_PI;
+    get_sprite("shadow")->color = color_from_hue(0, 0, 0, 75);
+
+    get_sprite("light")->scale = (sfVector2f){15, 20};
+    get_sprite("light")->color = color_from_hue(0, 70, 0, 255);
+    center_sprite_origin(get_sprite("light"), 0.5, 0.5);
     return SUCCESS;
 }
 
