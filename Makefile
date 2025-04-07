@@ -19,7 +19,7 @@ OBJS	=	$(SRCS:.c=.o)
 all	:	$(NAME)
 
 increment_counter:
-	@if [ ! -f .counter ]; then echo -n "Compiled sources: [00]" ; \
+	@if [ ! -f .counter ]; then echo -n "Compiling source files: [00]" ; \
 	echo 0 > .counter; fi; \
 	count=$$(cat .counter); \
 	new_count=$$((count + 1)); \
@@ -27,7 +27,9 @@ increment_counter:
 	for i in $$(seq 1 4); do \
 		printf "\b \b"; \
 	done; \
-	if [ $$new_count -lt 10 ]; then printf "[0$$new_count]"; else printf "[$$new_count]"; fi;
+	if [ $$new_count -lt 10 ]; \
+	then printf "[0$$new_count]"; \
+	else printf "[$$new_count]"; fi;
 
 
 %.o	:	%.c
@@ -38,30 +40,28 @@ increment_counter:
 $(NAME)	:	$(OBJS)
 		@echo ""
 		@rm .counter
-		@echo "Compiled sources into objects."
+		@echo "Compiled source files into object files."
 		@gcc $(OBJS) $(LIBS) -o $(NAME)
 		@echo "Compiled successfully!"
-		@echo "Moved object files into .build"
 
 val	:
 		@gcc -o $(NAME) $(SRCS) $(CFLAGS) -g3
-		@echo "Compiled for valgrind successfully!"
+		@echo "Compiled successfully! (valgrind edition)"
 
 viewer	:
-		@echo "Searching bonus sources files."
+		@echo "Executing viewer Makefile."
 		@make -C./bonus/ --no-print-directory
-		@echo "Copying viewer to the root."
 		@mv bonus/viewer .
+		@echo "Moved viewer binary to root."
 		@ln -sf bonus/assets .
-		@echo "Created a linked folder of the assets."
+		@echo "Created symbolic link to assets folder."
 
 viewer_fclean	:
-		@echo "Removing compiled viewer executable."
-		@rm -rf viewer
-		@echo "Removing the assets."
+		@make -C bonus/ clean --no-print-directory
 		@rm -rf assets
-		@make -C bonus/ fclean --no-print-directory
-		@echo "Removed the viewer."
+		@echo "Removed assets symbolic link."
+		@rm -rf viewer
+		@echo "Removed viewer binary."
 
 tests_run	:
 		@gcc -o unit_tests $(SRCTEST) -Iinclude -lcriterion --coverage
@@ -71,11 +71,11 @@ tests_run	:
 
 clean	:
 		@rm -rf $(OBJS)
-		@echo "Removed objects files."
+		@echo "Removed object files."
 
 fclean	:	clean
 		@rm -rf $(NAME)
-		@echo "Removed compiled executable."
+		@echo "Removed binary."
 
 re	:	fclean all
 

@@ -48,7 +48,7 @@ $(NAME)	:	$(OBJ)
 
 clean	:
 		@rm -rf $(OBJ)
-		@echo "Removed object files."
+		@echo "Removed viewer object files."
 
 fclean	:	clean
 		@rm -rf $(NAME)
