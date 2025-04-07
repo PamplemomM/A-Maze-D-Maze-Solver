@@ -123,12 +123,13 @@ int do_move(vwr_robot_t *robot, room_t *room, float speed)
     float traj = atan2f(diffx, fabs(diffy - 80.0)) * 180.0 / M_PI;
     float angle = MAX(MIN(sqrt(abs(diffx)) * ((float)(diffx + 1) / (float)(abs(diffx) + 1)) * 1.5, 80), -80);
     float diffa = fabs(traj - angle);
-    float squish_factor = ((diffa + 25.0) / 50.0 - 1.0) * (diffd / 1000.0) + 1.0;
+    float squish_factor = MAX(((diffa + 25.0) / 50.0 - 1.0) * (diffd / 1000.0) + 1.0, 0.4);
 
     sprite->angle = angle;
-    sprite->pos.y += pow(MAX(diffy / 60.0, 0), 2) * squish_factor;
     sprite->scale.x *= squish_factor;
     sprite->scale.y /= squish_factor;
+    if (diffy > 0)
+        sprite->pos.y += ((sprite->scale.y - 0.2) * 500.0) / (fabs(angle) / 20.0 + 1.0);
     if (do_move_tweens(robot->sprite, room, speed) == ERROR)
         return ERROR;
     play_sound("move", 70.0 / speed, diceroll(80, 90) / 100.0 + speed / 50.0);
