@@ -20,6 +20,13 @@ Test(my_strlen, full_covr)
     cr_assert_eq(my_strlen(str), 6);
 }
 
+Test(my_strlen_error, full_covr)
+{
+    char *str = NULL;
+
+    cr_assert_eq(my_strlen(str), 0);
+}
+
 Test(my_strdup, full_covr, .init = cr_redirect_stdout)
 {
     char *dup = my_strdup("Hello");

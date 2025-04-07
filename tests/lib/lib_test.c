@@ -52,3 +52,19 @@ Test(my_getnbr, full_covr)
     cr_assert_eq(my_getnbr(src), 45);
 }
 
+Test(my_getnbr_error, full_covr)
+{
+    char *str = NULL;
+
+    cr_assert_eq(my_getnbr(str), 0);
+}
+
+Test(char_in_str_true, full_covr)
+{
+    cr_assert_eq(char_in_str('o', "bonjour"), TRUE);
+}
+
+Test(char_in_str_false, full_covr)
+{
+    cr_assert_eq(char_in_str('z', "bonjour"), FALSE);
+}
