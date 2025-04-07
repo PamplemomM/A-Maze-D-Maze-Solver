@@ -174,10 +174,10 @@ static int init_progbar(void)
     if (make_sprite("barbg", "AWESOME_PIXEL", 148, 538) == NULL)
         return ERROR;
     get_sprite("barbg")->scale = (sfVector2f){504, 28.5};
-    get_sprite("barbg")->color = color_from_hue(0, 255, 0, 100);
+    get_sprite("barbg")->color = color_from_hue(0, 255, 0, 180);
     get_sprite("barbg")->type = HUD;
     get_sprite("barbuff")->scale = (sfVector2f){0, 24.5};
-    get_sprite("barbuff")->color = color_from_hue(GAME->hue + 120, 255, 255, 255);
+    get_sprite("barbuff")->color = color_from_hue(GAME->hue + 120, 200, 255, 255);
     get_sprite("barbuff")->type = HUD;
     get_sprite("barprog")->scale = (sfVector2f){3, 36};
     get_sprite("barprog")->color = color_from_hue(0, 255, 0, 255);
