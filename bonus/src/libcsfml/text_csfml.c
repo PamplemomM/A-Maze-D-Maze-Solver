@@ -40,6 +40,7 @@ static void setup_text(text_t *text)
     text->angle = 0;
     text->alpha = 1;
     text->color = sfBlack;
+    text->type = NONE;
     text->draw = 1;
     text->next = *get_textlist();
     *get_textlist() = text;
@@ -64,20 +65,24 @@ text_t *make_text(char *name, char *str, int x, int y)
     return text;
 }
 
-void draw_alltexts(void)
+void draw_text(text_t *text)
 {
-    text_t *text = *get_textlist();
+    sfVector2f pos = text->pos;
+    sfVector2f scale = text->scale;
 
-    while (text != NULL) {
-        if (text->draw) {
-            sfText_setPosition(text->text, text->pos);
-            sfText_setScale(text->text, text->scale);
-            sfText_setRotation(text->text, text->angle);
-            text->color.a = text->alpha * 255;
-            sfText_setFillColor(text->text, text->color);
-            sfRenderWindow_drawText(WINDOW, text->text, NULL);
+    if (text->draw) {
+        if (text->type == HUD) {
+            pos.x = CAM->center.x + (pos.x - 400) / CAM->zoom;
+            pos.y = CAM->center.y + (pos.y - 300) / CAM->zoom;
+            scale.x /= CAM->zoom;
+            scale.y /= CAM->zoom;
         }
-        text = text->next;
+        sfText_setPosition(text->text, pos);
+        sfText_setScale(text->text, scale);
+        sfText_setRotation(text->text, text->angle);
+        text->color.a = text->alpha * 255;
+        sfText_setFillColor(text->text, text->color);
+        sfRenderWindow_drawText(WINDOW, text->text, NULL);
     }
 }
 

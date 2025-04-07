@@ -7,7 +7,7 @@
 
 #include "../../../include/header_csfml.h"
 
-void draw_allsprites(sprite_type_t type)
+void draw_allsprites(element_type_t type)
 {
     sprite_t *sprite = *get_spritelist();
 

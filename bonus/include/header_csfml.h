@@ -46,14 +46,14 @@
 
 // ------- CSFML LIB STRUCTURES --------
 
-typedef enum sprite_types {
+typedef enum element_types {
     NONE,
     HUD,
     ROOM,
     ROBOT,
     TUNNEL,
     ANY
-} sprite_type_t;
+} element_type_t;
 
 typedef enum tween_methods {
     LINEAR,
@@ -84,7 +84,7 @@ typedef struct sprite_s {
     float angle;
     sfColor color;
     sfIntRect rect;
-    sprite_type_t type;
+    element_type_t type;
     int draw;
 } sprite_t; // linked list for sprites
 
@@ -99,6 +99,7 @@ typedef struct text_s {
     float angle;
     float alpha;
     sfColor color;
+    element_type_t type;
     int draw;
 } text_t; // linked list for texts
 
@@ -169,7 +170,7 @@ void free_sprite(sprite_t *sprite);
 text_t **get_textlist(void);
 text_t *get_text(char const *name);
 text_t *make_text(char *name, char *str, int x, int y);
-void draw_alltexts(void);
+void draw_text(text_t *text);
 void free_text(text_t *text);
 
 // --- tweens_csfml.c ---
@@ -208,8 +209,11 @@ void destroy_clock(void);
 // ----- CSFML LIB TOOL FUNCTIONS ------
 
 // --- spritetools_csfml.c ---
-void draw_allsprites(sprite_type_t type);
+void draw_allsprites(element_type_t type);
 void center_sprite_origin(sprite_t *sprite, float xfact, float yfact);
+
+// --- texttools_csfml.c ---
+void draw_alltexts(element_type_t type);
 
 // --- soundloading_csfml.c ---
 sound_t *load_sound(char *name);
