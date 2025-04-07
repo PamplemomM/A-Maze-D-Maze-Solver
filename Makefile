@@ -18,10 +18,31 @@ OBJS	=	$(SRCS:.c=.o)
 
 all	:	$(NAME)
 
-$(NAME)	:
-		@echo "Searching the sources."
-		@gcc -o $(NAME) $(SRCS)
+increment_counter:
+	@if [ ! -f .counter ]; then echo -n "Compiled sources: [00]" ; \
+	echo 0 > .counter; fi; \
+	count=$$(cat .counter); \
+	new_count=$$((count + 1)); \
+	echo $$new_count > .counter; \
+	for i in $$(seq 1 4); do \
+		printf "\b \b"; \
+	done; \
+	if [ $$new_count -lt 10 ]; then printf "[0$$new_count]"; else printf "[$$new_count]"; fi;
+
+
+%.o	:	%.c
+		@$(MAKE) increment_counter --no-print-directory
+		@gcc -c $< -o $@
+
+
+$(NAME)	:	$(OBJS)
+		@echo ""
+		@rm .counter
+		@echo "Compiled sources into objects."
+		@gcc $(OBJS) $(LIBS) -o $(NAME)
 		@echo "Compiled successfully!"
+		@mv $(OBJS) .build
+		@echo "Moved object files into .build"
 
 val	:
 		@gcc -o $(NAME) $(SRCS) $(CFLAGS) -g3
@@ -51,6 +72,7 @@ tests_run	:
 
 clean	:
 		@rm -rf $(OBJS)
+		@rm -rf .build/*.o
 		@echo "Removed objects files."
 
 fclean	:	clean
