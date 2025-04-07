@@ -80,10 +80,19 @@ sprite_t *make_sprite(char *name, char *file, int x, int y)
 
 void draw_sprite(sprite_t *sprite)
 {
+    sfVector2f pos = sprite->pos;
+    sfVector2f scale = sprite->scale;
+
     if (sprite->draw) {
-        sfSprite_setPosition(sprite->sprite, sprite->pos);
+        if (sprite->type == HUD) {
+            pos.x = CAM->center.x + (pos.x - 400) / CAM->zoom;
+            pos.y = CAM->center.y + (pos.y - 300) / CAM->zoom;
+            scale.x /= CAM->zoom;
+            scale.y /= CAM->zoom;
+        }
+        sfSprite_setPosition(sprite->sprite, pos);
         sfSprite_setTextureRect(sprite->sprite, sprite->rect);
-        sfSprite_setScale(sprite->sprite, sprite->scale);
+        sfSprite_setScale(sprite->sprite, scale);
         sfSprite_setRotation(sprite->sprite, sprite->angle);
         sfSprite_setColor(sprite->sprite, sprite->color);
         sfRenderWindow_drawSprite(WINDOW, sprite->sprite, NULL);

@@ -132,9 +132,8 @@ static int init_tunnels(void)
 
 static int init_compass(void)
 {
-    if (make_sprite("cmpa", "compass_arrow", CAM->center.x,
-        CAM->center.y) == NULL || make_sprite("cmpp", "compass_pivot",
-        CAM->center.x, CAM->center.y) == NULL)
+    if (make_sprite("cmpa", "compass_arrow", 400, 300) == NULL ||
+        make_sprite("cmpp", "compass_pivot", 400, 300) == NULL)
         return ERROR;
     get_sprite("cmpa")->rect.width = 45;
     get_sprite("cmpa")->color.a = 0;
@@ -148,8 +147,9 @@ static int init_compass(void)
 
 static int init_logs(void)
 {
-    if (make_sprite("logs", "AWESOME_PIXEL", 0, 0) == NULL)
+    if (make_sprite("logs", "AWESOME_PIXEL", -250, 0) == NULL)
         return ERROR;
+    get_sprite("logs")->scale = (sfVector2f){250, 600};
     get_sprite("logs")->color = color_from_hue(0, 0, 0, 150);
     get_sprite("logs")->type = HUD;
     return SUCCESS;
