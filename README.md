@@ -43,7 +43,7 @@ Furthermore, the viewer's usage can be displayed by executing it with the `-h` o
 
 ---------------------------------------------------------------------------
 
-**You can also generate a brand new script!**
+### **You can also generate a brand new script!**
 
 It will generate a simple script to give as input for the program. You can also combine it with the viewer!
 
