@@ -177,7 +177,7 @@ static int init_progbar(void)
     get_sprite("barbg")->color = color_from_hue(0, 255, 0, 100);
     get_sprite("barbg")->type = HUD;
     get_sprite("barbuff")->scale = (sfVector2f){0, 25};
-    get_sprite("barbuff")->color = color_from_hue(5, 225, 255, 255);
+    get_sprite("barbuff")->color = color_from_hue(GAME->hue + 120, 255, 255, 255);
     get_sprite("barbuff")->type = HUD;
     get_sprite("barprog")->scale = (sfVector2f){3, 36};
     get_sprite("barprog")->color = color_from_hue(0, 255, 0, 255);
@@ -211,7 +211,7 @@ static int init_bg(void)
     get_sprite("shadow")->color = color_from_hue(0, 0, 0, 75);
 
     get_sprite("light")->scale = (sfVector2f){15, 20};
-    get_sprite("light")->color = color_from_hue(0, 70, 0, 255);
+    get_sprite("light")->color = color_from_hue(GAME->hue, 255, 255, 255);
     center_sprite_origin(get_sprite("light"), 0.5, 0.5);
     return SUCCESS;
 }

@@ -186,7 +186,7 @@ void update_progbar(int id)
     sprite_t *progaa = get_sprite("barprog");
 
     make_tween("barbuff", &buff->scale.x, id / (float)GAME->nb_moves * 500.0, 2.0)->method = EASEOUT;
-    make_tween("barprog", &progaa->pos.x, GAME->move_id / (float)GAME->nb_moves * 500.0 + 150, 1.0)->method = EASEOUT;
+    make_tween("barprog", &progaa->pos.x, (int)GAME->move_id / (float)GAME->nb_moves * 500.0 + 150, 0.1)->method = EASEOUT;
 }
 
 int count_remaining_moves(void)
