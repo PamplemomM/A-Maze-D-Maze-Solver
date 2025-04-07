@@ -24,6 +24,7 @@ cam_t *init_cam(void)
     CAM->view = sfView_createFromRect((sfFloatRect){0, 0,
         windowsize.x, windowsize.y});
     CAM->center = (sfVector2f){windowsize.x / 2.0, windowsize.y / 2.0};
+    CAM->offset = (sfVector2f){0, 0};
     CAM->size = (sfVector2f){windowsize.x, windowsize.y};
     CAM->zoom = 1.0;
     CAM->angle = 0;
@@ -34,7 +35,7 @@ void update_cam(void)
 {
     if (CAM == NULL)
         return;
-    sfView_setCenter(CAM->view, CAM->center);
+    sfView_setCenter(CAM->view, (sfVector2f){CAM->center.x + CAM->offset.x / CAM->zoom, CAM->center.y + CAM->offset.y / CAM->zoom});
     sfView_setSize(CAM->view, (sfVector2f){CAM->size.x / CAM->zoom,
         CAM->size.y / CAM->zoom});
     sfView_setRotation(CAM->view, CAM->angle);

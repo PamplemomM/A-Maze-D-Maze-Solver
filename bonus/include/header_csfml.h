@@ -65,6 +65,7 @@ typedef enum tween_methods {
 typedef struct camera_s {
     sfView *view;
     sfVector2f center;
+    sfVector2f offset;
     sfVector2f size;
     float zoom;
     float angle;
