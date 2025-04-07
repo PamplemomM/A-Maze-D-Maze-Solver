@@ -24,9 +24,7 @@ all	:	$(NAME)
 %.o	:	%.c
 		@gcc -c $< -o $@
 
-$(NAME)	:	
-		@echo "Searching the bonus sources."
-		$(OBJ)
+$(NAME)	:	$(OBJ)
 		@echo "Compiled viewer sources into objects."
 		@gcc $(OBJ) $(LIBS) -o $(NAME)
 		@echo "Compiled the viewer"
