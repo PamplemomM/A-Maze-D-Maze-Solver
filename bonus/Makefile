@@ -25,23 +25,23 @@ all	:	$(NAME)
 .PHONY: increment_counter
 
 increment_counter:
-	@if [ ! -f .counter ]; then echo -n "Compiled sources: " ; \
+	@if [ ! -f .counter ]; then echo -n "Compiled sources: [00]" ; \
 	echo 0 > .counter; fi; \
 	count=$$(cat .counter); \
 	new_count=$$((count + 1)); \
 	echo $$new_count > .counter; \
+	for i in $$(seq 1 4); do \
+		printf "\b \b"; \
+	done; \
 	if [ $$new_count -lt 10 ]; then printf "[0$$new_count]"; else printf "[$$new_count]"; fi;
 
 
 %.o	:	%.c
 		@$(MAKE) increment_counter --no-print-directory
 		@gcc -c $< -o $@
-		@for i in $$(seq 1 4); do \
-			printf "\b \b"; \
-		done
 
 $(NAME)	:	$(OBJ)
-		@echo "[END]"
+		@echo ""
 		@rm .counter
 		@echo "Compiled viewer sources into objects."
 		@gcc $(OBJ) $(LIBS) -o $(NAME)
