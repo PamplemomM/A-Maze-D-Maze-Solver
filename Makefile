@@ -29,7 +29,7 @@ val	:
 
 viewer	:
 		@echo "Searching bonus sources files."
-		@cd bonus ; make ; cd ..
+		@make -C./bonus/ --no-print-directory
 		@echo "Copying viewer to the root."
 		@mv bonus/viewer .
 		@ln -sf bonus/assets .
@@ -40,7 +40,7 @@ viewer_fclean	:
 		@rm -rf viewer
 		@echo "Removing the assets."
 		@rm -rf assets
-		@cd bonus ; make fclean ; cd ..
+		@make -C bonus/ fclean --no-print-directory
 		@echo "Removed the viewer."
 
 tests_run	:
