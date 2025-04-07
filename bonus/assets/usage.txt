@@ -21,16 +21,11 @@ USER INTERACTIONS:
 	Next move......................	'N' or '+'
 	Previous move..................	'B' or '-'
 
-	Focus on a robot...............	'LMB'
-	Focus on next robot............	'Right arrow'
-	Focus on previous robot........	'Left arrow'
-	Disable focus..................	'Down arrow'
-
-	Toggle freecam.................	'F' or any of the following
-	Move camera....................	'Arrow keys' or 'LMB' + 'Mouse move'
+	Toggle logs....................	'TAB'
+	Move camera....................	Arrow keys or 'LMB' + 'Mouse move'
 	Zoom camera in.................	'C' or 'Up scroll'
 	Zoom camera out................	'X' or 'Down scroll'
-	Speed up....................... 'LSHIFT'
+	Speed up camera................	'LSHIFT'
 
 	Quit program...................	'ESCAPE'
 
