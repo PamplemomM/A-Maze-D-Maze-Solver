@@ -98,7 +98,7 @@ static void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest)
     float traj = atan2f(diffx, -diffy) * 180.0 / M_PI;
 
     sprite->scale.y = diffd / (float)sprite->rect.height;
-    sprite->scale.x = (10.0 / sprite->scale.y) / (float)sprite->rect.width;
+    sprite->scale.x = (10.0 + 5.0 / sprite->scale.y) / (float)sprite->rect.width;
     sprite->angle = traj;
     sprite->color = color_from_hue(0, 255, 0, 100);
     sprite->type = TUNNEL;

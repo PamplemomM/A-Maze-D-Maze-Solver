@@ -63,23 +63,23 @@ void cam_move_keys(void)
     if (KEYPRESS(sfKeyLShift))
         fact = 1.5;
     if (KEYPRESS(sfKeyUp))
-        make_tween("camvert", &CAM->center.y, CAM->center.y - 50
-            / CAM->zoom * pow(fact, 2), 0.8)->method = EASEOUT;
+        make_tween("camvert", &CAM->center.y, CAM->center.y - 25
+            / CAM->zoom * pow(fact, 2), 0.4)->method = EASEOUT;
     else if (KEYPRESS(sfKeyDown))
-        make_tween("camvert", &CAM->center.y, CAM->center.y + 50
-            / CAM->zoom * pow(fact, 2), 0.8)->method = EASEOUT;
+        make_tween("camvert", &CAM->center.y, CAM->center.y + 25
+            / CAM->zoom * pow(fact, 2), 0.4)->method = EASEOUT;
     if (KEYPRESS(sfKeyLeft))
-        make_tween("camlat", &CAM->center.x, CAM->center.x - 50
-            / CAM->zoom * pow(fact, 2), 0.8)->method = EASEOUT;
+        make_tween("camlat", &CAM->center.x, CAM->center.x - 25
+            / CAM->zoom * pow(fact, 2), 0.4)->method = EASEOUT;
     else if (KEYPRESS(sfKeyRight))
-        make_tween("camlat", &CAM->center.x, CAM->center.x + 50
-            / CAM->zoom * pow(fact, 2), 0.8)->method = EASEOUT;
+        make_tween("camlat", &CAM->center.x, CAM->center.x + 25
+            / CAM->zoom * pow(fact, 2), 0.4)->method = EASEOUT;
     if (KEYPRESS(sfKeyC))
         make_tween("camzoom", &CAM->zoom, MIN(CAM->zoom
-            * (1.2 + (fact - 1) / 2.0), 100), 1)->method = EASEOUT;
+            * (1.1 + (fact - 1) / 2.0), 100), 0.8)->method = EASEOUT;
     else if (KEYPRESS(sfKeyX))
         make_tween("camzoom", &CAM->zoom, MAX(CAM->zoom
-            / (1.2 + (fact - 1) / 2.0), 0.1), 1)->method = EASEOUT;
+            / (1.1 + (fact - 1) / 2.0), 0.1), 0.8)->method = EASEOUT;
 }
 
 sprite_t *get_room_sprite(room_t *room) // possibly useless
@@ -196,7 +196,7 @@ void update_progbuff(int id)
 {
     sprite_t *buff = get_sprite("barbuff");
 
-    make_tween("barbuff", &buff->scale.x, id / (float)GAME->nb_moves * 500.0, 2.0)->method = EASEOUT;
+    make_tween("barbuff", &buff->scale.x, id / (float)GAME->nb_moves * 500.0, 1.5)->method = EASEOUT;
 }
 
 int count_remaining_moves(void)
