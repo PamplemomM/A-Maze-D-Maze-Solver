@@ -34,7 +34,7 @@ void update_stuff_maker(void)
     draw_allsprites(NONE);
     draw_allsprites(ROOM);
     //draw_robots();
-    draw_alltexts();
+    draw_alltexts(NONE);
     update_cam();
     events_maker();
 }

@@ -72,4 +72,8 @@ vwr_robot_t *get_robot(int id);
 vwr_robot_t *make_robot(int id);
 void free_robot(vwr_robot_t *robot);
 
+// --- logs.c ---
+int add_to_logs(char *entry);
+int add_logs_move(vwr_robot_t *robot, room_t *dest);
+
 #endif /* AMAZEDVIS_H */

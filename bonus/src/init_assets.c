@@ -149,9 +149,14 @@ static int init_logs(void)
 {
     if (make_sprite("logs", "AWESOME_PIXEL", -250, 0) == NULL)
         return ERROR;
+    if (make_text("logstxt", "fart", -243, 100) == NULL)
+        return ERROR;
     get_sprite("logs")->scale = (sfVector2f){250, 600};
     get_sprite("logs")->color = color_from_hue(0, 0, 0, 150);
     get_sprite("logs")->type = HUD;
+    get_text("logstxt")->scale = (sfVector2f){0.25, 0.25};
+    get_text("logstxt")->color = color_from_hue(0, 255, 0, 255);
+    get_text("logstxt")->type = HUD;
     return SUCCESS;
 }
 

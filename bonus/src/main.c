@@ -193,7 +193,7 @@ int count_remaining_moves(void)
     return cnt;
 }
 
-void move_robots(float speed)
+int move_robots(float speed)
 {
     static vwr_robot_t *robot = NULL;
     static int moves_cnt = 0;
@@ -202,10 +202,12 @@ void move_robots(float speed)
 
     speed *= 1 + abs(diff_id) / 2.0;
     if (robot == NULL && diff_id == 0)
-        return;
+        return SUCCESS;
     if (robot == NULL && diff_id != 0) {
         robot = *get_robotlist();
         curr_id += diff_id / abs(diff_id);
+        if (add_to_logs("\n") == ERROR)
+            return ERROR;
         //printf("move set %d is now in action!\n", curr_id);
         update_robots_rooms(curr_id);
         moves_cnt = count_remaining_moves();
@@ -214,12 +216,15 @@ void move_robots(float speed)
         while (robot != NULL && robot->move_to == NULL)
             robot = robot->next;
         if (robot == NULL)
-            return;
+            return SUCCESS;
+        if (add_logs_move(robot, robot->move_to) == ERROR)
+            return ERROR;
         //printf("move P%d-%s\n", robot->id, robot->move_to->name);
         do_move(robot, robot->move_to, speed);
         run_timer("mvcooldown", (diceroll(5, 10) / 40.0 / speed) / (1 + moves_cnt / 5.0));
         robot = robot->next;
     }
+    return SUCCESS;
 }
 
 void toggle_gamestate(gamestate_t state)
@@ -295,11 +300,13 @@ void interact_sim(void)
             make_tween("camlat", &CAM->center.x, CAM->center.x + 100 / (CAM->zoom / 1.2), 1.0)->method = EASEOUT;
             make_tween("camzoom", &CAM->zoom, CAM->zoom / 0.7, 1.0)->method = EASEOUT;
             make_tween("logs", &get_sprite("logs")->pos.x, -250, 1.0)->method = EASEOUT;
+            make_tween("logstxt", &get_text("logstxt")->pos.x, -243, 1.0)->method = EASEOUT;
             GAME->logs = 0;
         } else {
             make_tween("camlat", &CAM->center.x, CAM->center.x - 100 / (CAM->zoom * 0.58), 1.0)->method = EASEOUT;
             make_tween("camzoom", &CAM->zoom, CAM->zoom * 0.7, 1.0)->method = EASEOUT;
             make_tween("logs", &get_sprite("logs")->pos.x, 0, 1.0)->method = EASEOUT;
+            make_tween("logstxt", &get_text("logstxt")->pos.x, 7, 1.0)->method = EASEOUT;
             GAME->logs = 1;
         }
     }
@@ -338,7 +345,7 @@ void hue_shift(void)
     }
 }
 
-void update_robots(void)
+int update_robots(void)
 {
     static int prev_id = 0;
     tween_t *tween_id = get_tween("id");
@@ -351,8 +358,7 @@ void update_robots(void)
     }
     if ((int)GAME->move_id != prev_id)
         prev_id = (int)GAME->move_id;
-    move_robots(speed);
-    return;
+    return move_robots(speed);
 }
 
 void reorder_robots(void)
@@ -403,14 +409,11 @@ void update_compass(void)
     float fact = 0.5 + cos(TIME * 2.0) * 0.2;
     sfIntRect bounds = GAME->bounds;
 
-    //arrow->pos = CAM->center;
-    //pivot->pos = CAM->center;
-    //arrow->scale = (sfVector2f){0.4 / CAM->zoom + 0.2, 0.4 / CAM->zoom + 0.2};
-    //pivot->scale = (sfVector2f){fact / CAM->zoom + 0.1, fact / CAM->zoom + 0.1};
     arrow->scale = (sfVector2f){CAM->zoom, CAM->zoom};
     pivot->scale = (sfVector2f){fact * CAM->zoom, fact * CAM->zoom};
-    if (CAM->center.x > bounds.left - 100.0 && CAM->center.y > bounds.top - 100.0 &&
-        CAM->center.x < bounds.left + bounds.width + 100.0 && CAM->center.y < bounds.top + bounds.height + 100.0) {
+    if (CAM->center.x > bounds.left - 100 && CAM->center.y > bounds.top - 100
+        && CAM->center.x < bounds.left + bounds.width + 100
+        && CAM->center.y < bounds.top + bounds.height + 100) {
         arrow->color.a /= 1.2;
         pivot->color.a /= 1.2;
     } else {
@@ -423,38 +426,34 @@ void update_compass(void)
     }
 }
 
-void update_logs(void)
-{
-    sprite_t *logs = get_sprite("logs");
-
-    //logs->pos.x = CAM->center.x - 400 / CAM->zoom;
-    //logs->pos.y = CAM->center.y - 300 / CAM->zoom;
-    //logs->scale = (sfVector2f){250 / CAM->zoom, 600 / CAM->zoom};
-}
-
-void update_stuff(void)
+int update_stuff(void)
 {
     update_tweens();
     update_timers();
-    update_robots();
+    if (update_robots() == ERROR)
+        return ERROR;
     update_compass();
-    update_logs();
     hue_shift();
     draw_allsprites(NONE);
     draw_allsprites(TUNNEL);
     draw_allsprites(ROOM);
     draw_robots();
-    draw_alltexts();
+    draw_alltexts(NONE);
     update_cam();
     draw_allsprites(HUD);
+    draw_alltexts(HUD);
     events();
+    return SUCCESS;
 }
 
 void run(void)
 {
     while (sfRenderWindow_isOpen(WINDOW)) {
         sfRenderWindow_clear(WINDOW, color_from_hue(0, 60, 0, 255));
-        update_stuff();
+        if (update_stuff() == ERROR) {
+            sfRenderWindow_close(WINDOW);
+            return;
+        }
         sfRenderWindow_display(WINDOW);
     }
 }
