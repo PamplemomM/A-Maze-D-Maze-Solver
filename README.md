@@ -61,4 +61,22 @@ Here is an *example usage* :
 ./gen.sh 2 5 6 | ./amazed | ./viewer
 ```
 
+## 🔎 **Testing Part** 🔎
+
+Multiple tests have been created specially for this project !
+From unit tests to functionnal tests.
+
+Simply run this command in you terminal, at the root of the project:
+```bash
+make test_run
+```
+**Functional tests** :
+For the functional tests, you can execute this bash script:
+```bash
+./tester.sh
+```
+The output of the *error values* will be stored in the file `tests/testerEresult`, and the *success values* will be in `tests/testerSresult`.
+
+
+
 <sup>📝 EPITECH project developed as part of the B-CPE-200 module by AntothP, Pathie and PamplemomM.</sup>
