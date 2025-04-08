@@ -26,7 +26,9 @@
 typedef enum game_states_s {
     PLAY,
     PAUSE,
-    REWIND
+    REWIND,
+    BUILD,
+    BREAK
 } gamestate_t;
 
 typedef struct vwr_robot_s {
@@ -55,9 +57,12 @@ int move_allrobots_to(room_t *room);
 void update_robots_rooms(int id);
 int move_robots(float speed);
 
-// --- interact_sim.c ---
+// --- toggle_gamestates.c ---
 void toggle_gamestate(gamestate_t state);
+
+// --- interact_sim.c ---
 void start_sim(float start);
+void interact_sim_logs(void);
 void interact_sim(void);
 
 // --- interact_cam.c ---
