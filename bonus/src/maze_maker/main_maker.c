@@ -23,8 +23,8 @@ void track_room_select(sfMouseMoveEvent mouse)
 {
     //static sfVector2f prev_pos = {};
     sfVector2i mouse_gamepos =
-        {CAM->center.x + (mouse.x - 400) / CAM->zoom + 25,
-        CAM->center.y + (mouse.y - 300) / CAM->zoom + 25};
+        {CAM->center.x + (mouse.x + CAM->offset.x - 400) / CAM->zoom + 25,
+        CAM->center.y + (mouse.y + CAM->offset.y - 300) / CAM->zoom + 25};
     sfVector2f snapped_pos =
         {(mouse_gamepos.x / 50 - (mouse_gamepos.x < 0)) * 50,
         (mouse_gamepos.y / 50 - (mouse_gamepos.y < 0)) * 50};
@@ -35,22 +35,20 @@ void track_room_select(sfMouseMoveEvent mouse)
 static char *make_room_name(sprite_t *room)
 {
     char *name = NULL;
-    char *tmp1 = NULL;
-    char *tmp2 = NULL;
+    char *tmp[2] = {NULL, NULL};
 
-    tmp2 = int_to_str((int)(room->pos.x / 50));
-    if (tmp2 == NULL)
+    tmp[1] = int_to_str((int)(room->pos.x / 50));
+    if (tmp[1] == NULL)
         return NULL;
-    tmp1 = merge_str(tmp2, "_");
-    OMNIFREE(tmp2, 1);
-    if (tmp1 == NULL)
+    tmp[0] = merge_str(tmp[1], "_");
+    OMNIFREE(tmp[1], 1);
+    if (tmp[0] == NULL)
         return NULL;
-    tmp2 = int_to_str((int)(room->pos.y / 50));
-    if (tmp2 == NULL)
-        return OMNIFREE(tmp1, 1);
-    name = merge_str(tmp1, tmp2);
-    OMNIFREE(tmp1, 1);
-    OMNIFREE(tmp2, 1);
+    tmp[1] = int_to_str((int)(room->pos.y / 50));
+    if (tmp[1] == NULL)
+        return OMNIFREE(tmp[0], 1);
+    name = merge_str(tmp[0], tmp[1]);
+    SDFREE("%1 %1", &tmp[0], &tmp[1]);
     return name;
 }
 
@@ -112,15 +110,13 @@ void destroy_room(room_t *room)
     get_sprite("room_select")->scale = (sfVector2f){0.95, 0.95};
 }
 
+// you are autistic, don't forget it. you are AUTISTIC.
 void interact_room(void)
 {
     sprite_t *room_tmp = get_sprite("room_select");
     char *name = make_room_name(room_tmp);
 
-    if (GAME->state == BREAK && get_room(name, MAZE) != NULL) {
-        destroy_room(get_room(name, MAZE));
-        OMNIFREE(name, 1);
-    } else if (GAME->state == BUILD) {
+    if (GAME->state == BUILD && get_room(name, MAZE) == NULL) {
         if (add_room(name, room_tmp->pos.x, room_tmp->pos.y, &MAZE) == ERROR) {
             OMNIFREE(name, 1);
             return;
@@ -128,11 +124,12 @@ void interact_room(void)
         add_logs_new_room(get_room(name, MAZE));
         create_room_sprite(get_room(name, MAZE));
         room_modifs(get_room(name, MAZE));
-        OMNIFREE(name, 1);
         //update_bounds();
         play_sound("place", MIN(40.0 * CAM->zoom + 20.0, 80.0),
             diceroll(90, 110) / 100.0);
-    }
+    } else if (GAME->state == BREAK && get_room(name, MAZE) != NULL)
+        destroy_room(get_room(name, MAZE));
+    OMNIFREE(name, 1);
 }
 
 void interact_maker(void)
@@ -152,6 +149,88 @@ void interact_maker(void)
     interact_sim_logs();
 }
 
+int save_nb_robots(int fd)
+{
+    char *nb_robots = int_to_str(MAZE->nb_robots);
+
+    if (nb_robots == NULL)
+        return ERROR;
+    write(fd, "#number_of_robots\n", strlen("#number_of_robots\n"));
+    write(fd, nb_robots, strlen(nb_robots));
+    write(fd, "\n", 1);
+    OMNIFREE(nb_robots, 1);
+    return SUCCESS;
+}
+
+int save_rooms(int fd)
+{
+    room_t *room = MAZE->rooms;
+    char *tmp = NULL;
+
+    if (room == NULL)
+        return SUCCESS;
+    write(fd, "#rooms\n", strlen("#rooms\n"));
+    while (room != NULL) {
+        if (room == MAZE->start)
+            write(fd, "##start\n", strlen("##start\n"));
+        if (room == MAZE->end)
+            write(fd, "##end\n", strlen("##end\n"));
+        write(fd, room->name, strlen(room->name));
+        write(fd, " ", 1);
+        tmp = int_to_str(room->x / 50);
+        if (tmp == NULL)
+            return ERROR;
+        write(fd, tmp, strlen(tmp));
+        OMNIFREE(tmp, 1);
+        write(fd, " ", 1);
+        tmp = int_to_str(room->y / 50);
+        if (tmp == NULL)
+            return ERROR;
+        write(fd, tmp, strlen(tmp));
+        OMNIFREE(tmp, 1);
+        write(fd, "\n", 1);
+        room = room->next;
+    }
+    return SUCCESS;
+}
+
+int save_tunnels(int fd)
+{
+    tunnel_t *tunnel = MAZE->tunnels;
+
+    if (tunnel == NULL)
+        return SUCCESS;
+    write(fd, "#tunnels\n", strlen("#tunnels\n"));
+    while (tunnel != NULL) {
+        write(fd, tunnel->r1->name, strlen(tunnel->r1->name));
+        write(fd, "-", 1);
+        write(fd, tunnel->r2->name, strlen(tunnel->r2->name));
+        write(fd, "\n", 1);
+        tunnel = tunnel->next;
+    }
+    return SUCCESS;
+}
+
+void save_maze(void)
+{
+    int fd = open("new_custom_maze.txt", O_WRONLY | O_TRUNC | O_CREAT,
+        S_IRUSR | S_IWUSR);
+
+    if (fd == -1) {
+        text_jumpscare("File couldn't open!!! :'(", 2);
+        return;
+    }
+    if (save_nb_robots(fd) == ERROR || save_rooms(fd) == ERROR
+        || save_tunnels(fd) == ERROR) {
+        text_jumpscare("Error while saving :(", 2);
+        close(fd);
+        return;
+    }
+    text_jumpscare("Saved! :DDD", 2);
+    play_sound("save", 50, 1.0);
+    close(fd);
+}
+
 void events_maker(void)
 {
     sfEvent event;
@@ -165,6 +244,11 @@ void events_maker(void)
         }
         if (event.type == sfEvtMouseWheelScrolled)
             cam_zoom_mouse(event.mouseWheelScroll);
+        if (get_timer("save_cdwn") == NULL && event.type == sfEvtKeyPressed
+            && event.key.code == sfKeyS) {
+            save_maze();
+            run_timer("save_cdwn", 2.0);
+        }
         if (event.type == sfEvtKeyPressed && event.key.code == sfKeyEscape)
             sfRenderWindow_close(WINDOW);
         if (event.type == sfEvtClosed)

@@ -29,3 +29,16 @@ USER INTERACTIONS:
 
 	Quit program...................	'ESCAPE'
 
+MAKER CONTROLS:
+	Place / Destroy................	'LMB'
+	Switch mode.................... 'SPACEBAR'
+	Save maze......................	'S'
+
+	Toggle logs....................	'TAB'
+	Move camera....................	Arrow keys or 'RMB' + 'Mouse move'
+	Zoom camera in.................	'C' or 'Up scroll'
+	Zoom camera out................	'X' or 'Down scroll'
+	Speed up camera................	'LSHIFT'
+
+	Quit program...................	'ESCAPE'
+
