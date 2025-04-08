@@ -22,7 +22,7 @@ USER INTERACTIONS:
 	Previous move..................	'B' or '-'
 
 	Toggle logs....................	'TAB'
-	Move camera....................	Arrow keys or 'LMB' + 'Mouse move'
+	Move camera....................	Arrow keys or 'RMB' + 'Mouse move'
 	Zoom camera in.................	'C' or 'Up scroll'
 	Zoom camera out................	'X' or 'Down scroll'
 	Speed up camera................	'LSHIFT'

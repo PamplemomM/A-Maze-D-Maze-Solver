@@ -11,7 +11,7 @@ void cam_move_mouse(sfMouseMoveEvent mouse)
 {
     static sfMouseMoveEvent mouseold = {sfEvtMouseMoved, 0, 0};
 
-    if (MOUSEPRESS(sfMouseLeft) && (mouseold.x != 0 && mouseold.y != 0)) {
+    if (MOUSEPRESS(sfMouseRight) && (mouseold.x != 0 && mouseold.y != 0)) {
         DESTROY(get_tween("camvert"), get_tweenlist, free_tween);
         DESTROY(get_tween("camlat"), get_tweenlist, free_tween);
         CAM->center.x += (mouseold.x - mouse.x) / CAM->zoom;
