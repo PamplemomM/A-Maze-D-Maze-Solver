@@ -7,7 +7,7 @@
 
 #include "../../include/header_amazed.h"
 
-static int add_tunnel(room_t *r1, room_t *r2, maze_t **maze)
+int add_tunnel(room_t *r1, room_t *r2, maze_t **maze)
 {
     tunnel_t *headcpy = (*maze)->tunnels;
     tunnel_t *tunnel = malloc(sizeof(tunnel_t));
@@ -28,7 +28,7 @@ static int add_tunnel(room_t *r1, room_t *r2, maze_t **maze)
     return SUCCESS;
 }
 
-static int connect_rooms(room_t *r1, room_t *r2)
+int connect_rooms(room_t *r1, room_t *r2)
 {
     room_t **newlist = NULL;
     int len = 0;

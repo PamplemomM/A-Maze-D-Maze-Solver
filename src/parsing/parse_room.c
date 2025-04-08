@@ -46,7 +46,7 @@ static void link_room(room_t *room, maze_t *maze)
     headcpy->next = room;
 }
 
-static int add_room(char *name, int x, int y, maze_t **maze)
+int add_room(char *name, int x, int y, maze_t **maze)
 {
     room_t *room = check_valid_room(name, x, y, *maze);
 

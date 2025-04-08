@@ -86,10 +86,13 @@ maze_t *parse_maze(int viewer);
 
 // --- parse_room.c ---
 room_t *get_room(char *name, maze_t *maze);
+int add_room(char *name, int x, int y, maze_t **maze);
 char *get_name(char *line, int *i, char const *separators);
 int parse_room(maze_t **maze, char *line, int *special);
 
 // --- parse_tunnel.c ---
+int add_tunnel(room_t *r1, room_t *r2, maze_t **maze);
+int connect_rooms(room_t *r1, room_t *r2);
 int parse_tunnel(maze_t **maze, char *line);
 
 
