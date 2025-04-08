@@ -34,11 +34,17 @@ char *int_to_str(int nbr)
 {
     char *str;
     int len = digitcount(nbr);
+    int neg = 0;
 
     str = malloc(sizeof(char) * (len + 1));
     if (str == NULL)
         return NULL;
-    for (int i = 0; i < len; i++) {
+    if (nbr < 0) {
+        str[0] = '-';
+        nbr = abs(nbr);
+        neg = 1;
+    }
+    for (int i = 0; i < len - neg; i++) {
         str[len - i - 1] = nbr % 10 + '0';
         nbr /= 10;
     }

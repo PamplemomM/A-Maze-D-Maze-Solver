@@ -13,7 +13,9 @@ int digitcount(int nbr)
     int len = 0;
 
     if (nbr == 0)
-        return 0;
+        return 1;
+    if (nbr < 0)
+        len++;
     while (nbr != nbr / 10) {
         nbr /= 10;
         len++;
