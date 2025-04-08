@@ -79,15 +79,21 @@ void update_progbar(void);
 void update_progbuff(int id);
 void update_compass(void);
 
-// --- amazed_data.c ---
-maze_t **get_maze(void);
-int init_new_maze(void);
-int read_maze(void);
-
 // --- gamestuff.c ---
 game_t **get_gamestuff(void);
 int init_gamestuff(void);
 void destroy_gamestuff(void);
+
+// --- amazed_data.c ---
+maze_t **get_maze(void);
+room_t **get_rooms(void);
+tunnel_t **get_tunnels(void);
+void free_room(room_t *room);
+void free_tunnel(tunnel_t *tunnel);
+
+// --- init_maze.c ---
+int init_new_maze(void);
+int read_maze(void);
 
 // --- init_assets.c ---
 int init_sounds(void);

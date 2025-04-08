@@ -53,18 +53,44 @@ static char *make_room_name(sprite_t *room)
     return name;
 }
 
+void destroy_room(room_t *room)
+{
+    char *name = merge_str("room_", room->name);
+
+    if (name == NULL)
+        return;
+    DESTROY(get_sprite(name), get_spritelist, free_sprite);
+    OMNIFREE(name, 1);
+    DESTROY(room, get_rooms, free_room);
+}
+
+void room_wobble(room_t *room)
+{
+    sprite_t *sprite = NULL;
+    char *name = merge_str("room_", room->name);
+
+    if (name == NULL)
+        return;
+    sprite = get_sprite(name);
+    run_timer(name, 0.5);
+    OMNIFREE(name, 1);
+}
+
 void interact_maker(void)
 {
     sprite_t *room_tmp = get_sprite("room_tmp");
     char *name = NULL;
 
-    if (MOUSEPRESS(sfMouseLeft)) {
+    if (MOUSEPRESS(sfMouseLeft) && get_timer("place_cdwn") == NULL) {
+        run_timer("place_cdwn", 0.5);
         name = make_room_name(room_tmp);
         if (add_room(name, room_tmp->pos.x, room_tmp->pos.y, &MAZE) == ERROR) {
+            destroy_room(get_room(name, MAZE));
             OMNIFREE(name, 1);
             return;
         }
         create_room_sprite(get_room(name, MAZE));
+        room_wobble(get_room(name, MAZE));
         OMNIFREE(name, 1);
         play_sound("place", 60, diceroll(90, 110) / 100.0);
     }
@@ -90,6 +116,23 @@ void events_maker(void)
     }
 }
 
+void update_rooms(void)
+{
+    sprite_t *room = NULL;
+    timers_t *timer = *get_timerlist();
+    float time_left = 0;
+
+    while (timer != NULL) {
+        room = get_sprite(timer->name);
+        if (room != NULL) {
+            time_left = timer->tend - TIME;
+            room->scale.x = 1 + cos(TIME * 28) * time_left / 6.0 + time_left / 3.0;
+            room->scale.y = 1 + sin(TIME * 28) * time_left / 6.0 + time_left / 3.0;
+        }
+        timer = timer->next;
+    }
+}
+
 int update_stuff_maker(void)
 {
     update_tweens();
@@ -97,6 +140,7 @@ int update_stuff_maker(void)
     update_music();
     //if (update_robots() == ERROR)
     //    return ERROR;
+    update_rooms();
     if (TIME > 4.5)
         update_compass();
     hue_shift();
