@@ -48,6 +48,7 @@ int update_stuff(void)
 {
     update_tweens();
     update_timers();
+    update_music();
     if (update_robots() == ERROR)
         return ERROR;
     update_compass();

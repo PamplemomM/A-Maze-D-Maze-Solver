@@ -27,14 +27,17 @@ static void setup_camera(void)
 {
     sfIntRect bounds = GAME->bounds;
     float cam_zoom;
+    float cam_y;
 
     bounds.width -= bounds.left;
     bounds.height -= bounds.top;
     cam_zoom = 2.0 / ((float)MAX(bounds.width, bounds.height) / 200.0);
+    cam_y = bounds.top + bounds.height / 2.0;
     CAM->center.x = bounds.left + bounds.width / 2.0;
-    CAM->center.y = bounds.top + bounds.height / 2.0;
-    CAM->zoom = cam_zoom * 1.2;
-    make_tween("camzoom", &CAM->zoom, cam_zoom, 1.7)->method = EASEOUT;
+    CAM->center.y = cam_y + 700;
+    CAM->zoom = cam_zoom * 1.3;
+    make_tween("camzoom", &CAM->zoom, cam_zoom, 5.0)->method = EASEINOUT;
+    make_tween("camvert", &CAM->center.y, cam_y, 7.0)->method = EASEOUT;
     GAME->bounds = (sfIntRect){bounds.left - 200, bounds.top - 200,
         bounds.width + 400, bounds.height + 400};
 }

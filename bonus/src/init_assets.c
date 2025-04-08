@@ -9,10 +9,11 @@
 
 static int init_sprites(void)
 {
-    int inits[7] = {init_rooms(), init_tunnels(), init_robots(),
-        init_compass(), init_logs(), init_progbar(), init_bg()};
+    int inits[8] = {init_rooms(), init_tunnels(), init_robots(),
+        init_blackscreen(), init_compass(), init_logs(),
+        init_progbar(), init_bg()};
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
         if (inits[i] == ERROR)
             return ERROR;
     }
@@ -26,8 +27,10 @@ static int init_sounds(void)
 
 static int init_music(void)
 {
-    if (play_music("Parade", "K.K. Parade", 50, 1.0) == NULL)
+    if (play_music("Parade", "K.K. Parade", 0, 1.0) == NULL)
         return ERROR;
+    make_tween("music_fadein", &(*get_music())->volume,
+        50, 5.0)->method = EASEINOUT;
     sfMusic_setLoop((*get_music())->music, sfTrue);
     return SUCCESS;
 }

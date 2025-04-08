@@ -98,6 +98,7 @@ int init_rooms(void);
 int init_tunnels(void);
 
 // --- init_misc_assets.c ---
+int init_blackscreen(void);
 int init_compass(void);
 int init_logs(void);
 int init_progbar(void);

@@ -58,7 +58,7 @@ void update_compass(void)
         pivot->color.a /= 1.2;
     } else {
         arrow->color.a = 255 + (arrow->color.a - 255) / 1.05;
-        pivot->color.a = fact * 200;
+        pivot->color.a = fact * 255;
     }
     if (get_timer("cmpcooldown") == NULL) {
         update_compass_arrow();

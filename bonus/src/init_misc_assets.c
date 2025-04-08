@@ -7,6 +7,18 @@
 
 #include "../include/header_viewer.h"
 
+int init_blackscreen(void)
+{
+    if (make_sprite("black", "AWESOME_PIXEL", -150, 0) == NULL)
+        return ERROR;
+    get_sprite("black")->scale = (sfVector2f){950, 600};
+    get_sprite("black")->color = sfBlack;
+    get_sprite("black")->type = HUD;
+    make_tween("screen_fadein",
+        (float *)&get_sprite("black")->color.a, 0, 4.0);
+    return SUCCESS;
+}
+
 int init_compass(void)
 {
     if (make_sprite("cmpa", "compass_arrow", 400, 300) == NULL)
@@ -15,7 +27,8 @@ int init_compass(void)
         return ERROR;
     get_sprite("cmpa")->rect.width = 45;
     get_sprite("cmpa")->color.a = 0;
-    get_sprite("cmpp")->color.a = 0;
+    get_sprite("cmpp")->color = color_from_hue(GAME->hue + 180,
+        255, 255, 0);
     get_sprite("cmpa")->type = HUD;
     get_sprite("cmpp")->type = HUD;
     center_sprite_origin(get_sprite("cmpa"), 0.5, 4.0);
@@ -55,7 +68,7 @@ int init_progbar(void)
     get_sprite("barbg")->color = color_from_hue(0, 255, 0, 180);
     get_sprite("barbg")->type = HUD;
     get_sprite("barbuff")->scale = (sfVector2f){0, 24.5};
-    get_sprite("barbuff")->color = color_from_hue(GAME->hue + 120,
+    get_sprite("barbuff")->color = color_from_hue(GAME->hue + 180,
         200, 255, 255);
     get_sprite("barbuff")->type = HUD;
     get_sprite("barprog")->scale = (sfVector2f){3, 36};
