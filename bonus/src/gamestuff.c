@@ -29,7 +29,7 @@ int init_gamestuff(void)
     GAME->move_id = 0;
     GAME->nb_moves = 0;
     if (move == NULL)
-        return ERROR;
+        return SUCCESS;
     while (move->next != NULL)
         move = move->next;
     GAME->nb_moves = move->id + 1;

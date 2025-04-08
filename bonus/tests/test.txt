@@ -1,22 +1,21 @@
 #number of robots
 3
 #rooms
-2 5 0
+2 5 10
 ##start
-0 1 2
+0 4 10
 ##end
-lalaa 15 18
-3 5 4
-caca 30 2
+lalaa 5 11
+caca 5 9
 #tunnels
 0-2
-0-3
+0-caca
 2-lalaa
-3-lalaa
-2-3
+caca-lalaa
+2-caca
 lalaa-caca
 #moves
 P1-2
-P1-3
+P1-caca
 P1-lalaa
 P1-caca

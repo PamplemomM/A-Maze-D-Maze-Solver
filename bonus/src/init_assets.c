@@ -20,12 +20,12 @@ static int init_sprites(void)
     return SUCCESS;
 }
 
-static int init_sounds(void)
+int init_sounds(void)
 {
     return precache_sounds();
 }
 
-static int init_music(void)
+int init_music(void)
 {
     if (play_music("Parade", "K.K. Parade", 0, 1.0) == NULL)
         return ERROR;

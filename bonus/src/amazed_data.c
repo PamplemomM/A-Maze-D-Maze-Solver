@@ -57,6 +57,23 @@ static int read_moves(void)
     return SUCCESS;
 }
 
+int init_new_maze(void)
+{
+    maze_t *maze = malloc(sizeof(maze_t));
+
+    if (maze == NULL)
+        return ERROR;
+    maze->nb_robots = 0;
+    maze->rooms = NULL;
+    maze->start = NULL;
+    maze->end = NULL;
+    maze->tunnels = NULL;
+    maze->moves = NULL;
+    maze->viewer = 2;
+    MAZE = maze;
+    return SUCCESS;
+}
+
 int read_maze(void)
 {
     MAZE = parse_maze(1);

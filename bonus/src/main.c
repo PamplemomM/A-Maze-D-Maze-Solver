@@ -51,7 +51,8 @@ int update_stuff(void)
     update_music();
     if (update_robots() == ERROR)
         return ERROR;
-    update_compass();
+    if (TIME > 4.5)
+        update_compass();
     hue_shift();
     draw_allsprites(NONE);
     draw_allsprites(TUNNEL);
