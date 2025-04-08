@@ -23,7 +23,7 @@ int init_gamestuff(void)
         return ERROR;
     GAME->state = PAUSE;
     GAME->logs = 0;
-    GAME->bounds = (sfIntRect){0, 0, 800, 600};
+    GAME->bounds = (sfIntRect){-1, -1, -1, -1};
     GAME->hue = diceroll(0, 360);
     GAME->robots_order = NULL;
     GAME->move_id = 0;
