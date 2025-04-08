@@ -81,6 +81,7 @@ void update_compass(void);
 
 // --- amazed_data.c ---
 maze_t **get_maze(void);
+int init_new_maze(void);
 int read_maze(void);
 
 // --- gamestuff.c ---
@@ -89,12 +90,19 @@ int init_gamestuff(void);
 void destroy_gamestuff(void);
 
 // --- init_assets.c ---
+int init_sounds(void);
+int init_music(void);
 int init_assets(void);
 void destroy_assets(void);
 
-// --- init_maze_assets.c ---
-int init_robots(void);
+// --- init_rooms.c ---
+void setup_camera(void);
+sfIntRect update_bounds(room_t *room);
+int create_room_sprite(room_t *room);
 int init_rooms(void);
+
+// --- init_tunnels.c ---
+int create_tunnel_sprite(tunnel_t *tunnel);
 int init_tunnels(void);
 
 // --- init_misc_assets.c ---
@@ -108,6 +116,7 @@ int init_bg(void);
 vwr_robot_t **get_robotlist(void);
 vwr_robot_t *get_robot(int id);
 vwr_robot_t *make_robot(int id);
+int init_robots(void);
 void free_robot(vwr_robot_t *robot);
 
 // --- main_maker.c ---

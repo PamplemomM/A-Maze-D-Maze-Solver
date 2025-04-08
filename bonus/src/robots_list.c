@@ -87,6 +87,22 @@ vwr_robot_t *make_robot(int id)
     return robot;
 }
 
+int init_robots(void)
+{
+    vwr_robot_t **list = malloc(sizeof(vwr_robot_t *) * (MAZE->nb_robots + 1));
+
+    if (list == NULL)
+        return ERROR;
+    for (int i = 1; i <= MAZE->nb_robots; i++) {
+        if (make_robot(i) == NULL)
+            return ERROR;
+        list[MAZE->nb_robots - i] = get_robot(i);
+    }
+    list[MAZE->nb_robots] = NULL;
+    GAME->robots_order = list;
+    return SUCCESS;
+}
+
 void free_robot(vwr_robot_t *robot)
 {
     DESTROY(robot->sprite, get_spritelist, free_sprite);
