@@ -26,31 +26,31 @@
 // -------- A-MAZE-D STRUCTURES --------
 
 typedef struct room_s {
+    struct room_s *next;
     char *name;
     int x;
     int y;
     struct room_s **links;
-    struct room_s *next;
 } room_t;
 
 typedef struct path_s {
+    struct path_s *next;
     char *name;
     room_t *room;
-    struct path_s *next;
 } path_t;
 
 typedef struct tunnel_s {
+    struct tunnel_s *next;
     room_t *r1;
     room_t *r2;
     int val;
-    struct tunnel_s *next;
 } tunnel_t;
 
 typedef struct move_s {
+    struct move_s *next;
     int id;
     int robot;
     room_t *dest;
-    struct move_s *next;
 } move_t;
 
 typedef struct maze_s {
