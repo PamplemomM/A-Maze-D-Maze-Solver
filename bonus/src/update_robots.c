@@ -34,6 +34,10 @@ int update_robots(void)
         speed = 1 + sin(fabs((*tween_id->value) - tween_id->start)
             / length_id * M_PI) * sqrt(length_id);
     }
+    if (GAME->state == REWIND && GAME->move_id <= 0.2)
+        DESTROY(tween_id, get_tweenlist, free_tween);
+    if (tween_id == NULL && get_timer("moving") == NULL)
+        toggle_gamestate(PAUSE);
     if ((int)GAME->move_id != prev_id) {
         prev_id = (int)GAME->move_id;
         update_progbar();

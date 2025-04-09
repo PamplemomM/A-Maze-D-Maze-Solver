@@ -17,10 +17,6 @@ void start_sim(float start)
 
 static void interact_sim_state(void)
 {
-    if (GAME->state == REWIND && GAME->move_id <= 0.2)
-        DESTROY(get_tween("id"), get_tweenlist, free_tween);
-    if (get_tween("id") == NULL && get_timer("moving") == NULL)
-        toggle_gamestate(PAUSE);
     if (KEYPRESS(sfKeyBackspace) && get_timer("rewind_cdwn") == NULL) {
         run_timer("rewind_cdwn", 0.5);
         toggle_gamestate(REWIND);
