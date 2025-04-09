@@ -38,17 +38,15 @@ static int find_all_moves(room_t *current, maze_t *maze,
     path_t **path)
 {
     tunnel_t *tunnel = NULL;
-    tunnel_t *rev_tunnel = NULL;
 
     if (current == NULL || current->links == NULL)
+        return ERROR;
+    if (current == maze->end)
         return SUCCESS;
     for (int i = 0; current->links[i] != NULL; i++) {
         tunnel = get_tunnel(current, current->links[i], maze);
         if (tunnel == NULL || tunnel->val == 1)
             continue;
-        rev_tunnel = get_tunnel(current->links[i], current, maze);
-        if (rev_tunnel != NULL)
-            rev_tunnel->val = 1;
         tunnel->val = 1;
         if (find_all_moves(current->links[i], maze, path) == SUCCESS) {
             add_new_path(path, current->links[i]->name, TRUE);
