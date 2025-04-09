@@ -63,18 +63,29 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
     return SUCCESS;
 }
 
-int create_new_pathlist(maze_t *maze, pathlist_t *paths)
+int create_new_pathlist(maze_t *maze, pathlist_t **paths)
 {
     path_t *new_path = NULL;
     int value = 0;
 
     value = find_all_moves(maze->start, maze, &new_path);
-    add_new_pathlist(&paths, new_path);
+    add_new_pathlist(paths, new_path);
     return value;
 }
 
-int display_paths(pathlist_t *paths)
+int display_paths(int i, pathlist_t *paths)
 {
+    path_t *current = NULL;
+    pathlist_t *cur_list = paths;
+
+    while (cur_list != NULL) {
+        current = cur_list->path;
+        while (current != NULL) {
+            mini_printf("P%d-%s\n", i, current->name);
+            current = current->next;
+        }
+        cur_list = cur_list->next;
+    }
     return SUCCESS;
 }
 
@@ -86,12 +97,13 @@ pathlist_t *find_allpath(maze_t *maze)
     if (maze == NULL)
         return NULL;
     mini_printf("--- Creating a pathlist ---\n");
-    value = create_new_pathlist(maze, paths);
+    value = create_new_pathlist(maze, &paths);
     while (value == SUCCESS) {
         mini_printf("\n--- Creating a pathlist ---\n");
-        value = create_new_pathlist(maze, paths);
+        value = create_new_pathlist(maze, &paths);
         mini_printf("%s", (value == ERROR) ? "No path found.\n" : "");
     }
-    display_paths(paths);
+    for (int i = 1; i < maze->nb_robots + 1; i++)
+        display_paths(i, paths);
     return paths;
 }

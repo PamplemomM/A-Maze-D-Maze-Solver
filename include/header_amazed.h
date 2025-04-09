@@ -107,7 +107,7 @@ int parse_tunnel(maze_t **maze, char *line);
 // --- detect_all_paths.c ---
 int free_pathlist(pathlist_t *paths);
 int add_new_pathlist(pathlist_t **original, path_t *new);
-int create_new_pathlist(maze_t *maze, pathlist_t *paths);
+int create_new_pathlist(maze_t *maze, pathlist_t **paths);
 pathlist_t *find_allpath(maze_t *maze);
 
 // --- display_robots_move.c ---
