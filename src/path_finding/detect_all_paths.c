@@ -7,6 +7,13 @@
 
 #include "../../include/header_amazed.h"
 
+int get_pathlist_size(pathlist_t *paths)
+{
+    int result = 0;
+
+    return result;
+}
+
 int free_pathlist(pathlist_t *paths)
 {
     pathlist_t *current = paths;
