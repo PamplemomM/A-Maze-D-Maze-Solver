@@ -15,6 +15,7 @@ int free_pathlist(pathlist_t *paths)
     while (current != NULL) {
         next = current->next;
         free_paths(&current->path);
+        free(current);
         current = next;
     }
     paths = NULL;
@@ -48,9 +49,12 @@ static int find_all_moves(room_t *current, maze_t *maze,
 int add_new_pathlist(pathlist_t **original, path_t *new)
 {
     pathlist_t *current = *original;
-    pathlist_t *new_list = malloc(sizeof(pathlist_t) * 1);
+    pathlist_t *new_list = NULL;
 
-    if (new_list == NULL || new == NULL)
+    if (new == NULL)
+        return ERROR;
+    new_list = malloc(sizeof(pathlist_t) * 1);
+    if (new_list == NULL)
         return ERROR;
     new_list->path = new;
     new_list->lenght = my_linked_size(&new);
