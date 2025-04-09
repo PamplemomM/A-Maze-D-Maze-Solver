@@ -57,7 +57,7 @@ int display_robots_move_singlepath(path_t **good_path, maze_t *maze)
 {
     char **path = dup_pathlist(good_path);
     int id_size = my_linked_size(good_path);
-    int max_id = id_size + maze->nb_robots - 2;
+    int max_id = get_move_lenght(id_size, maze->nb_robots);
 
     if (path == NULL)
         return ERROR;
