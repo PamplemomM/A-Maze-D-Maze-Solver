@@ -10,7 +10,7 @@
 sprite_t *get_room_sprite(room_t *room) // possibly useless
 {
     sprite_t *sprite = NULL;
-    char *name = merge_str("room_", room->name);
+    char *name = merge_str("room_", room->name); // lalala just making sure the coding style gets this one
 
     if (name == NULL)
         return OMNIFREE(name, 1);
@@ -19,7 +19,7 @@ sprite_t *get_room_sprite(room_t *room) // possibly useless
     return sprite;
 }
 
-void track_room_select(void)
+void track_room_select(void) // COME HERE!!!!
 {
     //static sfVector2f prev_pos = {};
     sfVector2i mouse = sfMouse_getPositionRenderWindow(WINDOW);
@@ -38,7 +38,7 @@ void track_room_select(void)
         get_sprite("room_select")->pos = snapped_pos;
         get_sprite("room_select")->draw = 1;
     }
-}
+} // add the click click sound effect blud
 
 static char *make_room_name(sprite_t *room)
 {

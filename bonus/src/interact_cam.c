@@ -11,6 +11,8 @@ void cam_move_mouse(sfMouseMoveEvent mouse)
 {
     static sfMouseMoveEvent mouseold = {sfEvtMouseMoved, 0, 0};
 
+    if (mouse.x < 0 || mouse.y < 0 || mouse.x > 800 || mouse.y > 600)
+        return;
     if (MOUSEPRESS(sfMouseRight) && (mouseold.x != 0 && mouseold.y != 0)) {
         DESTROY(get_tween("camvert"), get_tweenlist, free_tween);
         DESTROY(get_tween("camlat"), get_tweenlist, free_tween);
@@ -25,6 +27,8 @@ void cam_zoom_mouse(sfMouseWheelScrollEvent mouse)
     tween_t *tween = get_tween("camzoom");
     float tmp = CAM->zoom;
 
+    if (mouse.x < 0 || mouse.y < 0 || mouse.x > 800 || mouse.y > 600)
+        return;
     if (tween != NULL)
         tmp = tween->dest;
     tween = make_tween("camzoom", &CAM->zoom, tmp, 0.5);
