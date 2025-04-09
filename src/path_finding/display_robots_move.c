@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2025
-** move_robots.c
+** display_robot_path.c
 ** File description:
-** Moving algorithm of the best path.
+** File for displaying the robots in a single path.
 */
 
 #include "../../include/header_amazed.h"
