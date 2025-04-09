@@ -40,7 +40,8 @@ S-A-B-E -> 3
 S-D-E-F-G-E -> 5
 
 Si il y a 3 robots, tu envoie dans les nb_robots (trois) premiers
-qui sont triees si tpath (longueur du path) est inferieure ou egale au nombre de robots.
+qui sont triees si tpath (longueur du path) est inferieure ou egale au
+nombre de robots.
 Donc un dans SCE, un dans SHE et un dans SABE.
 
 Si il y a 7 robots, ca va donc en envoyer un dans chaque path au premier tour,
