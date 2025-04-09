@@ -7,29 +7,6 @@
 
 #include "../../include/header_amazed.h"
 
-int add_tunnel(room_t *r1, room_t *r2, maze_t **maze)
-{
-    tunnel_t *headcpy = (*maze)->tunnels;
-    tunnel_t *tunnel = NULL;
-
-    if (get_tunnel(r1, r2, *maze) == NULL)
-        tunnel = malloc(sizeof(tunnel_t));
-    if (tunnel == NULL)
-        return ERROR * (get_tunnel(r1, r2, *maze) == NULL);
-    tunnel->r1 = r1;
-    tunnel->r2 = r2;
-    tunnel->val = -1;
-    tunnel->next = NULL;
-    if (headcpy == NULL) {
-        (*maze)->tunnels = tunnel;
-        return SUCCESS;
-    }
-    while (headcpy->next != NULL)
-        headcpy = headcpy->next;
-    headcpy->next = tunnel;
-    return SUCCESS;
-}
-
 int connect_rooms(room_t *r1, room_t *r2)
 {
     room_t **newlist = NULL;
@@ -54,6 +31,36 @@ int connect_rooms(room_t *r1, room_t *r2)
     return SUCCESS;
 }
 
+static int connect_both_rooms(room_t *r1, room_t *r2)
+{
+    if (connect_rooms(r1, r2) == ERROR || connect_rooms(r2, r1) == ERROR)
+        return ERROR;
+    return SUCCESS;
+}
+
+int add_tunnel(room_t *r1, room_t *r2, maze_t **maze)
+{
+    tunnel_t *headcpy = (*maze)->tunnels;
+    tunnel_t *tunnel = NULL;
+
+    if (get_tunnel(r1, r2, *maze) == NULL)
+        tunnel = malloc(sizeof(tunnel_t));
+    if (tunnel == NULL)
+        return ERROR * (get_tunnel(r1, r2, *maze) == NULL);
+    tunnel->r1 = r1;
+    tunnel->r2 = r2;
+    tunnel->val = -1;
+    tunnel->next = NULL;
+    if (headcpy == NULL) {
+        (*maze)->tunnels = tunnel;
+        return SUCCESS;
+    }
+    while (headcpy->next != NULL)
+        headcpy = headcpy->next;
+    headcpy->next = tunnel;
+    return connect_both_rooms(r1, r2);
+}
+
 int parse_tunnel(maze_t **maze, char *line)
 {
     int i = 0;
@@ -71,8 +78,7 @@ int parse_tunnel(maze_t **maze, char *line)
     OMNIFREE(name2, 1);
     if (r1 == NULL || r2 == NULL)
         return give_up("Tunnel between non-existent rooms.", maze);
-    if (connect_rooms(r1, r2) == ERROR || connect_rooms(r2, r1) == ERROR
-        || add_tunnel(r1, r2, maze) == ERROR)
+    if (add_tunnel(r1, r2, maze) == ERROR)
         return ERROR;
     return SUCCESS;
 }
