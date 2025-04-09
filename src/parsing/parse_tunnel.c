@@ -53,7 +53,7 @@ int add_tunnel(room_t *r1, room_t *r2, maze_t **maze)
     tunnel->next = NULL;
     if (headcpy == NULL) {
         (*maze)->tunnels = tunnel;
-        return SUCCESS;
+        return connect_both_rooms(r1, r2);
     }
     while (headcpy->next != NULL)
         headcpy = headcpy->next;
