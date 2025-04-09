@@ -26,7 +26,7 @@ Repeat.
 
 Imagine a maze :
   A-B
- /   \
+ /   \         coding style
 S--C--E
 |\   /|
 D  H  G
