@@ -34,6 +34,7 @@
     #define WINDOW *get_window()
     #define TIME get_time()
     #define CAM (*get_cam())
+    #define MUSIC (*get_music())
     #define KEYPRESS(key) sfKeyboard_isKeyPressed(key)
     #define MOUSEPRESS(button) sfMouse_isButtonPressed(button)
     #define DESTROY(thing, list_func, free_func) destroy_thing((void *)thing, (void **(*)(void))(list_func), (void (*)(void *))(free_func))
