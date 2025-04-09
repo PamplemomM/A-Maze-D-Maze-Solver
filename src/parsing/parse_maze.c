@@ -72,12 +72,19 @@ static int check_valid_rooms(maze_t **maze)
         return ERROR;
     if ((*maze)->nb_robots <= 0)
         return give_up("Invalid number of robots.", maze);
-    if ((*maze)->rooms == NULL)
+    if ((*maze)->rooms == NULL) {
+        free_tunnels((*maze)->tunnels);
+        free_rooms((*maze)->rooms);
         return give_up("No rooms.", maze);
-    if ((*maze)->start == NULL)
+    }
+    if ((*maze)->start == NULL) {
+        free_tunnels((*maze)->tunnels);
         return give_up("No start room.", maze);
-    if ((*maze)->end == NULL)
+    }
+    if ((*maze)->end == NULL) {
+        free_tunnels((*maze)->tunnels);
         return give_up("No end room.", maze);
+    }
     return SUCCESS;
 }
 
