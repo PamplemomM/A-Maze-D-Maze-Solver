@@ -51,14 +51,9 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
         return ERROR;
     new_list->path = new;
     new_list->lenght = my_linked_size(&new);
-    new_list->next = NULL;
-    if (current == NULL) {
-        *original = new_list;
-        return SUCCESS;
-    }
-    while (current->next != NULL)
-        current = current->next;
-    current->next = new_list;
+    
+    current->next = *original;
+    *original = current;
     return SUCCESS;
 }
 
