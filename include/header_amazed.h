@@ -109,7 +109,6 @@ move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
 move_t *find_moves(maze_t *maze, int current_id);
 
 // --- solve_maze.c ---
-int solve_maze(maze_t *maze);
 int find_solved_maze(maze_t *maze);
 
 

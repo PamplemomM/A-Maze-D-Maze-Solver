@@ -22,11 +22,6 @@ static int free_paths(path_t **paths)
     return SUCCESS;
 }
 
-int solve_maze(maze_t *maze)
-{
-    return SUCCESS;
-}
-
 static int find_mult_robot_move(room_t *current, maze_t *maze, int robot)
 {
     tunnel_t *tunnel = NULL;
