@@ -75,7 +75,7 @@ int create_new_pathlist(maze_t *maze, pathlist_t **paths)
     return value;
 }
 
-int display_paths(int i, pathlist_t *paths)
+int display_paths(int i, pathlist_t *paths, maze_t *maze)
 {
     path_t *current = NULL;
     pathlist_t *cur_list = paths;
@@ -86,6 +86,7 @@ int display_paths(int i, pathlist_t *paths)
             mini_printf("P%d-%s\n", i, current->name);
             current = current->next;
         }
+        mini_printf("P%d-%s\n", i, maze->start->name);
         cur_list = cur_list->next;
     }
     return SUCCESS;
@@ -103,6 +104,6 @@ pathlist_t *find_allpath(maze_t *maze)
         value = create_new_pathlist(maze, &paths);
     }
     for (int i = 1; i < maze->nb_robots + 1; i++)
-        display_paths(i, paths);
+        display_paths(i, paths, maze);
     return paths;
 }

@@ -54,14 +54,16 @@ int add_new_path(path_t **node, char *room)
         return ERROR;
     }
     new_path->room = NULL;
-    new_path->next = NULL;
+    new_path->next = *node;
+    *node = new_path;
+    /*new_path->next = NULL;
     if (current == NULL) {
         *node = new_path;
         return SUCCESS;
     }
     while (current->next != NULL)
         current = current->next;
-    current->next = new_path;
+    current->next = new_path;*/
     return SUCCESS;
 }
 
