@@ -7,15 +7,28 @@
 
 #include "../../include/header_amazed.h"
 
+int free_pathlist(pathlist_t *paths)
+{
+    pathlist_t *current = paths;
+    pathlist_t *next = NULL;
+
+    while (current != NULL) {
+        next = current->next;
+        free_paths(&current->path);
+        current = next;
+    }
+    paths = NULL;
+    return SUCCESS;
+}
 
 pathlist_t *find_allpath(maze_t *maze)
 {
     pathlist_t *paths = NULL;
 
     if (maze == NULL)
-        return ERROR;
+        return NULL;
     for (int i = 1; i <= maze->nb_robots; i++) {
-        find_robot_move(maze->start, maze, i, &good_path);
+        continue;
     }
     return paths;
 }
