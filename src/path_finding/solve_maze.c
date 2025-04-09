@@ -50,6 +50,16 @@ int push_path_front(path_t **node, path_t *new_path)
 
 int push_path_back(path_t **node, path_t *new_path)
 {
+    path_t *current = *node;
+
+    new_path->next = NULL;
+    if (current == NULL) {
+        *node = new_path;
+        return SUCCESS;
+    }
+    while (current->next != NULL)
+        current = current->next;
+    current->next = new_path;
     return SUCCESS;
 }
 
