@@ -111,7 +111,7 @@ int create_new_pathlist(maze_t *maze, pathlist_t **paths);
 pathlist_t *find_allpath(maze_t *maze);
 
 // --- display_robots_move.c ---
-int get_move_lenght(int path_size, int robot_count);
+int get_movelength(int path_size, int robot_count);
 int my_linked_size(path_t **node);
 int display_robots_move_singlepath(path_t **good_path, maze_t *maze);
 

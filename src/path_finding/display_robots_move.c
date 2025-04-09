@@ -7,7 +7,7 @@
 
 #include "../../include/header_amazed.h"
 
-int get_move_lenght(int path_size, int robot_count)
+int get_movelength(int path_size, int robot_count)
 {
     return path_size + robot_count - 2;
 }
@@ -57,7 +57,7 @@ int display_robots_move_singlepath(path_t **good_path, maze_t *maze)
 {
     char **path = dup_pathlist(good_path);
     int id_size = my_linked_size(good_path);
-    int max_id = get_move_lenght(id_size, maze->nb_robots);
+    int max_id = get_movelength(id_size, maze->nb_robots);
 
     if (path == NULL)
         return ERROR;
