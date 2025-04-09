@@ -51,11 +51,17 @@ static int do_move_math(vwr_robot_t *robot, room_t *room)
 
 static int do_move(vwr_robot_t *robot, room_t *room, float speed)
 {
+    int diffrcx = CAM->center.x - robot->sprite->pos.x;
+    int diffrcy = CAM->center.y - robot->sprite->pos.y;
+    int diffrcd = sqrt(pow(diffrcx, 2) + pow(diffrcy, 2));
+    float dist_attenfact = 1.0 / MAX((diffrcd - 200) * CAM->zoom / 500.0, 1.0);
+    float zoom_attenfact = MIN(50.0 / speed * CAM->zoom, 70.0);
+
     do_move_math(robot, room);
     if (do_move_tweens(robot->sprite, room, speed) == ERROR)
         return ERROR;
-    play_sound("move", MIN(50.0 / speed * CAM->zoom, 70.0),
-        diceroll(80, 90) / 100.0 + speed / 50.0); // make it so this also gets attenuated by how far you are to the robot!!!!
+    play_sound("move", zoom_attenfact * dist_attenfact,
+        diceroll(80, 90) / 100.0 + speed / 50.0);
     run_timer("moving", 0.8 / speed / 1.5);
     robot->room = room;
     robot->move_to = NULL;
