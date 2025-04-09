@@ -9,9 +9,14 @@
 
 int get_pathlist_size(pathlist_t *paths)
 {
-    int result = 0;
+    int cpt = 0;
+    pathlist_t *current = paths;
 
-    return result;
+    while (current != NULL) {
+        cpt++;
+        current = current->next;
+    }
+    return cpt;
 }
 
 int free_pathlist(pathlist_t *paths)
