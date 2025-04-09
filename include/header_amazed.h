@@ -126,7 +126,7 @@ move_t *find_moves(maze_t *maze, int current_id);
 int push_path_front(path_t **node, path_t *new_path);
 int push_path_back(path_t **node, path_t *new_path);
 int free_paths(path_t **paths);
-int add_new_path(path_t **node, char *room);
+int add_new_path(path_t **node, char *room, int pushing);
 int find_solved_maze(maze_t *maze);
 
 
