@@ -69,7 +69,7 @@ static int find_robot_move(room_t *current, maze_t *maze,
     path_t **path)
 {
     tunnel_t *tunnel = NULL;
-
+find_allpath
     if (current == NULL || current->links == NULL)
         return SUCCESS;
     for (int i = 0; current->links[i] != NULL; i++) {
