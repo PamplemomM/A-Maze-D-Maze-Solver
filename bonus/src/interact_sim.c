@@ -39,20 +39,20 @@ static void interact_sim_iterate(void)
     if ((KEYPRESS(sfKeyAdd) || KEYPRESS(sfKeyN))
         && get_timer("iterup_cdwn") == NULL) {
         run_timer("iterup_cdwn", 0.2);
-        if ((int)GAME->move_id < GAME->nb_moves)
-            GAME->move_id++;
         if ((int)GAME->move_id >= GAME->nb_moves && GAME->state == PAUSE)
             text_jumpscare("no more moves blud </3", 1);
+        if ((int)GAME->move_id < GAME->nb_moves)
+            GAME->move_id++;
         toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     }
     if ((KEYPRESS(sfKeySubtract) || KEYPRESS(sfKeyB))
         && get_timer("iterdown_cdwn") == NULL) {
         run_timer("iterdown_cdwn", 0.2);
-        if ((int)GAME->move_id > 0)
-            GAME->move_id--;
         if ((int)GAME->move_id <= 0 && GAME->state == PAUSE)
             text_jumpscare("wrong way dawg </3", 1);
+        if ((int)GAME->move_id > 0)
+            GAME->move_id--;
         toggle_gamestate(PAUSE);
         DESTROY(get_tween("id"), get_tweenlist, free_tween);
     }
