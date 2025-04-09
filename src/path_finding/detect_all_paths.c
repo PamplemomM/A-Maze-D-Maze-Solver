@@ -21,6 +21,26 @@ int free_pathlist(pathlist_t *paths)
     return SUCCESS;
 }
 
+int add_new_pathlist(pathlist_t **original, path_t *new)
+{
+    pathlist_t *current = *original;
+    pathlist_t *new_list = malloc(sizeof(pathlist_t) * 1);
+
+    if (new_list == NULL || *original == NULL || new == NULL || current == NULL)
+        return ERROR;
+    new_list->path = new;
+    new_list->lenght = my_linked_size(&new);
+    new_list->next = NULL;
+    if (current == NULL) {
+        *original = new_list;
+        return SUCCESS;
+    }
+    while (current->next != NULL)
+        current = current->next;
+    current->next = new_list;
+    return SUCCESS;
+}
+
 int create_new_pathlist(maze_t *maze, pathlist_t *paths)
 {
     path_t *new_path = NULL;
