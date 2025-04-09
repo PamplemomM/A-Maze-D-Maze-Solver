@@ -13,6 +13,7 @@
     #include <unistd.h>
     #include <fcntl.h>
     #include <stdio.h>
+    #include <stdbool.h>
 
     // defines:
     #define SUCCESS 0
