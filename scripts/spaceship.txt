@@ -58,8 +58,8 @@ lh1-lh2
 lh1-CAF
 rh1-CAF
 rh1-rh2
-rh1-rh1
-rh1-rh0
+rh1-rw1
+rh1-rw0
 #
 lw1-lw0
 lw1-lwF

@@ -34,7 +34,6 @@ static int find_all_moves(room_t *current, maze_t *maze,
             continue;
         tunnel->val = 1;
         if (find_all_moves(current->links[i], maze, path) == SUCCESS) {
-            mini_printf("Moving backward from %s to %s\n", current->name, current->links[i]->name);
             add_new_path(path, current->links[i]->name);
             return SUCCESS;
         }
@@ -48,7 +47,7 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
     pathlist_t *new_list = malloc(sizeof(pathlist_t) * 1);
 
     mini_printf("Creating new path\n");
-    if (new_list == NULL || new == NULL || current == NULL)
+    if (new_list == NULL || new == NULL)
         return ERROR;
     new_list->path = new;
     new_list->lenght = my_linked_size(&new);
@@ -74,6 +73,7 @@ int create_new_pathlist(maze_t *maze, pathlist_t *paths)
     return value;
 }
 
+
 pathlist_t *find_allpath(maze_t *maze)
 {
     pathlist_t *paths = NULL;
@@ -88,5 +88,6 @@ pathlist_t *find_allpath(maze_t *maze)
         value = create_new_pathlist(maze, paths);
         mini_printf("%s", (value == ERROR) ? "No path found.\n" : "");
     }
+    display_paths(paths);
     return paths;
 }
