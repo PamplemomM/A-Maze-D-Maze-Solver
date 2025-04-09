@@ -63,8 +63,14 @@ int create_new_pathlist(maze_t *maze, pathlist_t *paths)
     int value = 0;
 
     new_path->next = NULL;
-    value = find_all_moves(maze->start, maze, &new_path);
-    add_new_pathlist(&paths, new_path);
+    new_list->next = NULL;
+    if (current == NULL) {
+        *original = new_list;
+        return SUCCESS;
+    }
+    while (current->next != NULL)
+        current = current->next;
+    current->next = new_list;
     return value;
 }
 
