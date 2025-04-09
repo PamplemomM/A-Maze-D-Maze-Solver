@@ -46,7 +46,8 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
     pathlist_t *current = *original;
     pathlist_t *new_list = malloc(sizeof(pathlist_t) * 1);
 
-    if (new_list == NULL || *original == NULL || new == NULL || current == NULL)
+    if (new_list == NULL || *original == NULL || new == NULL ||
+        current == NULL)
         return ERROR;
     new_list->path = new;
     new_list->lenght = my_linked_size(&new);
