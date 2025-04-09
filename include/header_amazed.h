@@ -42,7 +42,7 @@ typedef struct path_s {
 
 typedef struct pathlist_s {
     path_t *path;
-    int lenght;
+    int length;
     struct pathlist_s *next;
 } pathlist_t;
 
