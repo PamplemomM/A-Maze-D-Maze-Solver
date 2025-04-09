@@ -108,5 +108,6 @@ int detect_moves(maze_t *maze)
     if (maze == NULL)
         return ERROR;
     moves = find_moves(maze, id);
+    free_moves(moves);
     return SUCCESS;
 }
