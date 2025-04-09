@@ -25,6 +25,7 @@ static int find_all_moves(room_t *current, maze_t *maze,
     path_t **path)
 {
     tunnel_t *tunnel = NULL;
+    tunnel_t *rev_tunnel = NULL;
 
     if (current == NULL || current->links == NULL)
         return SUCCESS;
@@ -32,6 +33,9 @@ static int find_all_moves(room_t *current, maze_t *maze,
         tunnel = get_tunnel(current, current->links[i], maze);
         if (tunnel == NULL || tunnel->val == 1)
             continue;
+        rev_tunnel = get_tunnel(current->links[i], current, maze);
+        if (rev_tunnel != NULL)
+            rev_tunnel->val = 1;
         tunnel->val = 1;
         if (find_all_moves(current->links[i], maze, path) == SUCCESS) {
             add_new_path(path, current->links[i]->name);
@@ -46,12 +50,10 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
     pathlist_t *current = *original;
     pathlist_t *new_list = malloc(sizeof(pathlist_t) * 1);
 
-    mini_printf("Creating new path\n");
     if (new_list == NULL || new == NULL)
         return ERROR;
     new_list->path = new;
     new_list->lenght = my_linked_size(&new);
-    mini_printf("Created a new path : Size = %d\n", new_list->lenght);
     new_list->next = NULL;
     if (current == NULL) {
         *original = new_list;
@@ -96,12 +98,9 @@ pathlist_t *find_allpath(maze_t *maze)
 
     if (maze == NULL)
         return NULL;
-    mini_printf("--- Creating a pathlist ---\n");
     value = create_new_pathlist(maze, &paths);
     while (value == SUCCESS) {
-        mini_printf("\n--- Creating a pathlist ---\n");
         value = create_new_pathlist(maze, &paths);
-        mini_printf("%s", (value == ERROR) ? "No path found.\n" : "");
     }
     for (int i = 1; i < maze->nb_robots + 1; i++)
         display_paths(i, paths);
