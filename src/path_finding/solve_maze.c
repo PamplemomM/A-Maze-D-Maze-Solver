@@ -87,16 +87,25 @@ static int find_robot_move(room_t *current, maze_t *maze,
     return SUCCESS;
 }
 
-int find_solved_maze(maze_t *maze)
+int find_solved_maze_one_line(maze_t *maze)
 {
     path_t *good_path = NULL;
 
     if (maze == NULL)
         return ERROR;
     find_robot_move(maze->start, maze, &good_path);
-    //display_robots_move(&good_path, maze);
-    free_pathlist(find_allpath(maze));
+    display_robots_move(&good_path, maze);
     free_paths(&good_path);
+    return SUCCESS;
+}
+
+int find_solved_maze(maze_t *maze)
+{
+    path_t *good_path = NULL;
+
+    if (maze == NULL)
+        return ERROR;
+    free_pathlist(find_allpath(maze));
     return SUCCESS;
 }
 
