@@ -63,7 +63,11 @@ int push_path_back(path_t **node, path_t *new_path)
     return SUCCESS;
 }
 
-int add_new_path(path_t **node, char *room)
+/*
+  If pushing equals to 0, this means it's a push back,
+  else, it's a push front.
+*/
+int add_new_path(path_t **node, char *room, int pushing)
 {
     path_t *new_path = malloc(sizeof(path_t) * 1);
 
@@ -75,8 +79,6 @@ int add_new_path(path_t **node, char *room)
         return ERROR;
     }
     new_path->room = NULL;
-    new_path->next = *node;
-    *node = new_path;
     return SUCCESS;
 }
 
