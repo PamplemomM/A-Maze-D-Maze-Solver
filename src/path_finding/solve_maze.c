@@ -79,6 +79,10 @@ int add_new_path(path_t **node, char *room, int pushing)
         return ERROR;
     }
     new_path->room = NULL;
+    if (pushing == 0)
+        push_path_back(node, new_path);
+    else
+        push_path_front(node, new_path);
     return SUCCESS;
 }
 
