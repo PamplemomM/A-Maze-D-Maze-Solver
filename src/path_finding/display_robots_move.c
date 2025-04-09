@@ -7,6 +7,11 @@
 
 #include "../../include/header_amazed.h"
 
+int get_move_lenght(int path_size, int robot_count)
+{
+    return path_size + robot_count - 2;
+}
+
 int my_linked_size(path_t **node)
 {
     int size = 0;
