@@ -9,6 +9,5 @@
 
 int calculate_paths_proportion(pathlist_t *paths, maze_t *maze)
 {
-    
     return SUCCESS;
 }
