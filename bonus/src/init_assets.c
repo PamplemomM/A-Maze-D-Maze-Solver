@@ -29,9 +29,9 @@ int init_music(void)
 {
     if (play_music("Parade", "K.K. Parade", 0, 1.0) == NULL)
         return ERROR;
-    make_tween("music_fadein", &(*get_music())->volume,
-        50, 5.0)->method = EASEINOUT;
-    sfMusic_setLoop((*get_music())->music, sfTrue);
+    make_tween("music_fadein", &MUSIC->volume,
+        60, 5.0)->method = EASEINOUT;
+    sfMusic_setLoop(MUSIC->music, sfTrue);
     return SUCCESS;
 }
 

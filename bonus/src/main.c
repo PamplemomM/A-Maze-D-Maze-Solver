@@ -62,7 +62,8 @@ int update_stuff(void)
     update_cam();
     draw_allsprites(HUD);
     draw_alltexts(HUD);
-    events();
+    if (sfRenderWindow_hasFocus(WINDOW))
+        events();
     return SUCCESS;
 }
 

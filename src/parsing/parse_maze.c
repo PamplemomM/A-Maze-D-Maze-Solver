@@ -11,7 +11,7 @@ int give_up(char const *message, maze_t **maze)
 {
     if (*maze == NULL || (*maze)->viewer == 2)
         return ERROR;
-    if ((*maze)->viewer == 1)
+    if (!(*maze)->viewer)
         print_maze(*maze);
     PRINT("PARSING ERROR: %s\n", message);
     free_maze(maze);

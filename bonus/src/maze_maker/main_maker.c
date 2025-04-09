@@ -10,7 +10,7 @@
 sprite_t *get_room_sprite(room_t *room) // possibly useless
 {
     sprite_t *sprite = NULL;
-    char *name = merge_str("room_", room->name);
+    char *name = merge_str("room_", room->name); // lalala just making sure the coding style gets this one
 
     if (name == NULL)
         return OMNIFREE(name, 1);
@@ -19,17 +19,28 @@ sprite_t *get_room_sprite(room_t *room) // possibly useless
     return sprite;
 }
 
-void track_room_select(sfMouseMoveEvent mouse)
+void track_room_select(void) // COME HERE!!!!
 {
-    //static sfVector2f prev_pos = {};
-    sfVector2i mouse_gamepos =
+    static sfVector2f prev_pos = {0, 0};
+    sfVector2i mouse = sfMouse_getPositionRenderWindow(WINDOW);
+    sfVector2i mouse_gamepos;
+    sfVector2f snapped_pos;
+
+    if (mouse.x < 0 || mouse.y < 0 || mouse.x > 800 || mouse.y > 600) {
+        get_sprite("room_select")->draw = 0;
+        return;
+    }
+    get_sprite("room_select")->draw = 1;
+    mouse_gamepos = (sfVector2i)
         {CAM->center.x + (mouse.x + CAM->offset.x - 400) / CAM->zoom + 25,
         CAM->center.y + (mouse.y + CAM->offset.y - 300) / CAM->zoom + 25};
-    sfVector2f snapped_pos =
+    snapped_pos = (sfVector2f)
         {(mouse_gamepos.x / 50 - (mouse_gamepos.x < 0)) * 50,
         (mouse_gamepos.y / 50 - (mouse_gamepos.y < 0)) * 50};
-
     get_sprite("room_select")->pos = snapped_pos;
+    if (snapped_pos.x != prev_pos.x || snapped_pos.y != prev_pos.y)
+        play_sound("click", MIN(20.0 * CAM->zoom, 30.0), 1.0);
+    prev_pos = snapped_pos;
 }
 
 static char *make_room_name(sprite_t *room)
@@ -134,7 +145,7 @@ void interact_room(void)
 
 void interact_maker(void)
 {
-    if (MOUSEPRESS(sfMouseLeft))
+    if (MOUSEPRESS(sfMouseLeft) && get_sprite("room_select")->draw)
         interact_room();
     if (KEYPRESS(sfKeySpace) && get_timer("maker_state_cdwn") == NULL) {
         run_timer("maker_state_cdwn", 0.2);
@@ -237,11 +248,10 @@ void events_maker(void)
 
     cam_move_keys();
     interact_maker();
+    track_room_select();
     while (sfRenderWindow_pollEvent(WINDOW, &event)) {
-        if (event.type == sfEvtMouseMoved) {
-            track_room_select(event.mouseMove);
+        if (event.type == sfEvtMouseMoved)
             cam_move_mouse(event.mouseMove);
-        }
         if (event.type == sfEvtMouseWheelScrolled)
             cam_zoom_mouse(event.mouseWheelScroll);
         if (get_timer("save_cdwn") == NULL && event.type == sfEvtKeyPressed
@@ -303,7 +313,8 @@ int update_stuff_maker(void)
     update_cam();
     draw_allsprites(HUD);
     draw_alltexts(HUD);
-    events_maker();
+    if (sfRenderWindow_hasFocus(WINDOW))
+        events_maker();
     return SUCCESS;
 }
 
@@ -346,9 +357,9 @@ int init_maker_music(void)
 {
     if (play_music("Floor One", "Dorkus64 - Floor One", 0, 1.0) == NULL)
         return ERROR;
-    make_tween("music_fadein", &(*get_music())->volume,
+    make_tween("music_fadein", &MUSIC->volume,
         60, 5.0)->method = EASEINOUT;
-    sfMusic_setLoop((*get_music())->music, sfTrue);
+    sfMusic_setLoop(MUSIC->music, sfTrue);
     return SUCCESS;
 }
 
