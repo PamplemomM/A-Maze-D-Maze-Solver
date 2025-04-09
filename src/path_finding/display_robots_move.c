@@ -48,7 +48,7 @@ static int print_move(int rbt, int id, char **path, int id_size)
 //mini_printf("Id=%d ; move=%d ; path_num=%d ; room %s\n",
     //id, rbt, abs(rbt - (id + 1)),
     //path[abs(rbt - (id + 1))]);
-int display_robots_move(path_t **good_path, maze_t *maze)
+int display_robots_move_singlepath(path_t **good_path, maze_t *maze)
 {
     char **path = dup_pathlist(good_path);
     int id_size = my_linked_size(good_path);

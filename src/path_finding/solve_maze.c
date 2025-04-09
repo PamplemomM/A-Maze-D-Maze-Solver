@@ -86,7 +86,7 @@ int find_solved_maze_one_line(maze_t *maze)
     if (maze == NULL)
         return ERROR;
     find_robot_move(maze->start, maze, &good_path);
-    display_robots_move(&good_path, maze);
+    display_robots_move_singlepath(&good_path, maze);
     free_paths(&good_path);
     return SUCCESS;
 }
