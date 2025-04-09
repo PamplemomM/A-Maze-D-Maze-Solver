@@ -27,25 +27,3 @@ move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze)
     headcpy->next = move;
     return move;
 }
-
-int push_path_front(path_t **node, path_t *new_path)
-{
-    new_path->next = *node;
-    *node = new_path;
-    return SUCCESS;
-}
-
-int push_path_back(path_t **node, path_t *new_path)
-{
-    path_t *current = *node;
-
-    new_path->next = NULL;
-    if (current == NULL) {
-        *node = new_path;
-        return SUCCESS;
-    }
-    while (current->next != NULL)
-        current = current->next;
-    current->next = new_path;
-    return SUCCESS;
-}

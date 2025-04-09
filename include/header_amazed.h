@@ -119,6 +119,8 @@ int display_robots_move_singlepath(path_t **good_path, maze_t *maze);
 
 // --- make_move.c ---
 move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
+
+// --- push_topath.c ---
 int push_path_front(path_t **node, path_t *new_path);
 int push_path_back(path_t **node, path_t *new_path);
 
