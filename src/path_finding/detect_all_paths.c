@@ -79,9 +79,12 @@ pathlist_t *find_allpath(maze_t *maze)
     pathlist_t *paths = NULL;
     int value = 0;
 
+    mini_printf("Find_all_path\n");
     if (maze == NULL)
         return NULL;
+    mini_printf("blebleble\n");
     while (value == SUCCESS) {
+        mini_printf("Creating a pathlist\n");
         value = create_new_pathlist(maze, paths);
     }
     return paths;
