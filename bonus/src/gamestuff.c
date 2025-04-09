@@ -22,6 +22,7 @@ int init_gamestuff(void)
     if (GAME == NULL)
         return ERROR;
     GAME->state = PAUSE;
+    GAME->tool = T_NONE;
     GAME->logs = 0;
     GAME->bounds = (sfIntRect){-1, -1, -1, -1};
     GAME->hue = diceroll(0, 360);

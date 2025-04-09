@@ -31,7 +31,9 @@ USER INTERACTIONS:
 
 MAKER CONTROLS:
 	Place / Destroy................	'LMB'
-	Switch mode.................... 'SPACEBAR'
+	Tunnel mode....................	'LALT' (hold)
+	Destroy mode...................	'LCTRL' (hold)
+	Place end room.................	'E'
 	Save maze......................	'S'
 
 	Toggle logs....................	'TAB'

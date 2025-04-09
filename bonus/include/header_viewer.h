@@ -31,6 +31,13 @@ typedef enum game_states_s {
     BREAK
 } gamestate_t;
 
+typedef enum maker_tool_s {
+    T_NONE,
+    T_ROOM,
+    T_EXIT,
+    T_TUNNEL
+} maker_tool_t;
+
 typedef struct vwr_robot_s {
     struct vwr_robot_s *next;
     int id;
@@ -41,6 +48,7 @@ typedef struct vwr_robot_s {
 
 typedef struct game {
     gamestate_t state;
+    maker_tool_t tool;
     int logs;
     sfIntRect bounds;
     float hue;
@@ -133,7 +141,26 @@ vwr_robot_t *make_robot(int id);
 int init_robots(void);
 void free_robot(vwr_robot_t *robot);
 
+
+// --------- MAKER FUNCTIONS -----------
+
 // --- main_maker.c ---
 int start_maker(void);
+
+// --- place_rooms.c ---
+sprite_t *get_room_sprite(room_t *room);
+char *make_room_name(sprite_t *room);
+void destroy_room(room_t *room);
+int place_room(void);
+
+// --- save.c ---
+void save_maze(void);
+
+// --- update_bounds.c ---
+void update_maker_bounds(void);
+int update_rooms_pos(sprite_t *select);
+
+// --- init_maker_assets.c ---
+int init_maker_assets(void);
 
 #endif /* AMAZEDVIS_H */

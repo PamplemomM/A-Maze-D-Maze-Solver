@@ -31,237 +31,21 @@ void track_room_select(void) // COME HERE!!!!
     prev_pos = snapped_pos;
 }
 
-static char *make_room_name(sprite_t *room)
-{
-    char *name = NULL;
-    char *tmp[2] = {NULL, NULL};
-
-    tmp[1] = int_to_str((int)(room->pos.x / 50));
-    if (tmp[1] == NULL)
-        return NULL;
-    tmp[0] = merge_str(tmp[1], "_");
-    OMNIFREE(tmp[1], 1);
-    if (tmp[0] == NULL)
-        return NULL;
-    tmp[1] = int_to_str((int)(room->pos.y / 50));
-    if (tmp[1] == NULL)
-        return OMNIFREE(tmp[0], 1);
-    name = merge_str(tmp[0], tmp[1]);
-    SDFREE("%1 %1", &tmp[0], &tmp[1]);
-    return name;
-}
-
-void room_modifs(room_t *room)
-{
-    sprite_t *sprite = NULL;
-    char *name = merge_str("room_", room->name);
-
-    if (name == NULL)
-        return;
-    sprite = get_sprite(name);
-    sprite->color = color_from_hue(0, 240, 0, 255);
-    run_timer(name, 0.5);
-    OMNIFREE(name, 1);
-}
-
-int add_logs_new_room(room_t *room)
-{
-    char *entry = malloc(sizeof(char) * (strlen("room  added at , \n")
-        + strlen(room->name) + digitcount(room->x) + digitcount(room->y) + 1));
-
-    if (entry == NULL)
-        return ERROR;
-    sprintf(entry, "room %s added at %d, %d\n", room->name, room->x, room->y);
-    if (add_to_logs(entry) == ERROR) {
-        OMNIFREE(entry, 1);
-        return ERROR;
-    }
-    OMNIFREE(entry, 1);
-    return SUCCESS;
-}
-
-int add_logs_destroy_room(room_t *room)
-{
-    char *entry = malloc(sizeof(char) * (strlen("room  destroyed\n")
-        + strlen(room->name) + 1));
-
-    if (entry == NULL)
-        return ERROR;
-    sprintf(entry, "room %s destroyed\n", room->name);
-    if (add_to_logs(entry) == ERROR) {
-        OMNIFREE(entry, 1);
-        return ERROR;
-    }
-    OMNIFREE(entry, 1);
-    return SUCCESS;
-}
-
-void update_maker_bounds(void)
-{
-    room_t *room = MAZE->rooms;
-    sfIntRect bounds;
-
-    if (room == NULL)
-        return;
-    bounds = (sfIntRect){room->x - 200, room->y - 200,
-        room->x + 400, room->y + 400};
-    while (room != NULL) {
-        if (room->x < bounds.left + 200)
-            bounds.left = room->x - 200;
-        if (room->y < bounds.top + 200)
-            bounds.top = room->y - 200;
-        if (room->x > bounds.width - 400)
-            bounds.width = room->x + 400;
-        if (room->y > bounds.height - 400)
-            bounds.height = room->y + 400;
-        room = room->next;
-    }
-    GAME->bounds = bounds;
-    setup_bg(0);
-}
-
-void destroy_room(room_t *room)
-{
-    char *name = merge_str("room_", room->name);
-
-    if (name == NULL)
-        return;
-    add_logs_destroy_room(room);
-    DESTROY(get_sprite(name), get_spritelist, free_sprite);
-    OMNIFREE(name, 1);
-    DESTROY(room, get_rooms, free_room);
-    get_sprite("room_select")->scale = (sfVector2f){0.95, 0.95};
-    update_maker_bounds();
-}
-
-sprite_t *get_room_sprite(room_t *room) // possibly useless
-{
-    sprite_t *sprite = NULL;
-    char *name = merge_str("room_", room->name);
-
-    if (name == NULL)
-        return OMNIFREE(name, 1);
-    sprite = get_sprite(name);
-    OMNIFREE(name, 1);
-    return sprite;
-}
-
-int add_logs_offset(sfVector2i offset)
-{
-    char *entry = malloc(sizeof(char) * (strlen("map boundaries modified\n")
-        + strlen("all rooms were offset by , \n")
-        + digitcount(offset.x) + digitcount(offset.y) + 1));
-
-    if (entry == NULL)
-        return ERROR;
-    sprintf(entry,
-        "map boundaries modified\nall rooms were offset by %d, %d\n",
-        offset.x, offset.y);
-    if (add_to_logs(entry) == ERROR) {
-        OMNIFREE(entry, 1);
-        return ERROR;
-    }
-    OMNIFREE(entry, 1);
-    return SUCCESS;
-}
-
-int offset_room(room_t *room, sfVector2i offset)
-{
-    sprite_t *sprite = get_room_sprite(room);
-    timers_t *timer = get_timer(sprite->name);
-    char *name = NULL;
-
-    sprite->pos.x += offset.x;
-    sprite->pos.y += offset.y;
-    room->x += offset.x;
-    room->y += offset.y;
-    OMNIFREE(room->name, 1);
-    room->name = make_room_name(sprite);
-    if (room->name == NULL)
-        return ERROR;
-    name = merge_str("room_", room->name);
-    if (name == NULL)
-        return ERROR;
-    if (timer != NULL) {
-        OMNIFREE(timer->name, 1);
-        timer->name = strdup(name);
-        if (timer->name == NULL) {
-            OMNIFREE(sprite->name, 1);
-            return ERROR;
-        }
-    }
-    OMNIFREE(sprite->name, 1);
-    sprite->name = name;
-    return SUCCESS;
-}
-
-void offset_cam(sfVector2i offset)
-{
-    tween_t *camx = get_tween("camlat");
-    tween_t *camy = get_tween("camvert");
-
-    if (camx != NULL) {
-        camx->start += offset.x;
-        camx->dest += offset.x;
-    }
-    if (camy != NULL) {
-        camy->start += offset.y;
-        camy->dest += offset.y;
-    }
-    CAM->center.x += offset.x;
-    CAM->center.y += offset.y;
-}
-
-int update_rooms_pos(sprite_t *select)
-{
-    room_t *room = MAZE->rooms;
-    sfVector2i offset;
-
-    if (GAME->state == BUILD) {
-        offset = (sfVector2i){abs(MIN(select->pos.x, 0)),
-            abs(MIN(select->pos.y, 0))};
-    } else if (GAME->state == BREAK) {
-        update_maker_bounds();
-        offset = (sfVector2i)
-            {-200 - GAME->bounds.left, -200 - GAME->bounds.top};
-    }
-    if (offset.x == 0 && offset.y == 0)
-        return SUCCESS;
-    select->pos.x += offset.x;
-    select->pos.y += offset.y;
-    offset_cam(offset);
-    while (room != NULL) {
-        if (offset_room(room, offset) == ERROR)
-            return ERROR;
-        room = room->next;
-    }
-    add_logs_offset(offset);
-    update_maker_bounds();
-    return SUCCESS;
-}
-
 // you are autistic, don't forget it. you are AUTISTIC.
 int interact_room(void)
 {
     sprite_t *select = get_sprite("room_select");
     char *name = make_room_name(select);
 
-    if (get_room(name, MAZE) == MAZE->start) {
+    if (MAZE->start != NULL && get_room(name, MAZE) == MAZE->start) {
         OMNIFREE(name, 1);
         return SUCCESS;
     }
     if (GAME->state == BUILD && get_room(name, MAZE) == NULL) {
-        if (add_room(name, select->pos.x, select->pos.y, &MAZE) == ERROR) {
+        if (place_room() == ERROR) {
             OMNIFREE(name, 1);
             return ERROR;
         }
-        add_logs_new_room(get_room(name, MAZE));
-        create_room_sprite(get_room(name, MAZE));
-        room_modifs(get_room(name, MAZE));
-        update_maker_bounds();
-        play_sound("place", MIN(40.0 * CAM->zoom + 30.0, 90.0),
-            diceroll(90, 110) / 100.0);
-        update_rooms_pos(select);
     } else if (GAME->state == BREAK && get_room(name, MAZE) != NULL) {
         destroy_room(get_room(name, MAZE));
         update_rooms_pos(select);
@@ -276,100 +60,32 @@ int interact_maker(void)
         if (interact_room() == ERROR)
             return ERROR;
     }
-    if (KEYPRESS(sfKeySpace) && get_timer("maker_state_cdwn") == NULL) {
-        run_timer("maker_state_cdwn", 0.2);
-        if (GAME->state == BUILD) {
-            toggle_gamestate(BREAK);
-            add_to_logs("TOGGLED BREAK MODE\n\n");
-        } else if (GAME->state == BREAK) {
-            toggle_gamestate(BUILD);
-            add_to_logs("TOGGLED BUILD MODE\n\n");
-        }
-    }
-    interact_sim_logs();
-    return SUCCESS;
-}
-
-int save_nb_robots(int fd)
-{
-    char *nb_robots = int_to_str(MAZE->nb_robots);
-
-    if (nb_robots == NULL)
-        return ERROR;
-    write(fd, "#number_of_robots\n", strlen("#number_of_robots\n"));
-    write(fd, nb_robots, strlen(nb_robots));
-    write(fd, "\n", 1);
-    OMNIFREE(nb_robots, 1);
-    return SUCCESS;
-}
-
-int save_rooms(int fd)
-{
-    room_t *room = MAZE->rooms;
-    char *tmp = NULL;
-
-    if (room == NULL)
-        return SUCCESS;
-    write(fd, "#rooms\n", strlen("#rooms\n"));
-    while (room != NULL) {
-        if (room == MAZE->start)
-            write(fd, "##start\n", strlen("##start\n"));
-        if (room == MAZE->end)
-            write(fd, "##end\n", strlen("##end\n"));
-        write(fd, room->name, strlen(room->name));
-        write(fd, " ", 1);
-        tmp = int_to_str(room->x / 50);
-        if (tmp == NULL)
+    if (KEYPRESS(sfKeyLControl) && GAME->tool == T_ROOM)
+        toggle_gamestate(BREAK);
+    else
+        toggle_gamestate(BUILD);
+    if (KEYPRESS(sfKeyE) && get_sprite("room_select")->draw) { // unaffected by state
+        GAME->tool = T_EXIT;
+        GAME->state = BUILD;
+        if (place_room() == ERROR)
             return ERROR;
-        write(fd, tmp, strlen(tmp));
-        OMNIFREE(tmp, 1);
-        write(fd, " ", 1);
-        tmp = int_to_str(room->y / 50);
-        if (tmp == NULL)
-            return ERROR;
-        write(fd, tmp, strlen(tmp));
-        OMNIFREE(tmp, 1);
-        write(fd, "\n", 1);
-        room = room->next;
+        GAME->state = BREAK;
+        update_rooms_pos(get_sprite("room_select"));
+        GAME->tool = T_ROOM;
+        GAME->state = BUILD;
+    }
+    if (KEYPRESS(sfKeyLAlt)) { // force BUILD state
+        GAME->tool = T_TUNNEL;
+        get_sprite("room_select")->draw = 0;
+    } else {
+        GAME->tool = T_ROOM;
+        get_sprite("room_select")->draw = 1;
+    }
+    if (KEYPRESS(sfKeyS) && get_timer("save_cdwn") == NULL) {
+        save_maze();
+        run_timer("save_cdwn", 1.0);
     }
     return SUCCESS;
-}
-
-int save_tunnels(int fd)
-{
-    tunnel_t *tunnel = MAZE->tunnels;
-
-    if (tunnel == NULL)
-        return SUCCESS;
-    write(fd, "#tunnels\n", strlen("#tunnels\n"));
-    while (tunnel != NULL) {
-        write(fd, tunnel->r1->name, strlen(tunnel->r1->name));
-        write(fd, "-", 1);
-        write(fd, tunnel->r2->name, strlen(tunnel->r2->name));
-        write(fd, "\n", 1);
-        tunnel = tunnel->next;
-    }
-    return SUCCESS;
-}
-
-void save_maze(void)
-{
-    int fd = open("new_custom_maze.txt", O_WRONLY | O_TRUNC | O_CREAT,
-        S_IRUSR | S_IWUSR);
-
-    if (fd == -1) {
-        text_jumpscare("File couldn't open!!! :'(", 2);
-        return;
-    }
-    if (save_nb_robots(fd) == ERROR || save_rooms(fd) == ERROR
-        || save_tunnels(fd) == ERROR) {
-        text_jumpscare("Error while saving :(", 2);
-        close(fd);
-        return;
-    }
-    text_jumpscare("Saved! :DDD", 2);
-    play_sound("save", 50, 1.0);
-    close(fd);
 }
 
 void events_maker(void)
@@ -378,17 +94,14 @@ void events_maker(void)
 
     cam_move_keys();
     interact_maker(); // this can return ERROR
-    track_room_select();
+    interact_sim_logs();
+    if (GAME->tool != T_TUNNEL)
+        track_room_select();
     while (sfRenderWindow_pollEvent(WINDOW, &event)) {
         if (event.type == sfEvtMouseMoved)
             cam_move_mouse(event.mouseMove);
         if (event.type == sfEvtMouseWheelScrolled)
             cam_zoom_mouse(event.mouseWheelScroll);
-        if (get_timer("save_cdwn") == NULL && event.type == sfEvtKeyPressed
-            && event.key.code == sfKeyS) {
-            save_maze();
-            run_timer("save_cdwn", 2.0);
-        }
         if (event.type == sfEvtKeyPressed && event.key.code == sfKeyEscape)
             sfRenderWindow_close(WINDOW);
         if (event.type == sfEvtClosed)
@@ -459,70 +172,6 @@ void run_maker(void)
         }
         sfRenderWindow_display(WINDOW);
     }
-}
-
-int init_room_select(void)
-{
-    if (make_sprite("room_select", "room_select", 0, 0) == NULL)
-        return ERROR;
-    get_sprite("room_select")->color = color_from_hue(0, 255, 0, 150);
-    get_sprite("room_select")->type = ROOM;
-    center_sprite_origin(get_sprite("room_select"), 0.5, 0.5);
-    return SUCCESS;
-}
-
-int init_start_room(void)
-{
-    if (add_room("0_0", 0, 0, &MAZE) == ERROR)
-        return ERROR;
-    MAZE->start = get_room("0_0", MAZE);
-    if (create_room_sprite(MAZE->start) == ERROR)
-        return ERROR;
-    get_sprite("room_0_0")->color = color_from_hue(0, 240, 0, 255);
-    return SUCCESS;
-}
-
-int init_maker_sprites(void)
-{
-    int inits[6] = {init_room_select(), init_start_room(),
-        init_blackscreen(), init_compass(), init_logs(), init_bg()};
-
-    for (int i = 0; i < 6; i++) {
-        if (inits[i] == ERROR)
-            return ERROR;
-    }
-    get_sprite("light")->color = color_from_hue(0, 100, 0, 255);
-    return SUCCESS;
-}
-
-int init_maker_music(void)
-{
-    if (play_music("Floor One", "Dorkus64 - Floor One", 0, 1.0) == NULL)
-        return ERROR;
-    make_tween("music_fadein", &MUSIC->volume,
-        60, 5.0)->method = EASEINOUT;
-    sfMusic_setLoop(MUSIC->music, sfTrue);
-    return SUCCESS;
-}
-
-int init_maker_assets(void)
-{
-    create_window(800, 600, "A-MAZE-D VIEWER!");
-    *get_clock() = sfClock_create();
-    GAME->bounds = (sfIntRect){0, 0, 1, 1};
-    GAME->state = BUILD;
-    if (init_cam() == NULL)
-        return ERROR;
-    setup_camera();
-    get_tween("camzoom")->start = 1.0;
-    get_tween("camzoom")->dest = 0.5;
-    if (init_maker_sprites() == ERROR)
-        return ERROR;
-    if (init_sounds() == ERROR)
-        return ERROR;
-    if (init_maker_music() == ERROR)
-        return ERROR;
-    return SUCCESS;
 }
 
 int start_maker(void)
