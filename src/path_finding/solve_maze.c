@@ -41,6 +41,11 @@ static int find_mult_robot_move(room_t *current, maze_t *maze, int robot)
     return SUCCESS;
 }
 
+static int push_path_back(path_t **node, path_t *new_path)
+{
+    return SUCCESS;
+}
+
 int add_new_path(path_t **node, char *room)
 {
     path_t *new_path = malloc(sizeof(path_t) * 1);
