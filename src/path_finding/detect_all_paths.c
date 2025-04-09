@@ -21,34 +21,27 @@ int free_pathlist(pathlist_t *paths)
     return SUCCESS;
 }
 
-static int find_all_moves(room_t *current, maze_t *maze,
-    path_t **path)
+int create_new_pathlist(maze_t *maze, pathlist_t *paths)
 {
-    tunnel_t *tunnel = NULL;
+    path_t *new_path = NULL;
+    path_t *current = paths->path;
+    int value = 0;
 
-    if (current == NULL || current->links == NULL)
-        return SUCCESS;
-    for (int i = 0; current->links[i] != NULL; i++) {
-        tunnel = get_tunnel(current, current->links[i], maze);
-        if (tunnel == NULL || tunnel->val == 1)
-            continue;
-        tunnel->val = 1;
-        if (find_robot_move(current->links[i], maze) == SUCCESS) {
-            add_new_path(path, current->links[i]->name);
-            return SUCCESS;
-        }
-    }
-    return ERROR;
+    new_path->next = NULL;
+    value = find_all_moves(maze->start, maze, &new_path);
+    add_new_pathlist(&paths, new_path);
+    return value;
 }
 
 pathlist_t *find_allpath(maze_t *maze)
 {
     pathlist_t *paths = NULL;
+    int value = 0;
 
     if (maze == NULL)
         return NULL;
-    for (int i = 1; i <= maze->nb_robots; i++) {
-        continue;
+    while (value == SUCCESS) {
+        value = create_new_path(maze, paths);
     }
     return paths;
 }
