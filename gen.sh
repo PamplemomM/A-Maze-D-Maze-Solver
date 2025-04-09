@@ -63,7 +63,14 @@ done
 echo "#tunnels"
 
 
-
+# Generate random paths
+for ((i = 0; i <= nb_rooms; i++)); do
+  for ((j = i + 1; j <= nb_rooms; j++)); do
+    if [ "$i" -ne "$j" ] && [ $((RANDOM % 100)) -lt 20 ]; then
+      echo "$i-$j"
+    fi
+  done
+done
 
 
 # Generate a direct path to the end
@@ -75,11 +82,3 @@ while [ "$current" -ne "$nb_rooms" ]; do
 done
 
 
-# Generate random paths
-for ((i = 0; i <= nb_rooms; i++)); do
-  for ((j = i + 1; j <= nb_rooms; j++)); do
-    if [ "$i" -ne "$j" ] && [ $((RANDOM % 100)) -lt 20 ]; then
-      echo "$i-$j"
-    fi
-  done
-done
