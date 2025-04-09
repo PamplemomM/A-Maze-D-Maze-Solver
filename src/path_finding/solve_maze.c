@@ -106,8 +106,8 @@ int find_solved_maze(maze_t *maze)
         return ERROR;
     find_robot_move(maze->start, maze, &good_path);
     paths = find_allpath(maze);
+    display_robots_move(&get_shortest_path_temp(paths), maze);
     free_pathlist(paths);
-    //display_robots_move(&good_path, maze);
     free_paths(&good_path);
     return SUCCESS;
 }
