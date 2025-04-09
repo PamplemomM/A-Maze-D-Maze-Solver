@@ -11,16 +11,18 @@ static void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest)
 {
     int diffx = dest->x - start->x;
     int diffy = dest->y - start->y;
-    int diffd = sqrt(pow(diffx, 2) + pow(diffy, 2)) - 25;
+    int diffd = sqrt(pow(diffx, 2) + pow(diffy, 2)) - 60;
     float traj = atan2f(diffx, -diffy) * 180.0 / M_PI;
 
+    sprite->pos.x = (dest->x + start->x) / 2.0;
+    sprite->pos.y = (dest->y + start->y) / 2.0;
     sprite->scale.y = diffd / (float)sprite->rect.height;
-    sprite->scale.x = (10.0 + 5.0 / sprite->scale.y)
+    sprite->scale.x = (10.0 + 10.0 / sprite->scale.y)
         / (float)sprite->rect.width;
     sprite->angle = traj;
     sprite->color = color_from_hue(0, 255, 0, 100);
     sprite->type = TUNNEL;
-    center_sprite_origin(sprite, 0.5, 1.0);
+    center_sprite_origin(sprite, 0.5, 0.5);
 }
 
 int create_tunnel_sprite(tunnel_t *tunnel)
