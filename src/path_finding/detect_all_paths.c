@@ -65,10 +65,8 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
 int create_new_pathlist(maze_t *maze, pathlist_t *paths)
 {
     path_t *new_path = NULL;
-    path_t *current = paths->path;
     int value = 0;
 
-    new_path->next = NULL;
     value = find_all_moves(maze->start, maze, &new_path);
     add_new_pathlist(&paths, new_path);
     return value;
