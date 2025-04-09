@@ -73,6 +73,10 @@ int create_new_pathlist(maze_t *maze, pathlist_t *paths)
     return value;
 }
 
+int display_paths(pathlist_t *paths)
+{
+    return SUCCESS;
+}
 
 pathlist_t *find_allpath(maze_t *maze)
 {
