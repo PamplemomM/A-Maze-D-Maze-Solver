@@ -7,7 +7,7 @@
 
 #include "../../include/header_amazed.h"
 
-static int free_paths(path_t **paths)
+int free_paths(path_t **paths)
 {
     path_t *current = *paths;
     path_t *next = NULL;
@@ -41,10 +41,13 @@ static int find_mult_robot_move(room_t *current, maze_t *maze, int robot)
     return SUCCESS;
 }
 
-static int add_new_path(path_t **node, char *room)
+/*
+  If pushing equals to 0, this means it's a push back,
+  else, it's a push front.
+*/
+int add_new_path(path_t **node, char *room, int pushing)
 {
     path_t *new_path = malloc(sizeof(path_t) * 1);
-    path_t *current = *node;
 
     if (new_path == NULL)
         return ERROR;
@@ -54,18 +57,14 @@ static int add_new_path(path_t **node, char *room)
         return ERROR;
     }
     new_path->room = NULL;
-    new_path->next = NULL;
-    if (current == NULL) {
-        *node = new_path;
-        return SUCCESS;
-    }
-    while (current->next != NULL)
-        current = current->next;
-    current->next = new_path;
+    if (pushing == 0)
+        push_path_back(node, new_path);
+    else
+        push_path_front(node, new_path);
     return SUCCESS;
 }
 
-static int find_robot_move(room_t *current, maze_t *maze, int robot,
+static int find_robot_move(room_t *current, maze_t *maze,
     path_t **path)
 {
     tunnel_t *tunnel = NULL;
@@ -78,25 +77,39 @@ static int find_robot_move(room_t *current, maze_t *maze, int robot,
             continue;
         if (tunnel->val == 1) {
             tunnel->val = 2;
-            add_new_path(path, current->links[i]->name);
-            find_robot_move(current->links[i], maze, robot, path);
+            add_new_path(path, current->links[i]->name, FALSE);
+            find_robot_move(current->links[i], maze, path);
             break;
         }
     }
     return SUCCESS;
 }
 
-int find_solved_maze(maze_t *maze)
+int find_solved_maze_one_line(maze_t *maze)
 {
     path_t *good_path = NULL;
 
     if (maze == NULL)
         return ERROR;
-    for (int i = 1; i <= maze->nb_robots; i++) {
-        find_robot_move(maze->start, maze, i, &good_path);
-    }
-    display_robots_move(&good_path, maze);
+    find_robot_move(maze->start, maze, &good_path);
+    display_robots_move_singlepath(good_path, maze);
     free_paths(&good_path);
+    return SUCCESS;
+}
+
+int find_solved_maze(maze_t *maze)
+{
+    path_t *good_path = NULL;
+    pathlist_t *paths = NULL;
+
+    if (maze == NULL)
+        return ERROR;
+    find_robot_move(maze->start, maze, &good_path);
+    free_paths(&good_path);
+    paths = find_allpath(maze);
+    good_path = get_shortest_path_temp(paths);
+    display_robots_move_singlepath(good_path, maze);
+    free_pathlist(paths);
     return SUCCESS;
 }
 

@@ -13,6 +13,7 @@
     #include <unistd.h>
     #include <fcntl.h>
     #include <stdio.h>
+    #include <stdbool.h>
 
     // defines:
     #define SUCCESS 0
@@ -41,7 +42,7 @@ typedef struct path_s {
 
 typedef struct pathlist_s {
     path_t *path;
-    int lenght;
+    int length;
     struct pathlist_s *next;
 } pathlist_t;
 
@@ -104,17 +105,35 @@ int parse_tunnel(maze_t **maze, char *line);
 
 // --------- PATH_FINDING FOLDER ---------
 
+// --- detect_all_paths.c ---
+int get_pathlist_size(pathlist_t *paths);
+int free_pathlist(pathlist_t *paths);
+int add_new_pathlist(pathlist_t **original, path_t *new);
+int create_new_pathlist(maze_t *maze, pathlist_t **paths);
+pathlist_t *find_allpath(maze_t *maze);
+
 // --- display_robots_move.c ---
+int get_movelength(int path_size, int robot_count);
 int my_linked_size(path_t **node);
-int display_robots_move(path_t **good_path, maze_t *maze);
+int display_robots_move_singlepath(path_t *good_path, maze_t *maze);
+
+// --- display_robot_path.c ---
+path_t *get_shortest_path_temp(pathlist_t *paths);
+int calculate_paths_proportion(pathlist_t *paths, maze_t *maze);
 
 // --- make_move.c ---
 move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
+
+// --- push_topath.c ---
+int push_path_front(path_t **node, path_t *new_path);
+int push_path_back(path_t **node, path_t *new_path);
 
 // --- find_moves.c ---
 move_t *find_moves(maze_t *maze, int current_id);
 
 // --- solve_maze.c ---
+int free_paths(path_t **paths);
+int add_new_path(path_t **node, char *room, int pushing);
 int find_solved_maze(maze_t *maze);
 
 

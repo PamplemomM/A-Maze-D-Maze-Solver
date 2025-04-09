@@ -1,11 +1,16 @@
 /*
 ** EPITECH PROJECT, 2025
-** move_robots.c
+** display_robot_path.c
 ** File description:
-** Moving algorithm of the best path.
+** File for displaying the robots in a single path.
 */
 
 #include "../../include/header_amazed.h"
+
+int get_movelength(int path_size, int robot_count)
+{
+    return path_size + robot_count - 2;
+}
 
 int my_linked_size(path_t **node)
 {
@@ -19,16 +24,16 @@ int my_linked_size(path_t **node)
     return size;
 }
 
-static char **dup_pathlist(path_t **good_path)
+static char **dup_pathlist(path_t *good_path)
 {
-    path_t *current = *good_path;
-    int size = my_linked_size(good_path);
+    path_t *current = good_path;
+    int size = my_linked_size(&good_path);
     int i = 0;
     char **path = malloc(sizeof(char *) * (size + 1));
 
     if (path == NULL)
         return NULL;
-    current = *good_path;
+    current = good_path;
     while (current != NULL) {
         path[i] = my_strdup(current->name);
         i++;
@@ -48,11 +53,11 @@ static int print_move(int rbt, int id, char **path, int id_size)
 //mini_printf("Id=%d ; move=%d ; path_num=%d ; room %s\n",
     //id, rbt, abs(rbt - (id + 1)),
     //path[abs(rbt - (id + 1))]);
-int display_robots_move(path_t **good_path, maze_t *maze)
+int display_robots_move_singlepath(path_t *good_path, maze_t *maze)
 {
     char **path = dup_pathlist(good_path);
-    int id_size = my_linked_size(good_path);
-    int max_id = id_size + maze->nb_robots - 2;
+    int id_size = my_linked_size(&good_path);
+    int max_id = get_movelength(id_size, maze->nb_robots);
 
     if (path == NULL)
         return ERROR;
