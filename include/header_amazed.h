@@ -106,6 +106,7 @@ int parse_tunnel(maze_t **maze, char *line);
 // --------- PATH_FINDING FOLDER ---------
 
 // --- detect_all_paths.c ---
+int get_pathlist_size(pathlist_t *paths);
 int free_pathlist(pathlist_t *paths);
 int add_new_pathlist(pathlist_t **original, path_t *new);
 int create_new_pathlist(maze_t *maze, pathlist_t **paths);
