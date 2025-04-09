@@ -51,8 +51,14 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
         return ERROR;
     new_list->path = new;
     new_list->lenght = my_linked_size(&new);
-    current->next = *original;
-    *original = current;
+    new_list->next = NULL;
+    if (current == NULL) {
+        *original = new_list;
+        return SUCCESS;
+    }
+    while (current->next != NULL)
+        current = current->next;
+    current->next = new_list;
     return SUCCESS;
 }
 
@@ -63,14 +69,8 @@ int create_new_pathlist(maze_t *maze, pathlist_t *paths)
     int value = 0;
 
     new_path->next = NULL;
-    new_list->next = NULL;
-    if (current == NULL) {
-        *original = new_list;
-        return SUCCESS;
-    }
-    while (current->next != NULL)
-        current = current->next;
-    current->next = new_list;
+    value = find_all_moves(maze->start, maze, &new_path);
+    add_new_pathlist(&paths, new_path);
     return value;
 }
 
