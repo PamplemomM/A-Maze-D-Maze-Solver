@@ -7,23 +7,24 @@
 
 #include "../../include/header_amazed.h"
 
-int get_shortest_path_temp(pathlist_t *paths)
+path_t *get_shortest_path_temp(pathlist_t *paths)
 {
-    pathlist_t *current = *paths;
-    pathlist_t *winner = NULL;
+    pathlist_t *current = paths;
+    path_t *winner = NULL;
     int min = 0;
 
     if (current == NULL)
-        return winner;
+        return NULL;
     min = current->length;
+    winner = current->path;
     while (current != NULL) {
         if (current->length < min) {
             min = current->length;
-            winner = current;
+            winner = current->path;
         }
         current = current->next;
     }
-    return winner->path;
+    return winner;
 }
 
 int calculate_paths_proportion(pathlist_t *paths, maze_t *maze)

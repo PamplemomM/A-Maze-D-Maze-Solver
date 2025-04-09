@@ -120,7 +120,7 @@ pathlist_t *find_allpath(maze_t *maze)
     while (value == SUCCESS) {
         value = create_new_pathlist(maze, &paths);
     }
-    for (int i = 1; i < maze->nb_robots + 1; i++)
-        display_paths(i, paths);
+    //for (int i = 1; i < maze->nb_robots + 1; i++)
+    //    display_paths(i, paths);
     return paths;
 }
