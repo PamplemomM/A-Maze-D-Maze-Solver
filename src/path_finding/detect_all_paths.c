@@ -76,7 +76,7 @@ pathlist_t *find_allpath(maze_t *maze)
     if (maze == NULL)
         return NULL;
     while (value == SUCCESS) {
-        value = create_new_path(maze, paths);
+        value = create_new_pathlist(maze, paths);
     }
     return paths;
 }
