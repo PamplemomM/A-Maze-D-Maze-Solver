@@ -7,7 +7,7 @@
 
 #include "../../include/header_amazed.h"
 
-static int free_paths(path_t **paths)
+int free_paths(path_t **paths)
 {
     path_t *current = *paths;
     path_t *next = NULL;
