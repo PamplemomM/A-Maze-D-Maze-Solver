@@ -79,12 +79,10 @@ int add_new_path(path_t **node, char *room, int pushing)
         return ERROR;
     }
     new_path->room = NULL;
-    new_path->next = *node;
-    *node = new_path;/*
     if (pushing == 0)
         push_path_back(node, new_path);
     else
-        push_path_front(node, new_path);*/
+        push_path_front(node, new_path);
     return SUCCESS;
 }
 
@@ -124,10 +122,15 @@ int find_solved_maze_one_line(maze_t *maze)
 int find_solved_maze(maze_t *maze)
 {
     path_t *good_path = NULL;
+    pathlist_t *paths = NULL;
 
     if (maze == NULL)
         return ERROR;
-    free_pathlist(find_allpath(maze));
+    find_robot_move(maze->start, maze, &good_path);
+    paths = find_allpath(maze);
+    free_pathlist(paths);
+    //display_robots_move(&good_path, maze);
+    free_paths(&good_path);
     return SUCCESS;
 }
 
