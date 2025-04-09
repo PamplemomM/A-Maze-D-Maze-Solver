@@ -123,6 +123,8 @@ move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
 move_t *find_moves(maze_t *maze, int current_id);
 
 // --- solve_maze.c ---
+int push_path_front(path_t **node, path_t *new_path);
+int push_path_back(path_t **node, path_t *new_path);
 int free_paths(path_t **paths);
 int add_new_path(path_t **node, char *room);
 int find_solved_maze(maze_t *maze);
