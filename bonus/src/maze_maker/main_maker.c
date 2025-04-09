@@ -18,7 +18,6 @@ void track_room_select(void) // COME HERE!!!!
         get_sprite("room_select")->draw = 0;
         return;
     }
-    get_sprite("room_select")->draw = 1;
     mouse_gamepos = (sfVector2i)
         {CAM->center.x + (mouse.x + CAM->offset.x - 400) / CAM->zoom + 25,
         CAM->center.y + (mouse.y + CAM->offset.y - 300) / CAM->zoom + 25};
@@ -26,6 +25,7 @@ void track_room_select(void) // COME HERE!!!!
         {(mouse_gamepos.x / 50 - (mouse_gamepos.x < 0)) * 50,
         (mouse_gamepos.y / 50 - (mouse_gamepos.y < 0)) * 50};
     get_sprite("room_select")->pos = snapped_pos;
+    get_sprite("room_select")->draw = 1;
     if (snapped_pos.x != prev_pos.x || snapped_pos.y != prev_pos.y)
         play_sound("click", MIN(10.0 * CAM->zoom, MIN(TIME * 5, 20.0)), 1.0);
     prev_pos = snapped_pos;
@@ -35,7 +35,7 @@ void track_room_select(void) // COME HERE!!!!
 int interact_room(void)
 {
     sprite_t *select = get_sprite("room_select");
-    char *name = make_room_name(select);
+    char *name = make_room_name(select->pos);
 
     if (MAZE->start != NULL && get_room(name, MAZE) == MAZE->start) {
         OMNIFREE(name, 1);
@@ -56,14 +56,20 @@ int interact_room(void)
 
 int interact_maker(void)
 {
+    if (KEYPRESS(sfKeyS) && get_timer("save_cdwn") == NULL) {
+        save_maze();
+        run_timer("save_cdwn", 1.0);
+    }
     if (MOUSEPRESS(sfMouseLeft) && get_sprite("room_select")->draw) {
-        if (interact_room() == ERROR)
+        if (GAME->tool == T_ROOM && interact_room() == ERROR)
+            return ERROR;
+        if (GAME->tool == T_TUNNEL && interact_tunnel() == ERROR)
             return ERROR;
     }
-    if (KEYPRESS(sfKeyLControl) && GAME->tool == T_ROOM)
-        toggle_gamestate(BREAK);
+    if (KEYPRESS(sfKeyLControl))
+        GAME->state = BREAK;
     else
-        toggle_gamestate(BUILD);
+        GAME->state = BUILD;
     if (KEYPRESS(sfKeyE) && get_sprite("room_select")->draw) { // unaffected by state
         GAME->tool = T_EXIT;
         GAME->state = BUILD;
@@ -76,15 +82,11 @@ int interact_maker(void)
     }
     if (KEYPRESS(sfKeyLAlt)) { // force BUILD state
         GAME->tool = T_TUNNEL;
-        get_sprite("room_select")->draw = 0;
     } else {
         GAME->tool = T_ROOM;
-        get_sprite("room_select")->draw = 1;
     }
-    if (KEYPRESS(sfKeyS) && get_timer("save_cdwn") == NULL) {
-        save_maze();
-        run_timer("save_cdwn", 1.0);
-    }
+    if (interact_tunnel() == ERROR)
+        return ERROR;
     return SUCCESS;
 }
 
@@ -95,8 +97,7 @@ void events_maker(void)
     cam_move_keys();
     interact_maker(); // this can return ERROR
     interact_sim_logs();
-    if (GAME->tool != T_TUNNEL)
-        track_room_select();
+    track_room_select();
     while (sfRenderWindow_pollEvent(WINDOW, &event)) {
         if (event.type == sfEvtMouseMoved)
             cam_move_mouse(event.mouseMove);

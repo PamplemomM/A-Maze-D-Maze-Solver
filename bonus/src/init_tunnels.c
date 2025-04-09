@@ -7,7 +7,7 @@
 
 #include "../include/header_viewer.h"
 
-static void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest)
+void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest)
 {
     int diffx = dest->x - start->x;
     int diffy = dest->y - start->y;
@@ -20,9 +20,6 @@ static void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest)
     sprite->scale.x = (10.0 + 10.0 / sprite->scale.y)
         / (float)sprite->rect.width;
     sprite->angle = traj;
-    sprite->color = color_from_hue(0, 255, 0, 100);
-    sprite->type = TUNNEL;
-    center_sprite_origin(sprite, 0.5, 0.5);
 }
 
 int create_tunnel_sprite(tunnel_t *tunnel)
@@ -41,6 +38,9 @@ int create_tunnel_sprite(tunnel_t *tunnel)
         return ERROR;
     }
     setup_tunnel(get_sprite(name), tunnel->r1, tunnel->r2);
+    get_sprite(name)->color = color_from_hue(0, 255, 0, 100);
+    get_sprite(name)->type = TUNNEL;
+    center_sprite_origin(get_sprite(name), 0.5, 0.5);
     OMNIFREE(name, 1);
     return SUCCESS;
 }

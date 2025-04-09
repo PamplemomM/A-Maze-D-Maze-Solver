@@ -19,19 +19,19 @@ sprite_t *get_room_sprite(room_t *room)
     return sprite;
 }
 
-char *make_room_name(sprite_t *room)
+char *make_room_name(sfVector2f pos)
 {
     char *name = NULL;
     char *tmp[2] = {NULL, NULL};
 
-    tmp[1] = int_to_str((int)(room->pos.x / 50));
+    tmp[1] = int_to_str((int)(pos.x / 50));
     if (tmp[1] == NULL)
         return NULL;
     tmp[0] = merge_str(tmp[1], "_");
     OMNIFREE(tmp[1], 1);
     if (tmp[0] == NULL)
         return NULL;
-    tmp[1] = int_to_str((int)(room->pos.y / 50));
+    tmp[1] = int_to_str((int)(pos.y / 50));
     if (tmp[1] == NULL)
         return OMNIFREE(tmp[0], 1);
     name = merge_str(tmp[0], tmp[1]);
@@ -55,6 +55,19 @@ static int add_logs_destroy_room(room_t *room)
     return SUCCESS;
 }
 
+static void destroy_room_tunnels(room_t *room)
+{
+    tunnel_t *tunnel = MAZE->tunnels;
+    tunnel_t *tmp = NULL;
+
+    while (tunnel != NULL) {
+        tmp = tunnel->next;
+        if (tunnel->r1 == room || tunnel->r2 == room)
+            destroy_tunnel(tunnel);
+        tunnel = tmp;
+    }
+}
+
 void destroy_room(room_t *room)
 {
     sprite_t *select = get_sprite("room_select");
@@ -68,6 +81,7 @@ void destroy_room(room_t *room)
     if (room == MAZE->end)
         MAZE->end = NULL;
     add_logs_destroy_room(room);
+    destroy_room_tunnels(room);
     DESTROY(get_sprite(name), get_spritelist, free_sprite);
     OMNIFREE(name, 1);
     DESTROY(room, get_rooms, free_room);
@@ -107,7 +121,7 @@ static void room_modifs(room_t *room)
 int place_room(void)
 {
     sprite_t *select = get_sprite("room_select");
-    char *name = make_room_name(select);
+    char *name = make_room_name(select->pos);
 
     if (name == NULL)
         return ERROR;

@@ -78,7 +78,7 @@ static int offset_room(room_t *room, sfVector2i offset)
     room->x += offset.x;
     room->y += offset.y;
     OMNIFREE(room->name, 1);
-    room->name = make_room_name(sprite);
+    room->name = make_room_name(sprite->pos);
     if (room->name == NULL)
         return ERROR;
     name = merge_str("room_", room->name);
@@ -95,6 +95,48 @@ static int offset_room(room_t *room, sfVector2i offset)
     OMNIFREE(sprite->name, 1);
     sprite->name = name;
     return SUCCESS;
+}
+
+static sprite_t *get_tunnel_sprite_preoffset(tunnel_t *tunnel, sfVector2i offset)
+{
+    sprite_t *sprite = NULL;
+    char *path = NULL;
+    char *name = NULL;
+    char *nr1 = NULL;
+    char *nr2 = NULL;
+    sfVector2f pos;
+
+    pos = (sfVector2f){tunnel->r1->x - offset.x, tunnel->r1->y - offset.y};
+    nr1 = make_room_name(pos);
+    pos = (sfVector2f){tunnel->r2->x - offset.x, tunnel->r2->y - offset.y};
+    nr2 = make_room_name(pos);
+    path = merge_str(nr1, nr2);
+    OMNIFREE(nr1, 1);
+    OMNIFREE(nr2, 1);
+    if (path == NULL)
+        return NULL;
+    name = merge_str("tunnel_", path);
+    OMNIFREE(path, 1);
+    if (name == NULL)
+        return NULL;
+    sprite = get_sprite(name);
+    OMNIFREE(name, 1);
+    return sprite;
+}
+
+static void update_tunnels_pos(sfVector2i offset)
+{
+    sprite_t *sprite = NULL;
+    tunnel_t *tunnel = MAZE->tunnels;
+
+    while (tunnel != NULL) {
+        sprite = get_tunnel_sprite_preoffset(tunnel, offset);
+        sprite->pos.x = (tunnel->r1->x + tunnel->r2->x) / 2.0;
+        sprite->pos.y = (tunnel->r1->y + tunnel->r2->y) / 2.0;
+        OMNIFREE(sprite->name, 1);
+        sprite->name = make_tunnel_name(tunnel);
+        tunnel = tunnel->next;
+    }
 }
 
 int update_rooms_pos(sprite_t *select)
@@ -120,6 +162,7 @@ int update_rooms_pos(sprite_t *select)
             return ERROR;
         room = room->next;
     }
+    update_tunnels_pos(offset);
     add_logs_offset(offset);
     update_maker_bounds();
     return SUCCESS;

@@ -121,6 +121,7 @@ int create_room_sprite(room_t *room);
 int init_rooms(void);
 
 // --- init_tunnels.c ---
+void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest);
 int create_tunnel_sprite(tunnel_t *tunnel);
 int init_tunnels(void);
 
@@ -149,9 +150,16 @@ int start_maker(void);
 
 // --- place_rooms.c ---
 sprite_t *get_room_sprite(room_t *room);
-char *make_room_name(sprite_t *room);
+char *make_room_name(sfVector2f pos);
 void destroy_room(room_t *room);
 int place_room(void);
+
+// --- place_tunnels.c ---
+sprite_t *get_tunnel_sprite(tunnel_t *tunnel);
+char *make_tunnel_name(tunnel_t *tunnel);
+void destroy_tunnel(tunnel_t *tunnel);
+int place_tunnel(room_t *r1, room_t *r2);
+int interact_tunnel(void);
 
 // --- save.c ---
 void save_maze(void);
