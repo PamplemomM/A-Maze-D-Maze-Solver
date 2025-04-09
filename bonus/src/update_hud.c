@@ -17,7 +17,7 @@ void update_progbar(void)
     prog->scale.y = MAX(prog->scale.y - 3, 30);
     make_tween("barprogw", &prog->scale.x, 3, 0.2)->method = EASEINOUT;
     make_tween("barprogh", &prog->scale.y, 36, 0.2)->method = EASEINOUT;
-    play_sound("progbar", prog->scale.x * 2, 0.7 + prog->scale.x / 50.0);
+    play_sound("click", prog->scale.x * 2, 0.7 + prog->scale.x / 50.0);
 }
 
 void update_progbuff(int id)

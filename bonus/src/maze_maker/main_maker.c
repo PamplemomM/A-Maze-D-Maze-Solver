@@ -21,24 +21,27 @@ sprite_t *get_room_sprite(room_t *room) // possibly useless
 
 void track_room_select(void) // COME HERE!!!!
 {
-    //static sfVector2f prev_pos = {};
+    static sfVector2f prev_pos = {0, 0};
     sfVector2i mouse = sfMouse_getPositionRenderWindow(WINDOW);
     sfVector2i mouse_gamepos;
     sfVector2f snapped_pos;
 
     if (mouse.x < 0 || mouse.y < 0 || mouse.x > 800 || mouse.y > 600) {
         get_sprite("room_select")->draw = 0;
-    } else {
-        mouse_gamepos = (sfVector2i)
-            {CAM->center.x + (mouse.x + CAM->offset.x - 400) / CAM->zoom + 25,
-            CAM->center.y + (mouse.y + CAM->offset.y - 300) / CAM->zoom + 25};
-        snapped_pos = (sfVector2f)
-            {(mouse_gamepos.x / 50 - (mouse_gamepos.x < 0)) * 50,
-            (mouse_gamepos.y / 50 - (mouse_gamepos.y < 0)) * 50};
-        get_sprite("room_select")->pos = snapped_pos;
-        get_sprite("room_select")->draw = 1;
+        return;
     }
-} // add the click click sound effect blud
+    get_sprite("room_select")->draw = 1;
+    mouse_gamepos = (sfVector2i)
+        {CAM->center.x + (mouse.x + CAM->offset.x - 400) / CAM->zoom + 25,
+        CAM->center.y + (mouse.y + CAM->offset.y - 300) / CAM->zoom + 25};
+    snapped_pos = (sfVector2f)
+        {(mouse_gamepos.x / 50 - (mouse_gamepos.x < 0)) * 50,
+        (mouse_gamepos.y / 50 - (mouse_gamepos.y < 0)) * 50};
+    get_sprite("room_select")->pos = snapped_pos;
+    if (snapped_pos.x != prev_pos.x || snapped_pos.y != prev_pos.y)
+        play_sound("click", MIN(20.0 * CAM->zoom, 30.0), 1.0);
+    prev_pos = snapped_pos;
+}
 
 static char *make_room_name(sprite_t *room)
 {

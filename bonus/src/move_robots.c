@@ -55,7 +55,7 @@ static int do_move(vwr_robot_t *robot, room_t *room, float speed)
     if (do_move_tweens(robot->sprite, room, speed) == ERROR)
         return ERROR;
     play_sound("move", MIN(50.0 / speed * CAM->zoom, 70.0),
-        diceroll(80, 90) / 100.0 + speed / 50.0);
+        diceroll(80, 90) / 100.0 + speed / 50.0); // make it so this also gets attenuated by how far you are to the robot!!!!
     run_timer("moving", 0.8 / speed / 1.5);
     robot->room = room;
     robot->move_to = NULL;
