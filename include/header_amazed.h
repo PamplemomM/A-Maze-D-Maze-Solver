@@ -117,6 +117,10 @@ int get_movelength(int path_size, int robot_count);
 int my_linked_size(path_t **node);
 int display_robots_move_singlepath(path_t **good_path, maze_t *maze);
 
+// --- display_robot_path.c ---
+int get_shortest_path_temp(pathlist_t *paths, maze_t *maze);
+int calculate_paths_proportion(pathlist_t *paths, maze_t *maze);
+
 // --- make_move.c ---
 move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
 

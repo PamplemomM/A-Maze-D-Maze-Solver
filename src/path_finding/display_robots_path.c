@@ -7,7 +7,7 @@
 
 #include "../../include/header_amazed.h"
 
-int get_shorters_path_temp(pathlist_t *paths, maze_t *maze)
+int get_shortest_path_temp(pathlist_t *paths, maze_t *maze)
 {
     pathlist_t *current = *paths;
     pathlist_t *winner = NULL;
