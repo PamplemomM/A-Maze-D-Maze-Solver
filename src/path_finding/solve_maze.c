@@ -41,12 +41,14 @@ static int find_mult_robot_move(room_t *current, maze_t *maze, int robot)
     return SUCCESS;
 }
 
-static int push_path_front(path_t **node, path_t *new_path)
+int push_path_front(path_t **node, path_t *new_path)
 {
+    new_path->next = *node;
+    *node = new_path;
     return SUCCESS;
 }
 
-static int push_path_back(path_t **node, path_t *new_path)
+int push_path_back(path_t **node, path_t *new_path)
 {
     return SUCCESS;
 }
