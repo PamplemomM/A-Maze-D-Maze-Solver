@@ -39,6 +39,12 @@ typedef struct path_s {
     room_t *room;
 } path_t;
 
+typedef struct pathlist_s {
+    path_t *path;
+    int lenght;
+    struct pathlist_s *next;
+} pathlist_t;
+
 typedef struct tunnel_s {
     struct tunnel_s *next;
     room_t *r1;
