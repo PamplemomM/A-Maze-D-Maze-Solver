@@ -65,7 +65,7 @@ int add_new_path(path_t **node, char *room)
     return SUCCESS;
 }
 
-static int find_robot_move(room_t *current, maze_t *maze, int robot,
+static int find_robot_move(room_t *current, maze_t *maze,
     path_t **path)
 {
     tunnel_t *tunnel = NULL;
@@ -79,7 +79,7 @@ static int find_robot_move(room_t *current, maze_t *maze, int robot,
         if (tunnel->val == 1) {
             tunnel->val = 2;
             add_new_path(path, current->links[i]->name);
-            find_robot_move(current->links[i], maze, robot, path);
+            find_robot_move(current->links[i], maze, path);
             break;
         }
     }
@@ -93,7 +93,7 @@ int find_solved_maze(maze_t *maze)
     if (maze == NULL)
         return ERROR;
     for (int i = 1; i <= maze->nb_robots; i++) {
-        find_robot_move(maze->start, maze, i, &good_path);
+        find_robot_move(maze->start, maze, &good_path);
     }
     display_robots_move(&good_path, maze);
     free_paths(&good_path);
