@@ -7,18 +7,6 @@
 
 #include "../../include/header_viewer.h"
 
-sprite_t *get_room_sprite(room_t *room) // possibly useless
-{
-    sprite_t *sprite = NULL;
-    char *name = merge_str("room_", room->name); // lalala just making sure the coding style gets this one
-
-    if (name == NULL)
-        return OMNIFREE(name, 1);
-    sprite = get_sprite(name);
-    OMNIFREE(name, 1);
-    return sprite;
-}
-
 void track_room_select(void) // COME HERE!!!!
 {
     static sfVector2f prev_pos = {0, 0};
@@ -39,7 +27,7 @@ void track_room_select(void) // COME HERE!!!!
         (mouse_gamepos.y / 50 - (mouse_gamepos.y < 0)) * 50};
     get_sprite("room_select")->pos = snapped_pos;
     if (snapped_pos.x != prev_pos.x || snapped_pos.y != prev_pos.y)
-        play_sound("click", MIN(20.0 * CAM->zoom, 30.0), 1.0);
+        play_sound("click", MIN(10.0 * CAM->zoom, 20.0), 1.0);
     prev_pos = snapped_pos;
 }
 
@@ -108,6 +96,30 @@ int add_logs_destroy_room(room_t *room)
     return SUCCESS;
 }
 
+void update_maker_bounds(void)
+{
+    room_t *room = MAZE->rooms;
+    sfIntRect bounds;
+
+    if (room == NULL)
+        return;
+    bounds = (sfIntRect){room->x - 200, room->y - 200,
+        room->x + 400, room->y + 400};
+    while (room != NULL) {
+        if (room->x < bounds.left + 200)
+            bounds.left = room->x - 200;
+        if (room->y < bounds.top + 200)
+            bounds.top = room->y - 200;
+        if (room->x > bounds.width - 400)
+            bounds.width = room->x + 400;
+        if (room->y > bounds.height - 400)
+            bounds.height = room->y + 400;
+        room = room->next;
+    }
+    GAME->bounds = bounds;
+    setup_bg(0);
+}
+
 void destroy_room(room_t *room)
 {
     char *name = merge_str("room_", room->name);
@@ -119,45 +131,163 @@ void destroy_room(room_t *room)
     OMNIFREE(name, 1);
     DESTROY(room, get_rooms, free_room);
     get_sprite("room_select")->scale = (sfVector2f){0.95, 0.95};
+    update_maker_bounds();
+}
+
+sprite_t *get_room_sprite(room_t *room) // possibly useless
+{
+    sprite_t *sprite = NULL;
+    char *name = merge_str("room_", room->name);
+
+    if (name == NULL)
+        return OMNIFREE(name, 1);
+    sprite = get_sprite(name);
+    OMNIFREE(name, 1);
+    return sprite;
+}
+
+int add_logs_offset(sfVector2i offset)
+{
+    char *entry = malloc(sizeof(char) * (strlen("map boundaries modified\n")
+        + strlen("all rooms were offset by , \n")
+        + digitcount(offset.x) + digitcount(offset.y) + 1));
+
+    if (entry == NULL)
+        return ERROR;
+    sprintf(entry,
+        "map boundaries modified\nall rooms were offset by %d, %d\n",
+        offset.x, offset.y);
+    if (add_to_logs(entry) == ERROR) {
+        OMNIFREE(entry, 1);
+        return ERROR;
+    }
+    OMNIFREE(entry, 1);
+    return SUCCESS;
+}
+
+int offset_room(room_t *room, sfVector2i offset)
+{
+    sprite_t *sprite = get_room_sprite(room);
+    timers_t *timer = get_timer(sprite->name);
+    char *name = NULL;
+
+    sprite->pos.x += offset.x;
+    sprite->pos.y += offset.y;
+    room->x += offset.x;
+    room->y += offset.y;
+    OMNIFREE(room->name, 1);
+    room->name = make_room_name(sprite);
+    if (room->name == NULL)
+        return ERROR;
+    name = merge_str("room_", room->name);
+    if (name == NULL)
+        return ERROR;
+    if (timer != NULL) {
+        OMNIFREE(timer->name, 1);
+        timer->name = strdup(name);
+        if (timer->name == NULL) {
+            OMNIFREE(sprite->name, 1);
+            return ERROR;
+        }
+    }
+    OMNIFREE(sprite->name, 1);
+    sprite->name = name;
+    return SUCCESS;
+}
+
+void offset_cam(sfVector2i offset)
+{
+    tween_t *camx = get_tween("camlat");
+    tween_t *camy = get_tween("camvert");
+
+    if (camx != NULL) {
+        camx->start += offset.x;
+        camx->dest += offset.x;
+    }
+    if (camy != NULL) {
+        camy->start += offset.y;
+        camy->dest += offset.y;
+    }
+    CAM->center.x += offset.x;
+    CAM->center.y += offset.y;
+}
+
+int update_rooms_pos(sprite_t *select)
+{
+    room_t *room = MAZE->rooms;
+    sfVector2i offset;
+
+    if (GAME->state == BUILD) {
+        offset = (sfVector2i){abs(MIN(select->pos.x, 0)),
+            abs(MIN(select->pos.y, 0))};
+    } else if (GAME->state == BREAK) {
+        update_maker_bounds();
+        offset = (sfVector2i)
+            {-200 - GAME->bounds.left, -200 - GAME->bounds.top};
+    }
+    if (offset.x == 0 && offset.y == 0)
+        return SUCCESS;
+    select->pos.x += offset.x;
+    select->pos.y += offset.y;
+    offset_cam(offset);
+    while (room != NULL) {
+        if (offset_room(room, offset) == ERROR)
+            return ERROR;
+        room = room->next;
+    }
+    add_logs_offset(offset);
+    update_maker_bounds();
+    return SUCCESS;
 }
 
 // you are autistic, don't forget it. you are AUTISTIC.
-void interact_room(void)
+int interact_room(void)
 {
-    sprite_t *room_tmp = get_sprite("room_select");
-    char *name = make_room_name(room_tmp);
+    sprite_t *select = get_sprite("room_select");
+    char *name = make_room_name(select);
 
+    if (get_room(name, MAZE) == MAZE->start) {
+        OMNIFREE(name, 1);
+        return SUCCESS;
+    }
     if (GAME->state == BUILD && get_room(name, MAZE) == NULL) {
-        if (add_room(name, room_tmp->pos.x, room_tmp->pos.y, &MAZE) == ERROR) {
+        if (add_room(name, select->pos.x, select->pos.y, &MAZE) == ERROR) {
             OMNIFREE(name, 1);
-            return;
+            return ERROR;
         }
         add_logs_new_room(get_room(name, MAZE));
         create_room_sprite(get_room(name, MAZE));
         room_modifs(get_room(name, MAZE));
-        //update_bounds();
-        play_sound("place", MIN(40.0 * CAM->zoom + 20.0, 80.0),
+        update_maker_bounds();
+        play_sound("place", MIN(40.0 * CAM->zoom + 30.0, 90.0),
             diceroll(90, 110) / 100.0);
-    } else if (GAME->state == BREAK && get_room(name, MAZE) != NULL)
+        update_rooms_pos(select);
+    } else if (GAME->state == BREAK && get_room(name, MAZE) != NULL) {
         destroy_room(get_room(name, MAZE));
+        update_rooms_pos(select);
+    }
     OMNIFREE(name, 1);
+    return SUCCESS;
 }
 
-void interact_maker(void)
+int interact_maker(void)
 {
-    if (MOUSEPRESS(sfMouseLeft) && get_sprite("room_select")->draw)
-        interact_room();
+    if (MOUSEPRESS(sfMouseLeft) && get_sprite("room_select")->draw) {
+        if (interact_room() == ERROR)
+            return ERROR;
+    }
     if (KEYPRESS(sfKeySpace) && get_timer("maker_state_cdwn") == NULL) {
         run_timer("maker_state_cdwn", 0.2);
         if (GAME->state == BUILD) {
             toggle_gamestate(BREAK);
-            add_to_logs("\nTOGGLED BREAK MODE\n");
+            add_to_logs("TOGGLED BREAK MODE\n\n");
         } else if (GAME->state == BREAK) {
             toggle_gamestate(BUILD);
-            add_to_logs("\nTOGGLED BUILD MODE\n");
+            add_to_logs("TOGGLED BUILD MODE\n\n");
         }
     }
     interact_sim_logs();
+    return SUCCESS;
 }
 
 int save_nb_robots(int fd)
@@ -247,7 +377,7 @@ void events_maker(void)
     sfEvent event;
 
     cam_move_keys();
-    interact_maker();
+    interact_maker(); // this can return ERROR
     track_room_select();
     while (sfRenderWindow_pollEvent(WINDOW, &event)) {
         if (event.type == sfEvtMouseMoved)
@@ -271,6 +401,7 @@ void update_rooms(void)
     sprite_t *room = NULL;
     timers_t *timer = *get_timerlist();
     float time_left = 0;
+
     while (timer != NULL) {
         room = get_sprite(timer->name);
         if (room != NULL) {
@@ -305,12 +436,12 @@ int update_stuff_maker(void)
     if (TIME > 4.5)
         update_compass();
     hue_shift();
+    update_cam();
     draw_allsprites(NONE);
     draw_allsprites(TUNNEL);
     draw_allsprites(ROOM);
     //draw_robots();
     draw_alltexts(NONE);
-    update_cam();
     draw_allsprites(HUD);
     draw_alltexts(HUD);
     if (sfRenderWindow_hasFocus(WINDOW))
@@ -340,12 +471,23 @@ int init_room_select(void)
     return SUCCESS;
 }
 
+int init_start_room(void)
+{
+    if (add_room("0_0", 0, 0, &MAZE) == ERROR)
+        return ERROR;
+    MAZE->start = get_room("0_0", MAZE);
+    if (create_room_sprite(MAZE->start) == ERROR)
+        return ERROR;
+    get_sprite("room_0_0")->color = color_from_hue(0, 240, 0, 255);
+    return SUCCESS;
+}
+
 int init_maker_sprites(void)
 {
-    int inits[5] = {init_room_select(),
+    int inits[6] = {init_room_select(), init_start_room(),
         init_blackscreen(), init_compass(), init_logs(), init_bg()};
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
         if (inits[i] == ERROR)
             return ERROR;
     }
@@ -367,11 +509,13 @@ int init_maker_assets(void)
 {
     create_window(800, 600, "A-MAZE-D VIEWER!");
     *get_clock() = sfClock_create();
-    GAME->bounds = (sfIntRect){10, 10, 50, 50};
+    GAME->bounds = (sfIntRect){0, 0, 1, 1};
     GAME->state = BUILD;
     if (init_cam() == NULL)
         return ERROR;
     setup_camera();
+    get_tween("camzoom")->start = 1.0;
+    get_tween("camzoom")->dest = 0.5;
     if (init_maker_sprites() == ERROR)
         return ERROR;
     if (init_sounds() == ERROR)
