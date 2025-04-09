@@ -27,7 +27,7 @@ void track_room_select(void) // COME HERE!!!!
         (mouse_gamepos.y / 50 - (mouse_gamepos.y < 0)) * 50};
     get_sprite("room_select")->pos = snapped_pos;
     if (snapped_pos.x != prev_pos.x || snapped_pos.y != prev_pos.y)
-        play_sound("click", MIN(10.0 * CAM->zoom, 20.0), 1.0);
+        play_sound("click", MIN(10.0 * CAM->zoom, MIN(TIME * 5, 20.0)), 1.0);
     prev_pos = snapped_pos;
 }
 
