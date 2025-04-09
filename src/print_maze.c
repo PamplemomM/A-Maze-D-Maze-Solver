@@ -39,9 +39,9 @@ void print_maze(maze_t *maze)
         return;
     mini_printf("#number_of_robots\n");
     PRINT("%d\n", maze->nb_robots);
-    mini_printf("#rooms\n");
     if (maze->rooms == NULL)
         return;
+    mini_printf("#rooms\n");
     print_rooms(maze->rooms, maze);
     if (maze->tunnels == NULL)
         return;
