@@ -70,7 +70,6 @@ int add_new_pathlist(pathlist_t **original, path_t *new)
         return ERROR;
     new_list->path = new;
     new_list->length = my_linked_size(&new);
-    mini_printf("moves founds :%d\n", new_list->length);
     new_list->next = NULL;
     if (current == NULL) {
         *original = new_list;
@@ -117,13 +116,10 @@ pathlist_t *find_allpath(maze_t *maze)
 
     if (maze == NULL)
         return NULL;
-    mini_printf("Creating a new path.\n");
     value = create_new_pathlist(maze, &paths);
     while (value == SUCCESS) {
-        mini_printf("Creating a new path.\n");
         value = create_new_pathlist(maze, &paths);
     }
-    mini_printf("\nPaths founds :%d\n\n", get_pathlist_size(paths));
     for (int i = 1; i < maze->nb_robots + 1; i++)
         display_paths(i, paths);
     return paths;
