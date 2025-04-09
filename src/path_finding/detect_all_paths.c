@@ -24,6 +24,7 @@ int free_pathlist(pathlist_t *paths)
     pathlist_t *current = paths;
     pathlist_t *next = NULL;
 
+    //mini_printf("Paths founds :%d\n", get_pathlist_size(paths));
     while (current != NULL) {
         next = current->next;
         free_paths(&current->path);
@@ -96,6 +97,8 @@ int display_paths(int i, pathlist_t *paths)
     path_t *current = NULL;
     pathlist_t *cur_list = paths;
 
+    if (cur_list == NULL)
+        return ERROR;
     for (int j = 1; j < i && cur_list->next != NULL; j++) {
         cur_list = cur_list->next;
     }
