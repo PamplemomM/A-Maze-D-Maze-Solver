@@ -116,11 +116,14 @@ int init_rooms(void);
 int create_tunnel_sprite(tunnel_t *tunnel);
 int init_tunnels(void);
 
-// --- init_misc_assets.c ---
-int init_blackscreen(void);
+// --- init_hud.c ---
 int init_compass(void);
 int init_logs(void);
 int init_progbar(void);
+
+// --- init_misc_assets.c ---
+int init_blackscreen(void);
+void setup_bg(int do_color);
 int init_bg(void);
 
 // --- robots_list.c ---

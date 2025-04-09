@@ -19,83 +19,27 @@ int init_blackscreen(void)
     return SUCCESS;
 }
 
-int init_compass(void)
+void setup_bg(int do_color)
 {
-    if (make_sprite("cmpa", "compass_arrow", 400, 300) == NULL)
-        return ERROR;
-    if (make_sprite("cmpp", "compass_pivot", 400, 300) == NULL)
-        return ERROR;
-    get_sprite("cmpa")->rect.width = 45;
-    get_sprite("cmpa")->color.a = 0;
-    get_sprite("cmpp")->color = color_from_hue(GAME->hue + 180,
-        255, 255, 0);
-    get_sprite("cmpa")->type = HUD;
-    get_sprite("cmpp")->type = HUD;
-    center_sprite_origin(get_sprite("cmpa"), 0.5, 4.0);
-    center_sprite_origin(get_sprite("cmpp"), 0.5, 0.5);
-    return SUCCESS;
-}
+    sfIntRect bounds = GAME->bounds;
+    float scalex = (float)bounds.width / (float)get_sprite("bg")->rect.width;
+    float scaley = (float)bounds.height / (float)get_sprite("bg")->rect.height;
+    float diag = sqrt(pow(bounds.width, 2) + pow(bounds.height, 2));
 
-int init_logs(void)
-{
-    if (make_sprite("logs", "AWESOME_PIXEL", -250, 0) == NULL)
-        return ERROR;
-    if (make_text("logstitle", "LOGS", -170, 1) == NULL)
-        return ERROR;
-    if (make_text("logstxt", "program launched", -243, 55) == NULL)
-        return ERROR;
-    get_sprite("logs")->scale = (sfVector2f){250, 600};
-    get_sprite("logs")->color = color_from_hue(0, 0, 0, 150);
-    get_sprite("logs")->type = HUD;
-    get_text("logstitle")->scale = (sfVector2f){0.8, 0.7};
-    get_text("logstitle")->color = color_from_hue(0, 255, 0, 255);
-    get_text("logstitle")->type = HUD;
-    get_text("logstxt")->scale = (sfVector2f){0.25, 0.25};
-    get_text("logstxt")->color = color_from_hue(0, 255, 0, 255);
-    get_text("logstxt")->type = HUD;
-    return SUCCESS;
-}
-
-int init_progbar(void)
-{
-    if (make_sprite("barprog", "AWESOME_PIXEL", 150, 552) == NULL)
-        return ERROR;
-    if (make_sprite("barbuff", "AWESOME_PIXEL", 150, 540) == NULL)
-        return ERROR;
-    if (make_sprite("barbg", "AWESOME_PIXEL", 148, 538) == NULL)
-        return ERROR;
-    get_sprite("barbg")->scale = (sfVector2f){504, 28.5};
-    get_sprite("barbg")->color = color_from_hue(0, 255, 0, 180);
-    get_sprite("barbg")->type = HUD;
-    get_sprite("barbuff")->scale = (sfVector2f){0, 24.5};
-    get_sprite("barbuff")->color = color_from_hue(GAME->hue + 180,
-        200, 255, 255);
-    get_sprite("barbuff")->type = HUD;
-    get_sprite("barprog")->scale = (sfVector2f){3, 36};
-    get_sprite("barprog")->color = color_from_hue(0, 255, 0, 255);
-    get_sprite("barprog")->type = HUD;
-    center_sprite_origin(get_sprite("barprog"), 0.5, 0.5);
-    return SUCCESS;
-}
-
-static void setup_bg(void)
-{
-    float scalex = (float)GAME->bounds.width
-        / (float)get_sprite("bg")->rect.width;
-    float scaley = (float)GAME->bounds.height
-        / (float)get_sprite("bg")->rect.height;
-    float diag = sqrt(pow(GAME->bounds.width, 2)
-        + pow(GAME->bounds.height, 2));
-
+    get_sprite("bg")->pos = (sfVector2f){bounds.left, bounds.top};
     get_sprite("bg")->scale = (sfVector2f){scalex, scaley};
-    get_sprite("bg")->type = NONE;
     get_sprite("bg")->color = color_from_hue(0, 255, 255, 255);
+    get_sprite("shadow")->pos = (sfVector2f){bounds.left,
+        bounds.top + bounds.height};
     get_sprite("shadow")->scale = (sfVector2f){diag - 0.2, 10000};
-    get_sprite("shadow")->angle = -atan2f(GAME->bounds.height,
-        GAME->bounds.width) * 180.0 / M_PI;
+    get_sprite("shadow")->angle = -atan2f(bounds.height,
+        bounds.width) * 180.0 / M_PI;
     get_sprite("shadow")->color = color_from_hue(0, 0, 0, 75);
+    get_sprite("light")->pos = (sfVector2f){(bounds.left + bounds.width) / 2.0,
+        (bounds.top + bounds.height) / 2.0};
     get_sprite("light")->scale = (sfVector2f){15, 20};
-    get_sprite("light")->color = color_from_hue(GAME->hue, 255, 255, 255);
+    if (do_color)
+        get_sprite("light")->color = color_from_hue(GAME->hue, 255, 255, 255);
     center_sprite_origin(get_sprite("light"), 0.5, 0.5);
 }
 
@@ -106,8 +50,10 @@ int init_bg(void)
     if (make_sprite("shadow", "AWESOME_PIXEL", GAME->bounds.left,
         GAME->bounds.top + GAME->bounds.height) == NULL)
         return ERROR;
-    if (make_sprite("light", "gradient", CAM->center.x, CAM->center.y) == NULL)
+    if (make_sprite("light", "gradient",
+        (GAME->bounds.left + GAME->bounds.width) / 2.0,
+        (GAME->bounds.top + GAME->bounds.height) / 2.0) == NULL)
         return ERROR;
-    setup_bg();
+    setup_bg(1);
     return SUCCESS;
 }

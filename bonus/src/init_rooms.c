@@ -30,13 +30,13 @@ sfIntRect update_bounds(room_t *room)
 {
     sfIntRect bounds = GAME->bounds;
 
-    if (GAME->bounds.left == -1 || room->x < GAME->bounds.left)
+    if (bounds.left == -1 || room->x < bounds.left)
         bounds.left = room->x;
-    if (GAME->bounds.top == -1 || room->y < GAME->bounds.top)
+    if (bounds.top == -1 || room->y < bounds.top)
         bounds.top = room->y;
-    if (GAME->bounds.width == -1 || room->x > GAME->bounds.width)
+    if (bounds.width == -1 || room->x > bounds.width)
         bounds.width = room->x;
-    if (GAME->bounds.height == -1 || room->y > GAME->bounds.height)
+    if (bounds.height == -1 || room->y > bounds.height)
         bounds.height = room->y;
     return bounds;
 }
