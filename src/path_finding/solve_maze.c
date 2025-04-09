@@ -99,7 +99,7 @@ static int find_robot_move(room_t *current, maze_t *maze,
             continue;
         if (tunnel->val == 1) {
             tunnel->val = 2;
-            add_new_path(path, current->links[i]->name);
+            add_new_path(path, current->links[i]->name, FALSE);
             find_robot_move(current->links[i], maze, path);
             break;
         }

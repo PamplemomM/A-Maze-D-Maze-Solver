@@ -39,7 +39,7 @@ static int find_all_moves(room_t *current, maze_t *maze,
             rev_tunnel->val = 1;
         tunnel->val = 1;
         if (find_all_moves(current->links[i], maze, path) == SUCCESS) {
-            add_new_path(path, current->links[i]->name);
+            add_new_path(path, current->links[i]->name, TRUE);
             return SUCCESS;
         }
     }
