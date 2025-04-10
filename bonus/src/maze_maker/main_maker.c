@@ -79,7 +79,9 @@ int interact_maker(void)
     if (GAME->state == MKR_NONE
         && KEYPRESS(sfKeyE) && get_sprite("room_select")->draw) {
         GAME->state = MKR_EXIT;
-        return place_room();
+        if (place_room() == ERROR)
+            return ERROR;
+        GAME->state = MKR_NONE;
     }
     if (GAME->state == MKR_NONE
         && KEYPRESS(sfKeyS) && get_timer("save_cdwn") == NULL) {

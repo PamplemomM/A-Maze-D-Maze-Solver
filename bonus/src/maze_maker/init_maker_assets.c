@@ -57,7 +57,7 @@ static int init_maker_music(void)
     if (play_music("Floor One", "Dorkus64 - Floor One", 0, 1.0) == NULL)
         return ERROR;
     make_tween("music_fadein", &MUSIC->volume,
-        0, 5.0)->method = EASEINOUT; // go fuck youruseellf
+        60, 5.0)->method = EASEINOUT;
     sfMusic_setLoop(MUSIC->music, sfTrue);
     return SUCCESS;
 }
