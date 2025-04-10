@@ -115,6 +115,7 @@ int parse_tunnel(maze_t **maze, char *line);
 
 // --- create_move_sequence.c ---
 int display_every_move_humanread(maze_t *maze);
+int get_move_length(maze_t *maze);
 int display_every_move(maze_t *maze);
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size);

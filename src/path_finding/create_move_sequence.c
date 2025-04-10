@@ -33,22 +33,6 @@ int get_move_length(maze_t *maze)
     return max;
 }
 
-int display_every_move(maze_t *maze)
-{
-    move_t *headcpy = maze->moves;
-    move_t *current = maze->moves;
-    int actual_id = 1;
-
-    while (current != NULL) {
-        while ()
-        mini_printf("Moving %d in ", current->robot);
-        mini_printf("%s during ", current->room_name);
-        mini_printf("%d\n", current->id);
-        current = current->next;
-    }
-    return SUCCESS;
-}
-
 
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size)
