@@ -117,6 +117,7 @@ int create_new_pathlist(maze_t *maze, pathlist_t **paths);
 pathlist_t *find_allpath(maze_t *maze);
 
 // --- display_robots_move.c ---
+int get_pathcount(pathlist_t *paths);
 int get_movelength(int path_size, int robot_count);
 path_t *get_shortest_path_temp(pathlist_t *paths);
 int my_linked_size(path_t **node);
