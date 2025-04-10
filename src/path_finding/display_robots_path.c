@@ -62,14 +62,15 @@ int find_path_lower(pathlist_t **paths)
 int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
 {
     pathlist_t *current = *paths;
-    pathlist_t *shortest = get_shortest_pathlist(paths);
+    path_t *shortest_path = get_shortest_path_temp(paths);
+    int shortest = my_linked_size(&shortest_path);
     pathlist_t *tmp = NULL;
 
     if (*paths == NULL || maze->nb_robots == 1)
         return SUCCESS;
     while (current != NULL) {
         tmp = current->next;
-        if (MAX(maze->nb_robots, shortest->length) <= current->length +
+        if (MAX(maze->nb_robots, shortest) <= current->length +
             current->lower)
             delete_path_fromlist(current, paths);
         current = tmp;
