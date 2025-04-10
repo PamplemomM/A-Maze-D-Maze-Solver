@@ -7,6 +7,11 @@
 
 #include "../../include/header_amazed.h"
 
+int display_every_move(maze_t *maze)
+{
+    return SUCCESS;
+}
+
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size)
 {
