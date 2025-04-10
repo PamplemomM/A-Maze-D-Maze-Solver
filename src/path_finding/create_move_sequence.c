@@ -20,10 +20,17 @@ int display_every_move_humanread(maze_t *maze)
     return SUCCESS;
 }
 
-int get_move_length()
+int get_move_length(maze_t *maze)
 {
-    int cpt = 0;
-    return cpt;
+    move_t *current = maze->moves;
+    int max = 0;
+
+    while (current != NULL) {
+        if (current->id > max)
+            max = current->id;
+        current = current->next;
+    }
+    return max;
 }
 
 int display_every_move(maze_t *maze)
