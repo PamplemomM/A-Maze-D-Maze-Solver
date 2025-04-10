@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2025
-** sort_path.c
+** sort_pathlist.c
 ** File description:
-** The file that will sort all the paths.
+** The file that will sort all the pathlist.
 */
 
 #include "../../include/header_amazed.h"

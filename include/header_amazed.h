@@ -157,6 +157,9 @@ int add_new_path(path_t **node, char *room, int pushing);
 int find_solved_maze_one_line(maze_t *maze);
 int find_solved_maze(maze_t *maze);
 
+// --- sort_pathlist.c ---
+int sort_path(pathlist_t **paths);
+
 
 // ----------- LIB FUNCTIONS -----------
 
