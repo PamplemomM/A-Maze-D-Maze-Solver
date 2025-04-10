@@ -26,8 +26,6 @@ int initialise_moving_sequence(pathlist_t **paths, maze_t *maze)
         if (MAX(maze->nb_robots - start_id + 1, shortest + 1) >
             current->length + current->lower)
             move_robot_untilend(&current, start_id, i, maze);
-        else
-            mini_printf("BAD\n");
         current = current->next;
         if (current == NULL)
             current = *paths;
