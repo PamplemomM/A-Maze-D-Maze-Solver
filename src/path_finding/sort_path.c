@@ -25,7 +25,7 @@ static int insert_list(pathlist_t **paths, pathlist_t *new_node)
     return SUCCESS;
 }
 
-static int sort_path(pathlist_t **paths)
+int sort_path(pathlist_t **paths)
 {
     pathlist_t *list = NULL;
     pathlist_t *current = *paths;
