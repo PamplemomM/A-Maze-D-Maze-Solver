@@ -16,15 +16,15 @@ static int free_singlepath(pathlist_t *node)
     return SUCCESS;
 }
 
-static int destroy_firstpath(pathlist_t *list)
+static int destroy_firstpath(pathlist_t *paths)
 {
     pathlist_t *next = NULL;
 
-    if (list == NULL)
+    if (paths == NULL)
         return;
-    next = list->next;
-    free_singlepath(list);
-    list = next;
+    next = paths->next;
+    free_singlepath(paths);
+    paths = next;
     return SUCCESS;
 }
 
@@ -44,13 +44,13 @@ static int destroy_lastpath(pathlist_t *paths)
     return SUCCESS;
 }
 
-
-static void destroy_middlepath(pathlist_t *paths)
+static int destroy_middlepath(pathlist_t *paths)
 {
     pathlist_t *temp = NULL;
 
     temp = paths->next;
     paths->next = temp->next;
     free_singlepath(temp);
+    return SUCCESS;
 }
 
