@@ -16,7 +16,7 @@ static int free_singlepath(pathlist_t *node)
     return SUCCESS;
 }
 
-static int destroy_first(pathlist_t *list)
+static int destroy_firstpath(pathlist_t *list)
 {
     pathlist_t *next = NULL;
 
@@ -28,7 +28,7 @@ static int destroy_first(pathlist_t *list)
     return SUCCESS;
 }
 
-static int destroy_last(pathlist_t *paths)
+static int destroy_lastpath(pathlist_t *paths)
 {
     pathlist_t *current = paths;
 
@@ -45,7 +45,7 @@ static int destroy_last(pathlist_t *paths)
 }
 
 
-static void destroy_middle(pathlist_t *paths)
+static void destroy_middlepath(pathlist_t *paths)
 {
     pathlist_t *temp = NULL;
 
