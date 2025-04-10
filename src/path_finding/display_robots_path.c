@@ -7,12 +7,26 @@
 
 #include "../../include/header_amazed.h"
 
+int get_lowerpath_count(pathlist_t *paths, pathlist_t *current)
+{
+    int cpt = 0;
+    pathlist_t *curr = paths;
+
+    while (curr != NULL) {
+        
+    }
+}
+
 int calculate_paths_proportion(pathlist_t *paths, maze_t *maze)
 {
-    int max_id = get_movelength(paths->length, maze->nb_robots);
+    pathlist_t *current = paths;
 
     if (paths == NULL)
         return ERROR;
+    while (current != NULL) {
+        
+        current = current->next;
+    }
     return SUCCESS;
 }
 /*
