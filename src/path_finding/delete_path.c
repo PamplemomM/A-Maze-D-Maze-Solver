@@ -16,26 +16,15 @@ static int free_singlepath(pathlist_t *node)
     return SUCCESS;
 }
 
-int delete_path_fromlist(pathlist_t *paths, pathlist_t *node)
+static int destroy_first(pathlist_t *list)
 {
-    pathlist_t *temp = paths;
-    pathlist_t *prev = temp;
+    pathlist_t *next = NULL;
 
-    if (temp == node) {
-        paths = temp->next;
-        free_pathlist(temp);
-        return SUCCESS;
-    }
-    temp = temp->next;
-    while (temp != NULL) {
-        if (temp == node) {
-            prev->next = temp->next;
-            free_pathlist(temp);
-            return SUCCESS;
-        }
-        prev = temp;
-        temp = temp->next;
-    }
+    if (list == NULL)
+        return;
+    next = list->next;
+    free_singlepath(list);
+    list = next;
     return SUCCESS;
 }
 
