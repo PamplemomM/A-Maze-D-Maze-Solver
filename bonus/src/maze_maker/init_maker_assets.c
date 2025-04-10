@@ -46,7 +46,7 @@ static int init_maker_music(void)
     if (play_music("Floor One", "Dorkus64 - Floor One", 0, 1.0) == NULL)
         return ERROR;
     make_tween("music_fadein", &MUSIC->volume,
-        60, 5.0)->method = EASEINOUT;
+        0, 5.0)->method = EASEINOUT; // go fuck youruseellf
     sfMusic_setLoop(MUSIC->music, sfTrue);
     return SUCCESS;
 }
@@ -56,8 +56,7 @@ int init_maker_assets(void)
     create_window(800, 600, "A-MAZE-D VIEWER!");
     *get_clock() = sfClock_create();
     MAZE->nb_robots = 1;
-    GAME->state = BUILD;
-    GAME->tool = T_ROOM;
+    GAME->state = MKR_NONE;
     GAME->bounds = (sfIntRect){0, 0, 1, 1};
     if (init_cam() == NULL)
         return ERROR;

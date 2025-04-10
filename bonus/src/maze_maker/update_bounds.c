@@ -139,15 +139,15 @@ static void update_tunnels_pos(sfVector2i offset)
     }
 }
 
-int update_rooms_pos(sprite_t *select)
+int update_rooms_pos(sprite_t *select, int add_or_del)
 {
     room_t *room = MAZE->rooms;
     sfVector2i offset;
 
-    if (GAME->state == BUILD) {
+    if (add_or_del == 0) {
         offset = (sfVector2i){abs(MIN(select->pos.x, 0)),
             abs(MIN(select->pos.y, 0))};
-    } else if (GAME->state == BREAK) {
+    } else if (add_or_del == 1) {
         update_maker_bounds();
         offset = (sfVector2i)
             {-200 - GAME->bounds.left, -200 - GAME->bounds.top};

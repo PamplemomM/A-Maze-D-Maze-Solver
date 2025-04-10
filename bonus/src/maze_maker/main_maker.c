@@ -37,56 +37,58 @@ int interact_room(void)
     sprite_t *select = get_sprite("room_select");
     char *name = make_room_name(select->pos);
 
-    if (MAZE->start != NULL && get_room(name, MAZE) == MAZE->start) {
-        OMNIFREE(name, 1);
-        return SUCCESS;
-    }
-    if (GAME->state == BUILD && get_room(name, MAZE) == NULL) {
+    if (GAME->state == MKR_ROOM && get_room(name, MAZE) == NULL) {
         if (place_room() == ERROR) {
             OMNIFREE(name, 1);
             return ERROR;
         }
-    } else if (GAME->state == BREAK && get_room(name, MAZE) != NULL) {
+    } else if (GAME->state == MKR_DESTROY && get_room(name, MAZE) != NULL) {
         destroy_room(get_room(name, MAZE));
-        update_rooms_pos(select);
+        update_rooms_pos(select, 1);
     }
     OMNIFREE(name, 1);
     return SUCCESS;
 }
 
+int set_interaction(void)
+{
+    if ((GAME->state == MKR_NONE || GAME->state == MKR_ROOM)
+        && MOUSEPRESS(sfMouseLeft)) {
+        GAME->state = MKR_ROOM;
+        return SUCCESS;
+    }
+    if ((GAME->state == MKR_NONE || GAME->state == MKR_DESTROY)
+        && KEYPRESS(sfKeyLControl)) {
+        GAME->state = MKR_DESTROY;
+        return SUCCESS;
+    }
+    if ((GAME->state == MKR_NONE || GAME->state == MKR_TUNNEL)
+        && KEYPRESS(sfKeyLAlt)) {
+        GAME->state = MKR_TUNNEL;
+        return SUCCESS;
+    }
+    GAME->state = MKR_NONE;
+    return SUCCESS;
+}
+
 int interact_maker(void)
 {
-    if (KEYPRESS(sfKeyS) && get_timer("save_cdwn") == NULL) {
-        save_maze();
-        run_timer("save_cdwn", 1.0);
-    }
-    if (MOUSEPRESS(sfMouseLeft) && get_sprite("room_select")->draw) {
-        if (GAME->tool == T_ROOM && interact_room() == ERROR)
-            return ERROR;
-        if (GAME->tool == T_TUNNEL && interact_tunnel() == ERROR)
-            return ERROR;
-    }
-    if (KEYPRESS(sfKeyLControl))
-        GAME->state = BREAK;
-    else
-        GAME->state = BUILD;
-    if (KEYPRESS(sfKeyE) && get_sprite("room_select")->draw) { // unaffected by state
-        GAME->tool = T_EXIT;
-        GAME->state = BUILD;
-        if (place_room() == ERROR)
-            return ERROR;
-        GAME->state = BREAK;
-        update_rooms_pos(get_sprite("room_select"));
-        GAME->tool = T_ROOM;
-        GAME->state = BUILD;
-    }
-    if (KEYPRESS(sfKeyLAlt)) { // force BUILD state
-        GAME->tool = T_TUNNEL;
-    } else {
-        GAME->tool = T_ROOM;
-    }
-    if (interact_tunnel() == ERROR)
+    if (set_interaction() == ERROR)
         return ERROR;
+    if (GAME->state == MKR_ROOM || GAME->state == MKR_DESTROY)
+        return interact_room();
+    interact_tunnel();
+    if (GAME->state == MKR_NONE
+        && KEYPRESS(sfKeyE) && get_sprite("room_select")->draw) {
+        GAME->state = MKR_EXIT;
+        return place_room();
+    }
+    if (GAME->state == MKR_NONE
+        && KEYPRESS(sfKeyS) && get_timer("save_cdwn") == NULL) {
+        run_timer("save_cdwn", 1.0);
+        save_maze();
+        return SUCCESS;
+    }
     return SUCCESS;
 }
 
@@ -95,9 +97,9 @@ void events_maker(void)
     sfEvent event;
 
     cam_move_keys();
+    track_room_select();
     interact_maker(); // this can return ERROR
     interact_sim_logs();
-    track_room_select();
     while (sfRenderWindow_pollEvent(WINDOW, &event)) {
         if (event.type == sfEvtMouseMoved)
             cam_move_mouse(event.mouseMove);

@@ -42,25 +42,10 @@ static void toggle_gamestate_rewind(gamestate_t state)
     }
 }
 
-static void toggle_gamestate_maker(gamestate_t state)
-{
-    if (state == BUILD) {
-        GAME->state = state;
-        text_jumpscare("BUILD MODE", 1);
-        play_sound("mode_build", 75, diceroll(90, 110) / 100.0);
-    }
-    if (state == BREAK) {
-        GAME->state = state;
-        text_jumpscare("BREAK MODE", 1);
-        play_sound("mode_break", 75, diceroll(90, 110) / 100.0);
-    }
-}
-
 void toggle_gamestate(gamestate_t state)
 {
     if (GAME->state == state)
         return;
     toggle_gamestate_playpause(state);
     toggle_gamestate_rewind(state);
-    toggle_gamestate_maker(state);
 }

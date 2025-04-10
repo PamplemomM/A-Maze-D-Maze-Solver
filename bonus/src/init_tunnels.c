@@ -11,9 +11,13 @@ void setup_tunnel(sprite_t *sprite, room_t *start, room_t *dest)
 {
     int diffx = dest->x - start->x;
     int diffy = dest->y - start->y;
-    int diffd = sqrt(pow(diffx, 2) + pow(diffy, 2)) - 60;
+    int diffd = MAX(sqrt(pow(diffx, 2) + pow(diffy, 2)) - 40, 15);
     float traj = atan2f(diffx, -diffy) * 180.0 / M_PI;
 
+    if (diffx == 0 && diffy == 0)
+        sprite->draw = 0;
+    else
+        sprite->draw = 1;
     sprite->pos.x = (dest->x + start->x) / 2.0;
     sprite->pos.y = (dest->y + start->y) / 2.0;
     sprite->scale.y = diffd / (float)sprite->rect.height;

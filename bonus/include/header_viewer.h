@@ -27,16 +27,12 @@ typedef enum game_states_s {
     PLAY,
     PAUSE,
     REWIND,
-    BUILD,
-    BREAK
+    MKR_NONE,
+    MKR_ROOM,
+    MKR_EXIT,
+    MKR_TUNNEL,
+    MKR_DESTROY
 } gamestate_t;
-
-typedef enum maker_tool_s {
-    T_NONE,
-    T_ROOM,
-    T_EXIT,
-    T_TUNNEL
-} maker_tool_t;
 
 typedef struct vwr_robot_s {
     struct vwr_robot_s *next;
@@ -48,7 +44,6 @@ typedef struct vwr_robot_s {
 
 typedef struct game {
     gamestate_t state;
-    maker_tool_t tool;
     int logs;
     sfIntRect bounds;
     float hue;
@@ -166,7 +161,7 @@ void save_maze(void);
 
 // --- update_bounds.c ---
 void update_maker_bounds(void);
-int update_rooms_pos(sprite_t *select);
+int update_rooms_pos(sprite_t *select, int add_or_del);
 
 // --- init_maker_assets.c ---
 int init_maker_assets(void);

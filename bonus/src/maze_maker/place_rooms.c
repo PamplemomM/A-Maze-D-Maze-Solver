@@ -73,7 +73,7 @@ void destroy_room(room_t *room)
     sprite_t *select = get_sprite("room_select");
     char *name = NULL;
 
-    if (room == NULL)
+    if (room == NULL || room == MAZE->start)
         return;
     name = merge_str("room_", room->name);
     if (name == NULL)
@@ -126,18 +126,19 @@ int place_room(void)
     if (name == NULL)
         return ERROR;
     if (get_room(name, MAZE) != NULL) {
-        if (!(GAME->tool == T_EXIT && get_room(name, MAZE) != MAZE->end
-            && get_room(name, MAZE) != MAZE->start)) {
+        if (get_room(name, MAZE) == MAZE->end
+            || get_room(name, MAZE) == MAZE->start) {
             OMNIFREE(name, 1);
             return SUCCESS;
         }
-        destroy_room(get_room(name, MAZE));
+        if (GAME->state == MKR_EXIT)
+            destroy_room(get_room(name, MAZE));
     }
     if (add_room(name, select->pos.x, select->pos.y, &MAZE) == ERROR) {
         OMNIFREE(name, 1);
         return ERROR;
     }
-    if (GAME->tool == T_EXIT) {
+    if (GAME->state == MKR_EXIT) {
         destroy_room(MAZE->end);
         MAZE->end = get_room(name, MAZE);
     }
@@ -146,8 +147,10 @@ int place_room(void)
     room_modifs(get_room(name, MAZE));
     OMNIFREE(name, 1);
     update_maker_bounds();
-    update_rooms_pos(select);
+    update_rooms_pos(select, 0);
     play_sound("place", MIN(40.0 * CAM->zoom + 30.0, 90.0),
         diceroll(90, 110) / 100.0);
+    if (GAME->state == MKR_EXIT)
+        update_rooms_pos(select, 1);
     return SUCCESS;
 }

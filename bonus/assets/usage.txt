@@ -30,9 +30,9 @@ USER INTERACTIONS:
 	Quit program...................	'ESCAPE'
 
 MAKER CONTROLS:
-	Place / Destroy................	'LMB'
-	Tunnel mode....................	'LALT' (hold)
-	Destroy mode...................	'LCTRL' (hold)
+	Place room.....................	'LMB'
+	Destroy room...................	'LCTRL'
+	Create tunnel..................	'LALT' (hold and drag to next room)
 	Place end room.................	'E'
 	Save maze......................	'S'
 
