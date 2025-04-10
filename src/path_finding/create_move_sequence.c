@@ -7,7 +7,7 @@
 
 #include "../../include/header_amazed.h"
 
-int display_every_move(maze_t *maze)
+int display_every_move_humanread(maze_t *maze)
 {
     move_t *current = maze->moves;
 
@@ -19,6 +19,29 @@ int display_every_move(maze_t *maze)
     }
     return SUCCESS;
 }
+
+int get_move_length()
+{
+    int cpt = 0;
+    return cpt;
+}
+
+int display_every_move(maze_t *maze)
+{
+    move_t *headcpy = maze->moves;
+    move_t *current = maze->moves;
+    int actual_id = 1;
+
+    while (current != NULL) {
+        while ()
+        mini_printf("Moving %d in ", current->robot);
+        mini_printf("%s during ", current->room_name);
+        mini_printf("%d\n", current->id);
+        current = current->next;
+    }
+    return SUCCESS;
+}
+
 
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size)
