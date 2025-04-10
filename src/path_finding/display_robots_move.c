@@ -12,9 +12,9 @@ int get_movelength(int path_size, int robot_count)
     return path_size + robot_count - 2;
 }
 
-path_t *get_shortest_path_temp(pathlist_t *paths)
+path_t *get_shortest_path_temp(pathlist_t **paths)
 {
-    pathlist_t *current = paths;
+    pathlist_t *current = *paths;
     path_t *winner = NULL;
     int min = 0;
 

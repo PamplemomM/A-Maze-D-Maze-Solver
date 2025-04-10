@@ -7,12 +7,75 @@
 
 #include "../../include/header_amazed.h"
 
-int calculate_paths_proportion(pathlist_t *paths, maze_t *maze)
+int get_pathcount(pathlist_t **paths)
 {
-    int max_id = get_movelength(paths->length, maze->nb_robots);
+    int cpt = 0;
+    pathlist_t *current = *paths;
 
-    if (paths == NULL)
-        return ERROR;
+    while (current != NULL) {
+        cpt++;
+        current = current->next;
+    }
+    return cpt;
+}
+
+pathlist_t *get_shortest_pathlist(pathlist_t **paths)
+{
+    pathlist_t *shortest = NULL;
+    pathlist_t *current = *paths;
+    int min = MAX_INT;
+
+    while (current != NULL) {
+        if (current->length < min) {
+            min = current->length;
+            shortest = current;
+        }
+        current = current->next;
+    }
+    return shortest;
+}
+
+int get_lowerpath_count(pathlist_t **paths, pathlist_t *current)
+{
+    int cpt = 0;
+    pathlist_t *curr = *paths;
+
+    while (curr != NULL) {
+        if ((curr != current) && (curr->length < current->length))
+            cpt++;
+        curr = curr->next;
+    }
+    return cpt;
+}
+
+int find_path_lower(pathlist_t **paths)
+{
+    pathlist_t *current = *paths;
+
+    while (current != NULL) {
+        current->lower = get_lowerpath_count(paths, current);
+        current = current->next;
+    }
+    return SUCCESS;
+}
+
+int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
+{
+    pathlist_t *current = *paths;
+    path_t *shortest_path = get_shortest_path_temp(paths);
+    int shortest = my_linked_size(&shortest_path);
+    pathlist_t *tmp = NULL;
+
+    if (*paths == NULL)
+        return SUCCESS;
+    while (current != NULL) {
+        tmp = current->next;
+        if (MAX(maze->nb_robots, shortest + 1) <= current->length +
+            current->lower) {
+            delete_path_fromlist(current, paths);
+        }
+        current = tmp;
+    }
     return SUCCESS;
 }
 /*

@@ -20,9 +20,15 @@
     #define ERROR 84
     #define TRUE 1
     #define FALSE 0
+    #define MAX_INT 2147483647
+    #define MAX(a, b) ((a) > (b) ? (a) : (b))
     #define ABS(nb) (nb < 0) ? -nb : nb
     #define OMNIFREE(thing, dimension) omnifree((void ***)&thing, dimension)
     #define PRINT(format, ...) mini_printf(format, __VA_ARGS__)
+
+    #define CEILING_POS(X) ((X - (int)(X)) > 0 ? (int)(X + 1) : (int)(X))
+    #define CEILING_NEG(X) (int)(X)
+    #define CEILING(X) (((X) > 0) ? CEILING_POS(X) : CEILING_NEG(X))
 
 // -------- A-MAZE-D STRUCTURES --------
 
@@ -43,6 +49,7 @@ typedef struct path_s {
 typedef struct pathlist_s {
     path_t *path;
     int length;
+    int lower;
     struct pathlist_s *next;
 } pathlist_t;
 
@@ -57,6 +64,7 @@ typedef struct move_s {
     struct move_s *next;
     int id;
     int robot;
+    char *room_name;
     room_t *dest;
 } move_t;
 
@@ -105,23 +113,41 @@ int parse_tunnel(maze_t **maze, char *line);
 
 // --------- PATH_FINDING FOLDER ---------
 
+// --- create_move_sequence.c ---
+int display_every_move_humanread(maze_t *maze);
+int get_move_length(maze_t *maze);
+int display_every_move(maze_t *maze);
+int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
+    int path_size);
+int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
+    maze_t *maze);
+
+// --- delete_path.c ---
+int delete_path_fromlist(pathlist_t *element, pathlist_t **paths);
+
 // --- detect_all_paths.c ---
 int get_pathlist_size(pathlist_t *paths);
-int free_pathlist(pathlist_t *paths);
+int free_pathlist(pathlist_t **paths);
 int add_new_pathlist(pathlist_t **original, path_t *new);
 int create_new_pathlist(maze_t *maze, pathlist_t **paths);
 pathlist_t *find_allpath(maze_t *maze);
 
 // --- display_robots_move.c ---
 int get_movelength(int path_size, int robot_count);
-path_t *get_shortest_path_temp(pathlist_t *paths);
+path_t *get_shortest_path_temp(pathlist_t **paths);
 int my_linked_size(path_t **node);
 int display_robots_move_singlepath(path_t *good_path, maze_t *maze);
 
 // --- display_robot_path.c ---
-int calculate_paths_proportion(pathlist_t *paths, maze_t *maze);
+int get_pathcount(pathlist_t **paths);
+pathlist_t *get_shortest_pathlist(pathlist_t **paths);
+int get_lowerpath_count(pathlist_t **paths, pathlist_t *current);
+int find_path_lower(pathlist_t **paths);
+int calculate_paths_proportion(pathlist_t **paths, maze_t *maze);
 
 // --- make_move.c ---
+move_t *make_move_wthname(int robot_id, char *name, int move_id,
+    maze_t *maze);
 move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
 
 // --- push_topath.c ---
@@ -129,12 +155,19 @@ int push_path_front(path_t **node, path_t *new_path);
 int push_path_back(path_t **node, path_t *new_path);
 
 // --- find_moves.c ---
+int display_paths_order(pathlist_t **paths);
 move_t *find_moves(maze_t *maze, int current_id);
 
 // --- solve_maze.c ---
 int free_paths(path_t **paths);
 int add_new_path(path_t **node, char *room, int pushing);
+int find_solved_maze_one_line(maze_t *maze);
 int find_solved_maze(maze_t *maze);
+
+// --- sort_pathlist.c ---
+int sort_paths(pathlist_t **paths);
+int insert_list(pathlist_t **paths, pathlist_t *new_node);
+int sort_path(pathlist_t **paths);
 
 
 // ----------- LIB FUNCTIONS -----------

@@ -88,12 +88,16 @@ static int find_robot_move(room_t *current, maze_t *maze,
 int find_solved_maze_one_line(maze_t *maze)
 {
     path_t *good_path = NULL;
+    pathlist_t *paths = NULL;
 
     if (maze == NULL)
         return ERROR;
     find_robot_move(maze->start, maze, &good_path);
-    display_robots_move_singlepath(good_path, maze);
     free_paths(&good_path);
+    paths = find_allpath(maze);
+    good_path = get_shortest_path_temp(&paths);
+    display_robots_move_singlepath(good_path, maze);
+    free_pathlist(&paths);
     return SUCCESS;
 }
 
@@ -107,12 +111,22 @@ int find_solved_maze(maze_t *maze)
     find_robot_move(maze->start, maze, &good_path);
     free_paths(&good_path);
     paths = find_allpath(maze);
-    good_path = get_shortest_path_temp(paths);
-    display_robots_move_singlepath(good_path, maze);
-    free_pathlist(paths);
+    find_path_lower(&paths);
+    calculate_paths_proportion(&paths, maze);
+    sort_path(&paths);
+    initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
+    display_every_move(maze);
+    free_pathlist(&paths);
     return SUCCESS;
 }
 
+/* Debug prints:
+display_paths_order(&paths);
+mini_printf("%d paths founds!\n", get_pathcount(&paths));
+initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
+good_path = get_shortest_path_temp(&paths);
+display_robots_move_singlepath(good_path, maze);
+*/
 int detect_moves(maze_t *maze)
 {
     move_t *moves = NULL;

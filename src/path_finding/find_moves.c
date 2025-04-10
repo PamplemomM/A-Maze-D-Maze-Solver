@@ -7,6 +7,17 @@
 
 #include "../../include/header_amazed.h"
 
+int display_paths_order(pathlist_t **paths)
+{
+    pathlist_t *current = *paths;
+
+    while (current != NULL) {
+        mini_printf(" -- %d --\n", current->length);
+        current = current->next;
+    }
+    return SUCCESS;
+}
+
 static path_t *add_path_node(path_t **head, room_t *room)
 {
     path_t *headcpy = *head;

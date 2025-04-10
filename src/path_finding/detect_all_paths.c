@@ -19,9 +19,9 @@ int get_pathlist_size(pathlist_t *paths)
     return cpt;
 }
 
-int free_pathlist(pathlist_t *paths)
+int free_pathlist(pathlist_t **paths)
 {
-    pathlist_t *current = paths;
+    pathlist_t *current = *paths;
     pathlist_t *next = NULL;
 
     while (current != NULL) {
@@ -30,7 +30,7 @@ int free_pathlist(pathlist_t *paths)
         free(current);
         current = next;
     }
-    paths = NULL;
+    *paths = NULL;
     return SUCCESS;
 }
 
@@ -89,10 +89,10 @@ int create_new_pathlist(maze_t *maze, pathlist_t **paths)
     return value;
 }
 
-static int display_paths(int i, pathlist_t *paths)
+static int display_paths(int i, pathlist_t **paths)
 {
     path_t *current = NULL;
-    pathlist_t *cur_list = paths;
+    pathlist_t *cur_list = *paths;
 
     if (cur_list == NULL)
         return ERROR;
