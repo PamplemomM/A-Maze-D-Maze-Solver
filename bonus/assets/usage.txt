@@ -1,46 +1,45 @@
-
 USAGE:
 	[MAZE] | ./viewer
-	cat [FILE] | ./viewer
 	./viewer < [FILE]
+	./viewer -m (to launch the maze maker)
 
 	MAZE: data of a solved maze.
 	FILE: a file containing data of a solved maze.
 
-A-MAZE-D VIEWER:
+DESCRIPTION:
 	This program acts as a visualizer for the A-Maze-d project.
-	It reads, on the standard input, the data of a maze, parsed
-	and solved by the A-Maze-d program.
+
+	The viewer reads, on the standard input, the data of a maze,
+	parsed and solved by the A-Maze-d program.
 	It will display a representation of the given maze, with all
 	of its rooms and tunnels, and simulate the robots' movements
 	from the start to the end of the maze.
 
+	The maze maker lets you build your own maze, from start to
+	finish. Rooms and tunnels can be placed wherever you wish,
+	with no limit to how many of them the program can handle.
+	Once done, you can export your maze, which will be written
+	inside of a file, located in your current directory.
+
 USER INTERACTIONS:
-	Play / Pause...................	'SPACEBAR'
-	Rewind to start................	'BACKSPACE'
-	Next move......................	'N' or '+'
-	Previous move..................	'B' or '-'
+	VIEWER:
+		Play / Pause...................	'SPACEBAR'
+		Rewind to start................	'BACKSPACE'
+		Next move......................	'N' or '+'
+		Previous move..................	'B' or '-'
+	MAKER:
+		Place room.....................	'LMB'
+		Destroy room...................	'LCTRL'
+		Create tunnel..................	'LALT' (hold and drag to next room)
+		Place end room.................	'E'
+		Add a robot....................	'N' or '+'
+		Remove a robot.................	'B' or '-'
+		Save maze......................	'S'
+	GENERAL:
+		Toggle logs....................	'TAB'
+		Move camera....................	Arrow keys or 'RMB' + 'Mouse move'
+		Zoom camera in.................	'C' or 'Up scroll'
+		Zoom camera out................	'X' or 'Down scroll'
+		Speed up camera................	'LSHIFT'
 
-	Toggle logs....................	'TAB'
-	Move camera....................	Arrow keys or 'RMB' + 'Mouse move'
-	Zoom camera in.................	'C' or 'Up scroll'
-	Zoom camera out................	'X' or 'Down scroll'
-	Speed up camera................	'LSHIFT'
-
-	Quit program...................	'ESCAPE'
-
-MAKER CONTROLS:
-	Place room.....................	'LMB'
-	Destroy room...................	'LCTRL'
-	Create tunnel..................	'LALT' (hold and drag to next room)
-	Place end room.................	'E'
-	Save maze......................	'S'
-
-	Toggle logs....................	'TAB'
-	Move camera....................	Arrow keys or 'RMB' + 'Mouse move'
-	Zoom camera in.................	'C' or 'Up scroll'
-	Zoom camera out................	'X' or 'Down scroll'
-	Speed up camera................	'LSHIFT'
-
-	Quit program...................	'ESCAPE'
-
+		Quit program...................	'ESCAPE'

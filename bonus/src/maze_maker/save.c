@@ -78,6 +78,8 @@ void save_maze(void)
         text_jumpscare("File couldn't open!!! :'(", 2);
         return;
     }
+    write(fd, "# This maze was made with Pathie's maze maker.\n",
+    strlen("# This maze was made with Pathie's maze maker.\n"));
     if (save_nb_robots(fd) == ERROR || save_rooms(fd) == ERROR
         || save_tunnels(fd) == ERROR) {
         text_jumpscare("Error while saving :(", 2);

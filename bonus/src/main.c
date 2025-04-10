@@ -99,7 +99,7 @@ int start_simulator(void)
 int main(int ac, char **av)
 {
     srand(time(NULL));
-    if (ac == 2 && strcmp(av[1], "-c") == 0)
+    if (ac == 2 && strcmp(av[1], "-m") == 0)
         return start_maker();
     else if (ac != 1)
         return usage_print();
