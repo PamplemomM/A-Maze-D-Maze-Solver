@@ -86,7 +86,7 @@ void save_maze(void)
         close(fd);
         return;
     }
-    text_jumpscare("Saved! :DDD", 2);
+    text_jumpscare("Saved!", 2);
     play_sound("save", 50, 1.0);
     close(fd);
 }

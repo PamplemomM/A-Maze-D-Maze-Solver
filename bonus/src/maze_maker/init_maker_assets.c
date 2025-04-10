@@ -28,12 +28,23 @@ static int init_start_room(void)
     return SUCCESS;
 }
 
+static int init_icons(void)
+{
+    if (make_sprite("icon", "maker_icons", 40, 40) == NULL)
+        return ERROR;
+    get_sprite("icon")->scale = (sfVector2f){2.0, 2.0};
+    get_sprite("icon")->rect.width = 25;
+    get_sprite("icon")->type = HUD;
+    center_sprite_origin(get_sprite("icon"), 0.5, 0.5);
+    return SUCCESS;
+}
+
 static int init_maker_sprites(void)
 {
-    int inits[6] = {init_room_select(), init_start_room(),
-        init_blackscreen(), init_compass(), init_logs(), init_bg()};
+    int inits[7] = {init_room_select(), init_start_room(), init_blackscreen(),
+        init_icons(), init_compass(), init_logs(), init_bg()};
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
         if (inits[i] == ERROR)
             return ERROR;
     }

@@ -66,6 +66,9 @@ static void interact_sim_logs_on(void)
     make_tween("logstxt", &get_text("logstxt")->pos.x,
         -118, 1.0)->method = EASEOUT;
     play_sound("logs_toggle", 75, diceroll(90, 110) / 100.0);
+    if (get_sprite("icon") != NULL)
+        make_tween("icon_offsetlogs", &get_sprite("icon")->pos.x,
+        165, 1.0)->method = EASEOUT;
     GAME->logs = 1;
 }
 
@@ -81,6 +84,9 @@ static void interact_sim_logs_off(void)
     make_tween("logstxt", &get_text("logstxt")->pos.x,
         -243, 1.0)->method = EASEOUT;
     play_sound("logs_toggle", 75, diceroll(80, 90) / 100.0);
+    if (get_sprite("icon") != NULL)
+        make_tween("icon_offsetlogs", &get_sprite("icon")->pos.x,
+        40, 1.0)->method = EASEOUT;
     GAME->logs = 0;
 }
 

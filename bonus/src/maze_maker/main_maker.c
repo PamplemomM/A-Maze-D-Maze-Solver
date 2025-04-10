@@ -50,31 +50,29 @@ int interact_room(void)
     return SUCCESS;
 }
 
-int set_interaction(void)
+void set_interaction(void)
 {
     if ((GAME->state == MKR_NONE || GAME->state == MKR_ROOM)
         && MOUSEPRESS(sfMouseLeft)) {
-        GAME->state = MKR_ROOM;
-        return SUCCESS;
+        toggle_gamestate(MKR_ROOM);
+        return;
     }
     if ((GAME->state == MKR_NONE || GAME->state == MKR_DESTROY)
         && KEYPRESS(sfKeyLControl)) {
-        GAME->state = MKR_DESTROY;
-        return SUCCESS;
+        toggle_gamestate(MKR_DESTROY);
+        return;
     }
     if ((GAME->state == MKR_NONE || GAME->state == MKR_TUNNEL)
         && KEYPRESS(sfKeyLAlt)) {
-        GAME->state = MKR_TUNNEL;
-        return SUCCESS;
+        toggle_gamestate(MKR_TUNNEL);
+        return;
     }
-    GAME->state = MKR_NONE;
-    return SUCCESS;
+    toggle_gamestate(MKR_NONE);
 }
 
 int interact_maker(void)
 {
-    if (set_interaction() == ERROR)
-        return ERROR;
+    set_interaction();
     if (GAME->state == MKR_ROOM || GAME->state == MKR_DESTROY)
         return interact_room();
     interact_tunnel();

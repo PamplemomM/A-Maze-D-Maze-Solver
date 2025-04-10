@@ -42,10 +42,40 @@ static void toggle_gamestate_rewind(gamestate_t state)
     }
 }
 
+static void toggle_gamestate_maker_effect(int def)
+{
+    play_sound("switch", diceroll(30, 50), (diceroll(100, 110) - def * 20)
+        / 100.0);
+    get_sprite("icon")->angle += 5;
+    make_tween("icon_tilt", &get_sprite("icon")->angle,
+        0.0, 0.5)->method = EASEOUT;
+}
+
+static void toggle_gamestate_maker(gamestate_t state)
+{
+    if (state == MKR_ROOM || state == MKR_NONE) {
+        if (GAME->state != MKR_ROOM && GAME->state != MKR_NONE)
+            toggle_gamestate_maker_effect(1);
+        GAME->state = state;
+        get_sprite("icon")->rect.left = 0;
+    }
+    if (state == MKR_TUNNEL) {
+        GAME->state = state;
+        get_sprite("icon")->rect.left = 25;
+        toggle_gamestate_maker_effect(0);
+    }
+    if (state == MKR_DESTROY) {
+        GAME->state = state;
+        get_sprite("icon")->rect.left = 50;
+        toggle_gamestate_maker_effect(0);
+    }
+}
+
 void toggle_gamestate(gamestate_t state)
 {
     if (GAME->state == state)
         return;
     toggle_gamestate_playpause(state);
     toggle_gamestate_rewind(state);
+    toggle_gamestate_maker(state);
 }
