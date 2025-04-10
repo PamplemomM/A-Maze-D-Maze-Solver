@@ -42,7 +42,7 @@ int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
     while (current != NULL) {
         tmp = current->next;
         if (get_lowerpath_count(paths, current) != 0)
-            delete_path_fromlist(current, &paths);
+            delete_path_fromlist(current, paths);
         current = tmp;
     }
     return SUCCESS;
