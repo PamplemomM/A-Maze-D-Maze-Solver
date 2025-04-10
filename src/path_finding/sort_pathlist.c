@@ -61,4 +61,3 @@ int sort_path(pathlist_t **paths)
     *paths = list;
     return SUCCESS;
 }
-

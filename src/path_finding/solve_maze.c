@@ -118,15 +118,14 @@ int find_solved_maze(maze_t *maze)
     free_pathlist(&paths);
     return SUCCESS;
 }
-/*
-Debug prints:
+
+/* Debug prints:
 display_paths_order(&paths);
 mini_printf("%d paths founds!\n", get_pathcount(&paths));
 initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
 good_path = get_shortest_path_temp(&paths);
 display_robots_move_singlepath(good_path, maze);
 */
-
 int detect_moves(maze_t *maze)
 {
     move_t *moves = NULL;

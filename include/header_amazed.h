@@ -160,6 +160,7 @@ int find_solved_maze(maze_t *maze);
 
 // --- sort_pathlist.c ---
 int sort_paths(pathlist_t **paths);
+int insert_list(pathlist_t **paths, pathlist_t *new_node);
 int sort_path(pathlist_t **paths);
 
 
