@@ -7,4 +7,12 @@
 
 #include "../../include/header_amazed.h"
 
+static int free_pathlist(pathlist_t *node)
+{
+    if (node != NULL) {
+        free_paths(&node->path);
+        free(node);
+    }
+    return SUCCESS;
+}
 
