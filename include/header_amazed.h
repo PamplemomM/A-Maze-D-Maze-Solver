@@ -149,6 +149,7 @@ int push_path_front(path_t **node, path_t *new_path);
 int push_path_back(path_t **node, path_t *new_path);
 
 // --- find_moves.c ---
+int display_paths_order(pathlist_t **paths);
 move_t *find_moves(maze_t *maze, int current_id);
 
 // --- solve_maze.c ---
