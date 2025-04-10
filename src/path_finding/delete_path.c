@@ -16,3 +16,26 @@ static int free_pathlist(pathlist_t *node)
     return SUCCESS;
 }
 
+int delete_path_fromlist(pathlist_t *paths, pathlist_t *node)
+{
+    pathlist_t *temp = paths;
+    pathlist_t *prev = temp;
+
+    if (temp == node) {
+        paths = temp->next;
+        free_pathlist(temp);
+        return SUCCESS;
+    }
+    temp = temp->next;
+    while (temp != NULL) {
+        if (temp == node) {
+            prev->next = temp->next;
+            free_pathlist(temp);
+            return SUCCESS;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return SUCCESS;
+}
+
