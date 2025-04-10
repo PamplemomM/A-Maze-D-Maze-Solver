@@ -107,7 +107,7 @@ int parse_tunnel(maze_t **maze, char *line);
 // --------- PATH_FINDING FOLDER ---------
 
 // --- delete_path.c ---
-int delete_path_fromlist(pathlist_t *element, pathlist_t *paths);
+int delete_path_fromlist(pathlist_t *element, pathlist_t **paths);
 
 // --- detect_all_paths.c ---
 int get_pathlist_size(pathlist_t *paths);
@@ -125,7 +125,7 @@ int display_robots_move_singlepath(path_t *good_path, maze_t *maze);
 
 // --- display_robot_path.c ---
 int get_lowerpath_count(pathlist_t *paths, pathlist_t *current);
-int calculate_paths_proportion(pathlist_t *paths, maze_t *maze);
+int calculate_paths_proportion(pathlist_t **paths, maze_t *maze);
 
 // --- make_move.c ---
 move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
