@@ -39,20 +39,25 @@ int display_every_move(maze_t *maze)
     move_t *current = maze->moves;
     int actual_id = 1;
     int length = get_move_length(maze);
+    int printed = 0;
 
     while (actual_id <= length) {
-        if (current->id == actual_id)
+        if (current->id == actual_id) {
+            printed = 1;
             mini_printf("P%d-%s ", current->robot, current->room_name);
+        }
         current = current->next;
         if (current == NULL) {
             current = headcpy;
             actual_id++;
-            mini_printf("\n");
+            mini_printf("%s", (printed == 1) ? "\n" : "");
         }
     }
     return SUCCESS;
 }
 
+// It's maybe there that does the fact that the first one is always alone.
+// Surely due to the id movement if you look with the debug prints(downstais)
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size)
 {
