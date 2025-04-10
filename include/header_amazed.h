@@ -107,7 +107,7 @@ int parse_tunnel(maze_t **maze, char *line);
 // --------- PATH_FINDING FOLDER ---------
 
 // --- delete_path.c ---
-int delete_path_fromlist(pathlist_t *paths, pathlist_t *node);
+int delete_path_fromlist(pathlist_t *element, pathlist_t *paths);
 
 // --- detect_all_paths.c ---
 int get_pathlist_size(pathlist_t *paths);

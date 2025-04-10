@@ -21,7 +21,7 @@ static int destroy_firstpath(pathlist_t *paths)
     pathlist_t *next = NULL;
 
     if (paths == NULL)
-        return;
+        return SUCCESS;
     next = paths->next;
     free_singlepath(paths);
     paths = next;
@@ -35,7 +35,7 @@ static int destroy_lastpath(pathlist_t *paths)
     if (current->next == NULL) {
         free_singlepath(current);
         paths = NULL;
-        return;
+        return SUCCESS;
     }
     while (current->next->next != NULL)
         current = current->next;
@@ -54,15 +54,15 @@ static int destroy_middlepath(pathlist_t *paths)
     return SUCCESS;
 }
 
-void delete_path_fromlist(pathlist_t *element, pathlist_t *paths)
+int delete_path_fromlist(pathlist_t *element, pathlist_t *paths)
 {
     pathlist_t *current = paths;
 
     if (element == NULL)
-        return;
+        return ERROR;
     if (current == element) {
         destroy_firstpath(paths);
-        return;
+        return SUCCESS;
     }
     while (current->next != NULL) {
         if (current->next == element)
@@ -71,7 +71,8 @@ void delete_path_fromlist(pathlist_t *element, pathlist_t *paths)
     }
     if (current->next == NULL) {
         destroy_lastpath(paths);
-        return;
+        return SUCCESS;
     }
     destroy_middlepath(paths);
+    return SUCCESS;
 }
