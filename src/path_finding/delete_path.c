@@ -1,0 +1,10 @@
+/*
+** EPITECH PROJECT, 2025
+** delete_path.c
+** File description:
+** The file that will delete the paths.
+*/
+
+#include "../../include/header_amazed.h"
+
+
