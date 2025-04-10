@@ -13,8 +13,11 @@ int get_lowerpath_count(pathlist_t *paths, pathlist_t *current)
     pathlist_t *curr = paths;
 
     while (curr != NULL) {
-        
+        if (curr == current && curr->length < current->length)
+            cpt++;
+        curr = curr->next;
     }
+    return cpt;
 }
 
 int calculate_paths_proportion(pathlist_t *paths, maze_t *maze)
