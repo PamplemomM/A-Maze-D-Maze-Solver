@@ -7,28 +7,6 @@
 
 #include "../../include/header_amazed.h"
 
-int sort_paths(pathlist_t **paths)
-{
-    pathlist_t *current = *paths;
-    pathlist_t *temp = NULL;
-
-    if (paths == NULL || *paths == NULL || (*paths)->next == NULL)
-        return SUCCESS;
-    while (current->next != NULL) {
-        if (current->length > current->next->length) {
-            temp = current->next;
-            current->next = temp->next;
-            temp->next = current;
-            if (current == *paths)
-                *paths = temp;
-            sort_paths(paths);
-            return SUCCESS;
-        }
-        current = current->next;
-    }
-    return SUCCESS;
-}
-
 int get_pathcount(pathlist_t **paths)
 {
     int cpt = 0;

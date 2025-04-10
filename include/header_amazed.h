@@ -135,7 +135,6 @@ int my_linked_size(path_t **node);
 int display_robots_move_singlepath(path_t *good_path, maze_t *maze);
 
 // --- display_robot_path.c ---
-int sort_paths(pathlist_t **paths);
 int get_pathcount(pathlist_t **paths);
 pathlist_t *get_shortest_pathlist(pathlist_t **paths);
 int get_lowerpath_count(pathlist_t **paths, pathlist_t *current);
@@ -160,6 +159,7 @@ int find_solved_maze_one_line(maze_t *maze);
 int find_solved_maze(maze_t *maze);
 
 // --- sort_pathlist.c ---
+int sort_paths(pathlist_t **paths);
 int sort_path(pathlist_t **paths);
 
 
