@@ -101,6 +101,7 @@ int find_solved_maze(maze_t *maze)
 {
     path_t *good_path = NULL;
     pathlist_t *paths = NULL;
+    pathlist_t *cur = NULL;
 
     if (maze == NULL)
         return ERROR;
@@ -108,8 +109,11 @@ int find_solved_maze(maze_t *maze)
     free_paths(&good_path);
     paths = find_allpath(maze);
     good_path = get_shortest_path_temp(paths);
-    mini_printf("Path length = %d, found %d lower\n", paths->length, get_lowerpath_count(paths, paths));
     display_robots_move_singlepath(good_path, maze);
+    cur = paths;
+    while (cur->next != NULL)
+        cur = cur->next;
+    mini_printf("Path length = %d, found %d lower\n", cur->length, get_lowerpath_count(paths, cur));
     free_pathlist(paths);
     return SUCCESS;
 }
