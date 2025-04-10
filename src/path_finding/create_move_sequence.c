@@ -15,8 +15,11 @@ int initialise_moving_sequence(pathlist_t **paths, maze_t *maze)
     int path_size = get_pathcount(paths);
     int start_id = 1;
 
-    for (int i = 1; i < maze->nb_robots + 1; i++) {
-        start_id = CEILING(maze->nb_robots / path_size);
+    for (int i = 1; i <= maze->nb_robots + 1; i++) {
+        start_id = CEILING(i / path_size) + 1;
+        mini_printf("Moving robot %d\n", i);
+        mini_printf("MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1, shortest + 1, current->length + current->lower);
+        mini_printf("StartID = %d and path_num = %d actual path size : %d\n", start_id, path_size, current->length);
         if (MAX(maze->nb_robots - start_id + 1, shortest + 1) >
             current->length + current->lower)
             move_robot_untilend(&current, start_id, i, maze);
