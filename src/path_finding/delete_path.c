@@ -44,3 +44,13 @@ static int destroy_last(pathlist_t *paths)
     return SUCCESS;
 }
 
+
+static void destroy_middle(pathlist_t *paths)
+{
+    pathlist_t *temp = NULL;
+
+    temp = paths->next;
+    paths->next = temp->next;
+    free_singlepath(temp);
+}
+
