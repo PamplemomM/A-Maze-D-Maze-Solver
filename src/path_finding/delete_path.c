@@ -28,3 +28,19 @@ static int destroy_first(pathlist_t *list)
     return SUCCESS;
 }
 
+static int destroy_last(pathlist_t *paths)
+{
+    pathlist_t *current = paths;
+
+    if (current->next == NULL) {
+        free_singlepath(current);
+        paths = NULL;
+        return;
+    }
+    while (current->next->next != NULL)
+        current = current->next;
+    free_singlepath(current->next);
+    current->next = NULL;
+    return SUCCESS;
+}
+
