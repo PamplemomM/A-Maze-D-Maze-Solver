@@ -64,6 +64,7 @@ typedef struct move_s {
     struct move_s *next;
     int id;
     int robot;
+    char *room_name;
     room_t *dest;
 } move_t;
 
@@ -113,6 +114,7 @@ int parse_tunnel(maze_t **maze, char *line);
 // --------- PATH_FINDING FOLDER ---------
 
 // --- create_move_sequence.c ---
+int display_every_move(maze_t *maze);
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size);
 int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
@@ -142,6 +144,8 @@ int find_path_lower(pathlist_t **paths);
 int calculate_paths_proportion(pathlist_t **paths, maze_t *maze);
 
 // --- make_move.c ---
+move_t *make_move_wthname(int robot_id, char *name, int move_id,
+    maze_t *maze);
 move_t *make_move(int robot_id, room_t *dest, int move_id, maze_t *maze);
 
 // --- push_topath.c ---

@@ -115,6 +115,7 @@ int find_solved_maze(maze_t *maze)
     calculate_paths_proportion(&paths, maze);
     sort_path(&paths);
     initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
+    display_every_move(maze);
     free_pathlist(&paths);
     return SUCCESS;
 }
