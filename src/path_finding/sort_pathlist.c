@@ -11,7 +11,7 @@ static int insert_list(pathlist_t **paths, pathlist_t *new_node)
 {
     pathlist_t *current = *paths;
 
-    if (*paths == NULL || (*paths)->length > new_node->length) {
+    if (*paths == NULL || (*paths)->length < new_node->length) {
         new_node->next = *paths;
         *paths = new_node;
         return SUCCESS;

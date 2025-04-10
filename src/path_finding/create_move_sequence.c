@@ -35,8 +35,8 @@ int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     int id = start_id;
 
     while (current != NULL) {
-        //mini_printf("Making the move for robot %d during %d in %s\n", robot_id, id, current->name);
-        mini_printf("P%d-%s\n", robot_id, current->name);
+        mini_printf("Making the move for robot %d during %d in %s\n", robot_id, id, current->name);
+        //mini_printf("P%d-%s\n", robot_id, current->name);
         make_move(robot_id, current->room, id, maze);
         id++;
         current = current->next;
