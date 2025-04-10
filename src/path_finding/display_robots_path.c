@@ -7,6 +7,11 @@
 
 #include "../../include/header_amazed.h"
 
+int sort_paths(pathlist_t **paths)
+{
+    return SUCCESS;
+}
+
 int get_pathcount(pathlist_t **paths)
 {
     int cpt = 0;
@@ -66,11 +71,11 @@ int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
     int shortest = my_linked_size(&shortest_path);
     pathlist_t *tmp = NULL;
 
-    if (*paths == NULL || maze->nb_robots == 1)
+    if (*paths == NULL)
         return SUCCESS;
     while (current != NULL) {
         tmp = current->next;
-        if (MAX(maze->nb_robots, shortest) <= current->length +
+        if (MAX(maze->nb_robots, shortest + 1) <= current->length +
             current->lower) {
             delete_path_fromlist(current, paths);
         }
