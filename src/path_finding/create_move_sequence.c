@@ -40,12 +40,13 @@ int display_every_move(maze_t *maze)
     int actual_id = 1;
     int length = get_move_length(maze);
 
-    while (actual_id < length) {
-        if (current->id = actual_id)
-            mini_printf("P%d-%s", current->robot, current->room_name);
+    while (actual_id <= length) {
+        if (current->id == actual_id)
+            mini_printf("P%d-%s ", current->robot, current->room_name);
         current = current->next;
         if (current == NULL) {
             current = headcpy;
+            actual_id++;
             mini_printf("\n");
         }
     }
@@ -85,7 +86,7 @@ int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     int id = start_id;
 
     while (current != NULL) {
-        mini_printf("P%d-%s\n", robot_id, current->name);
+        //mini_printf("P%d-%s\n", robot_id, current->name);
         make_move_wthname(robot_id, current->name, id, maze);
         id++;
         current = current->next;
