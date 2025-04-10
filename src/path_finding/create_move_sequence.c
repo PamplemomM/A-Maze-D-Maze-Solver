@@ -15,14 +15,19 @@ int initialise_moving_sequence(pathlist_t **paths, maze_t *maze)
     int path_size = get_pathcount(paths);
     int start_id = 1;
 
-    for (int i = 1; i <= maze->nb_robots + 1; i++) {
+    for (int i = 1; i < maze->nb_robots + 1; i++) {
         start_id = CEILING(i / path_size) + 1;
-        mini_printf("Moving robot %d\n", i);
-        mini_printf("MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1, shortest + 1, current->length + current->lower);
-        mini_printf("StartID = %d and path_num = %d actual path size : %d\n", start_id, path_size, current->length);
+        while (!(MAX(maze->nb_robots - start_id + 1, shortest + 1) >
+            current->length + current->lower)) {
+            current = current->next;
+            if (current == NULL)
+                current = *paths;
+        }
         if (MAX(maze->nb_robots - start_id + 1, shortest + 1) >
             current->length + current->lower)
             move_robot_untilend(&current, start_id, i, maze);
+        else
+            mini_printf("BAD\n");
         current = current->next;
         if (current == NULL)
             current = *paths;
@@ -38,11 +43,30 @@ int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     int id = start_id;
 
     while (current != NULL) {
-        mini_printf("Making the move for robot %d during %d in %s\n", robot_id, id, current->name);
-        //mini_printf("P%d-%s\n", robot_id, current->name);
+        
+        mini_printf("P%d-%s\n", robot_id, current->name);
         make_move(robot_id, current->room, id, maze);
         id++;
         current = current->next;
     }
     return SUCCESS;
 }
+/*
+DEBUG PRINTS:
+
+in move_robo_untilend loop :
+mini_printf("Making the move for robot %d during %d in %s\n",
+    robot_id, id, current->name);
+
+
+in initialise_moving_sequence for loop after start_id :
+mini_printf("Moving robot %d\n", i);
+mini_printf("MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1,
+    shortest + 1, current->length + current->lower);
+mini_printf("StartID = %d and path_num = %d actual path size : %d\n",
+    start_id, path_size, current->length);
+
+In initialise_moving_sequence while loop :
+mini_printf("BAD : MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1,
+    shortest + 1, current->length + current->lower);
+*/
