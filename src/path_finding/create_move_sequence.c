@@ -19,9 +19,7 @@ int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
         start_id = CEILING(i / path_size) + 1;
         while (!(MAX(maze->nb_robots - start_id + 1, shortest + 1) >
             current->length + current->lower)) {
-            current = current->next;
-            if (current == NULL)
-                current = *paths;
+            current = (current->next == NULL) ? *paths : current->next;
         }
         if (MAX(maze->nb_robots - start_id + 1, shortest + 1) >
             current->length + current->lower)
@@ -41,7 +39,6 @@ int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     int id = start_id;
 
     while (current != NULL) {
-        
         mini_printf("P%d-%s\n", robot_id, current->name);
         make_move(robot_id, current->room, id, maze);
         id++;
