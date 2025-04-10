@@ -1,5 +1,5 @@
 #number_of_robots
-9
+2
 #rooms
 ##start
 7_9 7 9
