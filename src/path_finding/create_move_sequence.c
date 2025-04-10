@@ -7,12 +7,12 @@
 
 #include "../../include/header_amazed.h"
 
-int initialise_moving_sequence(pathlist_t **paths, maze_t *maze)
+int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
+    int path_size)
 {
     pathlist_t *current = *paths;
     path_t *shortest_path = get_shortest_path_temp(paths);
     int shortest = my_linked_size(&shortest_path);
-    int path_size = get_pathcount(paths);
     int start_id = 1;
 
     for (int i = 1; i < maze->nb_robots + 1; i++) {

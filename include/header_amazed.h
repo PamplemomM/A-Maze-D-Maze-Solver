@@ -113,7 +113,8 @@ int parse_tunnel(maze_t **maze, char *line);
 // --------- PATH_FINDING FOLDER ---------
 
 // --- create_move_sequence.c ---
-int initialise_moving_sequence(pathlist_t **paths, maze_t *maze);
+int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
+    int path_size);
 int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     maze_t *maze);
 
