@@ -7,7 +7,7 @@
 
 #include "../include/header_amazed.h"
 
-int main(int argc, char **argv)
+int main(int argc)
 {
     maze_t *maze = parse_maze(0);
 
