@@ -70,9 +70,13 @@ int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
         return SUCCESS;
     while (current != NULL) {
         tmp = current->next;
-        if (MAX(maze->nb_robots, shortest) <= current->length +
-            current->lower)
+        mini_printf("robots: %d; shortest: %d\n", maze->nb_robots, shortest);
+        mini_printf("length: %d; low: %d\n", current->length, current->lower);
+        if (MAX(maze->nb_robots, shortest) > current->length +
+            current->lower) {
+            mini_printf("Deleting.\n");
             delete_path_fromlist(current, paths);
+        }
         current = tmp;
     }
     return SUCCESS;

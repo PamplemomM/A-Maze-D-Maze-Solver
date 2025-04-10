@@ -21,7 +21,7 @@
     #define TRUE 1
     #define FALSE 0
     #define MAX_INT 2147483647
-    #define MAX(num1, num2) (num1 > num2) ? num1 : num2
+    #define MAX(a, b) ((a) > (b) ? (a) : (b))
     #define ABS(nb) (nb < 0) ? -nb : nb
     #define OMNIFREE(thing, dimension) omnifree((void ***)&thing, dimension)
     #define PRINT(format, ...) mini_printf(format, __VA_ARGS__)
