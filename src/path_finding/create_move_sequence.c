@@ -9,6 +9,13 @@
 
 int display_every_move(maze_t *maze)
 {
+    move_t *current = maze->moves;
+
+    while (current != NULL) {
+        mini_printf("Moving %d in %s during %d\n", current->robot,
+            current->dest->name, current->id);
+        current = current->next;
+    }
     return SUCCESS;
 }
 
