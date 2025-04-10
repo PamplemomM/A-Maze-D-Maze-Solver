@@ -119,6 +119,7 @@ int my_linked_size(path_t **node);
 int display_robots_move_singlepath(path_t *good_path, maze_t *maze);
 
 // --- display_robot_path.c ---
+int get_lowerpath_count(pathlist_t *paths, pathlist_t *current);
 int calculate_paths_proportion(pathlist_t *paths, maze_t *maze);
 
 // --- make_move.c ---
