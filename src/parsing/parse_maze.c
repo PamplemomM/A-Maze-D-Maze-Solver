@@ -25,8 +25,8 @@ tunnel_t *get_tunnel(room_t *r1, room_t *r2, maze_t *maze)
     if (r1 == NULL || r2 == NULL)
         return NULL;
     while (tunnel != NULL) {
-        if (tunnel->r1 == r1 && tunnel->r2 == r2
-            || tunnel->r1 == r2 && tunnel->r2 == r1)
+        if ((tunnel->r1 == r1 && tunnel->r2 == r2)
+            || (tunnel->r1 == r2 && tunnel->r2 == r1))
             return tunnel;
         tunnel = tunnel->next;
     }

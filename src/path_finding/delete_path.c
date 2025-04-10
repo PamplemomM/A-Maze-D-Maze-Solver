@@ -44,7 +44,7 @@ static int destroy_lastpath(pathlist_t **paths)
     return SUCCESS;
 }
 
-static int destroy_middlepath(pathlist_t *current, pathlist_t **paths)
+static int destroy_middlepath(pathlist_t *current)
 {
     pathlist_t *temp = NULL;
 
@@ -73,6 +73,6 @@ int delete_path_fromlist(pathlist_t *element, pathlist_t **paths)
         destroy_lastpath(paths);
         return SUCCESS;
     }
-    destroy_middlepath(current, paths);
+    destroy_middlepath(current);
     return SUCCESS;
 }

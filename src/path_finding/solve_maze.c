@@ -135,6 +135,8 @@ int detect_moves(maze_t *maze)
     if (maze == NULL)
         return ERROR;
     moves = find_moves(maze, id);
+    if (1 == 0)
+        find_mult_robot_move(NULL, maze, id);
     free_moves(moves);
     return SUCCESS;
 }

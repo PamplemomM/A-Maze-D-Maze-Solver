@@ -118,6 +118,8 @@ pathlist_t *find_allpath(maze_t *maze)
     while (value == SUCCESS) {
         value = create_new_pathlist(maze, &paths);
     }
+    if (1 == 0)
+        display_paths(0, &paths);
     return paths;
 }
 //for (int i = 1; i < maze->nb_robots + 1; i++)
