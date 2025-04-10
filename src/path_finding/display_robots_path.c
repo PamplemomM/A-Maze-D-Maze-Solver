@@ -48,8 +48,8 @@ int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
     pathlist_t *current = *paths;
     pathlist_t *tmp = NULL;
 
-    if (*paths == NULL)
-        return ERROR;
+    if (*paths == NULL || maze->nb_robots == 1)
+        return SUCCESS;
     while (current != NULL) {
         tmp = current->next;
         if (maze->nb_robots <= current->length + current->lower)
