@@ -113,6 +113,7 @@ int find_solved_maze(maze_t *maze)
     paths = find_allpath(maze);
     find_path_lower(&paths);
     calculate_paths_proportion(&paths, maze);
+    sort_path(&paths);
     //mini_printf("%d paths founds!\n", get_pathcount(&paths));
     initialise_moving_sequence(&paths, maze);
     good_path = get_shortest_path_temp(&paths);
