@@ -13,7 +13,7 @@ int display_every_move(maze_t *maze)
 
     while (current != NULL) {
         mini_printf("Moving %d in ", current->robot);
-        mini_printf("%s during ", current->dest->name);
+        mini_printf("%s during ", current->room_name);
         mini_printf("%d\n", current->id);
         current = current->next;
     }
@@ -52,8 +52,8 @@ int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     int id = start_id;
 
     while (current != NULL) {
-        mini_printf("P%d-%s\n", robot_id, current->room->name);
-        make_move_wthname(robot_id, current->room, id, maze);
+        mini_printf("P%d-%s\n", robot_id, current->name);
+        make_move_wthname(robot_id, current->name, id, maze);
         id++;
         current = current->next;
     }
