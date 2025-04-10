@@ -39,12 +39,39 @@ static int init_icons(void)
     return SUCCESS;
 }
 
+static int init_maker_robots(void)
+{
+    char *nb_robots = int_to_str(MAZE->nb_robots);
+
+    if (nb_robots == NULL)
+        return ERROR;
+    if (make_text("nb_robots", nb_robots,
+        765 - digitcount(MAZE->nb_robots) * 22, 20) == NULL) {
+        OMNIFREE(nb_robots, 1);
+        return ERROR;
+    }
+    OMNIFREE(nb_robots, 1);
+    for (int i = 1; i <= MAZE->nb_robots; i++) {
+        if (make_robot(i) == NULL)
+            return ERROR;
+        get_robot(i)->sprite->pos.x = 750 -
+            ((i - 1) / ((float)MAZE->nb_robots)) * 100.0;
+        get_robot(i)->sprite->pos.y = 90;
+        get_robot(i)->sprite->type = HUD;
+    }
+    get_text("nb_robots")->color = color_from_hue(0, 255, 0, 150);
+    get_text("nb_robots")->type = HUD;
+    sfText_setCharacterSize(get_text("nb_robots")->text, 80);
+    return SUCCESS;
+}
+
 static int init_maker_sprites(void)
 {
-    int inits[7] = {init_room_select(), init_start_room(), init_blackscreen(),
-        init_icons(), init_compass(), init_logs(), init_bg()};
+    int inits[8] = {init_room_select(), init_start_room(), init_blackscreen(),
+        init_icons(), init_maker_robots(), init_compass(),
+        init_logs(), init_bg()};
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
         if (inits[i] == ERROR)
             return ERROR;
     }
@@ -66,7 +93,8 @@ int init_maker_assets(void)
 {
     create_window(800, 600, "A-MAZE-D VIEWER!");
     *get_clock() = sfClock_create();
-    MAZE->nb_robots = 1;
+    MAZE->nb_robots = 3;
+    MAZE->viewer = 2;
     GAME->state = MKR_NONE;
     GAME->bounds = (sfIntRect){0, 0, 1, 1};
     if (init_cam() == NULL)

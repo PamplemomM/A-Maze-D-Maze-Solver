@@ -38,7 +38,6 @@ static void setup_text(text_t *text)
     sfText_setString(text->text, text->str);
     text->scale = (sfVector2f){1, 1};
     text->angle = 0;
-    text->alpha = 1;
     text->color = sfBlack;
     text->type = NONE;
     text->draw = 1;
@@ -80,7 +79,6 @@ void draw_text(text_t *text)
         sfText_setPosition(text->text, pos);
         sfText_setScale(text->text, scale);
         sfText_setRotation(text->text, text->angle);
-        text->color.a = text->alpha * 255;
         sfText_setFillColor(text->text, text->color);
         sfRenderWindow_drawText(WINDOW, text->text, NULL);
     }

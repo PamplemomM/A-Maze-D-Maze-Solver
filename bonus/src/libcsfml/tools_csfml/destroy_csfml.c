@@ -7,7 +7,7 @@
 
 #include "../../../include/header_csfml.h"
 
-static void destroy_first(void **(*list_func)(void), void (*free_func)(void *))
+void destroy_first(void **(*list_func)(void), void (*free_func)(void *))
 {
     linked_list_t *list = (linked_list_t *)(*list_func());
     linked_list_t *next = NULL;
@@ -19,7 +19,7 @@ static void destroy_first(void **(*list_func)(void), void (*free_func)(void *))
     *list_func() = next;
 }
 
-static void destroy_last(void **(*list_func)(void), void (*free_func)(void *))
+void destroy_last(void **(*list_func)(void), void (*free_func)(void *))
 {
     linked_list_t *list = (linked_list_t *)(*list_func());
 
@@ -44,7 +44,7 @@ static void destroy_middle(linked_list_t *list, void **(*list_func)(void),
     free_func(tmp);
 }
 
-void destroy_thing(void *element, void **(*list_func)(void),
+void destroy_obj(void *element, void **(*list_func)(void),
     void (*free_func)(void *))
 {
     linked_list_t *list = (linked_list_t *)(*list_func());

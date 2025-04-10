@@ -66,10 +66,12 @@ static void interact_sim_logs_on(void)
     make_tween("logstxt", &get_text("logstxt")->pos.x,
         -118, 1.0)->method = EASEOUT;
     play_sound("logs_toggle", 75, diceroll(90, 110) / 100.0);
-    if (get_sprite("icon") != NULL)
+    GAME->logs = 1;
+    if (MAZE->viewer == 2) {
         make_tween("icon_offsetlogs", &get_sprite("icon")->pos.x,
         165, 1.0)->method = EASEOUT;
-    GAME->logs = 1;
+        update_robot_display();
+    }
 }
 
 static void interact_sim_logs_off(void)
@@ -84,10 +86,12 @@ static void interact_sim_logs_off(void)
     make_tween("logstxt", &get_text("logstxt")->pos.x,
         -243, 1.0)->method = EASEOUT;
     play_sound("logs_toggle", 75, diceroll(80, 90) / 100.0);
-    if (get_sprite("icon") != NULL)
+    GAME->logs = 0;
+    if (MAZE->viewer == 2) {
         make_tween("icon_offsetlogs", &get_sprite("icon")->pos.x,
         40, 1.0)->method = EASEOUT;
-    GAME->logs = 0;
+        update_robot_display();
+    }
 }
 
 void interact_sim_logs(void)

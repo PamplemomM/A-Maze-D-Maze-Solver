@@ -78,8 +78,7 @@ void text_jumpscare(char *str, float dur)
     }
     sfText_setOrigin(txt->text, (sfVector2f){strlen(str) * 10, 30});
     txt->angle = diceroll(-75, 75) / 10.0;
-    txt->alpha = 1;
     txt->color = sfWhite;
-    make_tween(jumpscare[i], &txt->alpha, 0, dur)->method = EASEIN;
+    make_tween(jumpscare[i], (float *)&txt->color.a, 0, dur)->method = EASEIN;
     i = (i + 1) % 3;
 }

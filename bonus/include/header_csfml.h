@@ -37,7 +37,10 @@
     #define MUSIC (*get_music())
     #define KEYPRESS(key) sfKeyboard_isKeyPressed(key)
     #define MOUSEPRESS(button) sfMouse_isButtonPressed(button)
-    #define DESTROY(thing, list_func, free_func) destroy_thing((void *)thing, (void **(*)(void))(list_func), (void (*)(void *))(free_func))
+    #define OBJ_LIST(list_func) (void **(*)(void))(list_func)
+    #define OBJ_FREE(free_func) (void (*)(void *))(free_func)
+    #define OBJFCS(lfc, ffc) OBJ_LIST(lfc), OBJ_FREE(ffc)
+    #define DESTROY(obj, lfc, ffc) destroy_obj((void *)obj, OBJFCS(lfc, ffc))
 
     // tools:
     #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -98,7 +101,6 @@ typedef struct text_s {
     sfVector2f pos;
     sfVector2f scale;
     float angle;
-    float alpha;
     sfColor color;
     element_type_t type;
     int draw;
@@ -149,10 +151,6 @@ typedef struct music_s {
 sfRenderWindow **get_window(void);
 void create_window(unsigned int width, unsigned int height, char const *name);
 void destroy_window(void);
-
-// --- destroy_csfml.c ---
-void destroy_thing(void *element, void **(*list_func)(void),
-    void (*free_func)(void *));
 
 // --- cam_csfml.c ---
 cam_t **get_cam(void);
@@ -219,6 +217,12 @@ void draw_alltexts(element_type_t type);
 // --- soundloading_csfml.c ---
 sound_t *load_sound(char *name);
 int precache_sounds(void);
+
+// --- destroy_csfml.c ---
+void destroy_first(void **(*list_func)(void), void (*free_func)(void *));
+void destroy_last(void **(*list_func)(void), void (*free_func)(void *));
+void destroy_obj(void *element, void **(*list_func)(void),
+    void (*free_func)(void *));
 
 // --- arsenal_csfml.c ---
 sfColor color_from_hue(float hue, float brightness,

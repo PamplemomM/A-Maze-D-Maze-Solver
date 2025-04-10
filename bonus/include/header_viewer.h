@@ -156,6 +156,11 @@ void destroy_tunnel(tunnel_t *tunnel);
 int place_tunnel(room_t *r1, room_t *r2);
 int interact_tunnel(void);
 
+// --- interact_robotcnt.c ---
+int update_robot_display(void);
+int update_robot_counter(int hold);
+int interact_nb_robots(void);
+
 // --- save.c ---
 void save_maze(void);
 

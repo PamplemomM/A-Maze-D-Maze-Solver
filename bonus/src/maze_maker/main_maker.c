@@ -73,6 +73,8 @@ void set_interaction(void)
 int interact_maker(void)
 {
     set_interaction();
+    if (interact_nb_robots() == ERROR)
+        return ERROR;
     if (GAME->state == MKR_ROOM || GAME->state == MKR_DESTROY)
         return interact_room();
     interact_tunnel();
@@ -145,8 +147,6 @@ int update_stuff_maker(void)
     update_tweens();
     update_timers();
     update_music();
-    //if (update_robots() == ERROR)
-    //    return ERROR;
     update_rooms();
     update_room_select();
     if (TIME > 4.5)
