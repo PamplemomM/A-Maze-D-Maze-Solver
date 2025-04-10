@@ -7,10 +7,10 @@
 
 #include "../../include/header_amazed.h"
 
-int get_pathcount(pathlist_t *paths)
+int get_pathcount(pathlist_t **paths)
 {
     int cpt = 0;
-    pathlist_t *current = paths;
+    pathlist_t *current = *paths;
 
     while (current != NULL) {
         cpt++;
@@ -19,10 +19,10 @@ int get_pathcount(pathlist_t *paths)
     return cpt;
 }
 
-int get_lowerpath_count(pathlist_t *paths, pathlist_t *current)
+int get_lowerpath_count(pathlist_t **paths, pathlist_t *current)
 {
     int cpt = 0;
-    pathlist_t *curr = paths;
+    pathlist_t *curr = *paths;
 
     while (curr != NULL) {
         if ((curr != current) && (curr->length < current->length))
@@ -34,10 +34,10 @@ int get_lowerpath_count(pathlist_t *paths, pathlist_t *current)
 
 int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
 {
-    pathlist_t *current = paths;
+    pathlist_t *current = *paths;
     pathlist_t *tmp = NULL;
 
-    if (paths == NULL)
+    if (*paths == NULL)
         return ERROR;
     while (current != NULL) {
         tmp = current->next;
