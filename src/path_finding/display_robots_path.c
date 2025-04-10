@@ -27,7 +27,8 @@ int calculate_paths_proportion(pathlist_t *paths, maze_t *maze)
     if (paths == NULL)
         return ERROR;
     while (current != NULL) {
-        
+        if (get_lowerpath_count(paths, paths->next))
+            paths->next->length = MAX_INT;
         current = current->next;
     }
     return SUCCESS;
