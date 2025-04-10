@@ -54,3 +54,24 @@ static int destroy_middlepath(pathlist_t *paths)
     return SUCCESS;
 }
 
+void delete_path_fromlist(pathlist_t *element, pathlist_t *paths)
+{
+    pathlist_t *current = paths;
+
+    if (element == NULL)
+        return;
+    if (current == element) {
+        destroy_firstpath(paths);
+        return;
+    }
+    while (current->next != NULL) {
+        if (current->next == element)
+            break;
+        current = current->next;
+    }
+    if (current->next == NULL) {
+        destroy_lastpath(paths);
+        return;
+    }
+    destroy_middlepath(paths);
+}
