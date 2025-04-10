@@ -111,9 +111,10 @@ int find_solved_maze(maze_t *maze)
     find_robot_move(maze->start, maze, &good_path);
     free_paths(&good_path);
     paths = find_allpath(maze);
+    find_path_lower(&paths);
     calculate_paths_proportion(&paths, maze);
     //mini_printf("%d paths founds!\n", get_pathcount(&paths));
-    good_path = paths->path;// get_shortest_path_temp(paths);
+    good_path = get_shortest_path_temp(paths);
     display_robots_move_singlepath(good_path, maze);
     free_pathlist(&paths);
     return SUCCESS;
