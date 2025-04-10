@@ -26,6 +26,10 @@
     #define OMNIFREE(thing, dimension) omnifree((void ***)&thing, dimension)
     #define PRINT(format, ...) mini_printf(format, __VA_ARGS__)
 
+    #define CEILING_POS(X) ((X - (int)(X)) > 0 ? (int)(X + 1) : (int)(X))
+    #define CEILING_NEG(X) (int)(X)
+    #define CEILING(X) (((X) > 0) ? CEILING_POS(X) : CEILING_NEG(X))
+
 // -------- A-MAZE-D STRUCTURES --------
 
 typedef struct room_s {
