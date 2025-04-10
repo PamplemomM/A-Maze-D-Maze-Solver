@@ -52,7 +52,7 @@ int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
         return ERROR;
     while (current != NULL) {
         tmp = current->next;
-        if (current->lower < 3)
+        if (maze->nb_robots <= current->length + current->lower)
             delete_path_fromlist(current, paths);
         current = tmp;
     }
