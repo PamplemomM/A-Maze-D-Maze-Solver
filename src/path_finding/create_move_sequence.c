@@ -53,7 +53,6 @@ int display_every_move(maze_t *maze)
     return SUCCESS;
 }
 
-
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size)
 {
@@ -86,7 +85,6 @@ int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     int id = start_id;
 
     while (current != NULL) {
-        //mini_printf("P%d-%s\n", robot_id, current->name);
         make_move_wthname(robot_id, current->name, id, maze);
         id++;
         current = current->next;
