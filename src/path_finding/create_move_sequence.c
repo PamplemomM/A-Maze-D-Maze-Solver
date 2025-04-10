@@ -9,6 +9,12 @@
 
 int display_paths_order(pathlist_t **paths)
 {
+    pathlist_t *current = *paths;
+
+    while (current != NULL) {
+        mini_printf(" -- %d --\n", current->length);
+        current = current->next;
+    }
     return SUCCESS;
 }
 
