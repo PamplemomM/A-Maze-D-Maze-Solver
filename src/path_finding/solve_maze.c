@@ -115,6 +115,8 @@ int find_solved_maze(maze_t *maze)
     calculate_paths_proportion(&paths, maze);
     sort_paths(&paths);
     //mini_printf("%d paths founds!\n", get_pathcount(&paths));
+    for (int i = 0; i < maze->nb_robots; i++)
+        move_robot_untilend(&paths, 0, i, maze);
     good_path = get_shortest_path_temp(&paths);
     display_robots_move_singlepath(good_path, maze);
     free_pathlist(&paths);
