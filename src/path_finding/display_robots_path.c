@@ -32,6 +32,17 @@ int get_lowerpath_count(pathlist_t **paths, pathlist_t *current)
     return cpt;
 }
 
+int find_path_lower(pathlist_t **paths)
+{
+    pathlist_t *current = *paths;
+
+    while (current != NULL) {
+        current->lower = get_lowerpath_count(paths, current);
+        current = current->next;
+    }
+    return SUCCESS;
+}
+
 int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
 {
     pathlist_t *current = *paths;
@@ -41,7 +52,7 @@ int calculate_paths_proportion(pathlist_t **paths, maze_t *maze)
         return ERROR;
     while (current != NULL) {
         tmp = current->next;
-        if (get_lowerpath_count(paths, current) < 2)
+        if (current->lower < 2)
             delete_path_fromlist(current, paths);
         current = tmp;
     }
