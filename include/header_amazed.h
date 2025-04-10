@@ -111,7 +111,7 @@ int delete_path_fromlist(pathlist_t *element, pathlist_t **paths);
 
 // --- detect_all_paths.c ---
 int get_pathlist_size(pathlist_t *paths);
-int free_pathlist(pathlist_t *paths);
+int free_pathlist(pathlist_t **paths);
 int add_new_pathlist(pathlist_t **original, path_t *new);
 int create_new_pathlist(maze_t *maze, pathlist_t **paths);
 pathlist_t *find_allpath(maze_t *maze);

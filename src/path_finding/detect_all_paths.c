@@ -89,10 +89,10 @@ int create_new_pathlist(maze_t *maze, pathlist_t **paths)
     return value;
 }
 
-static int display_paths(int i, pathlist_t *paths)
+static int display_paths(int i, pathlist_t **paths)
 {
     path_t *current = NULL;
-    pathlist_t *cur_list = paths;
+    pathlist_t *cur_list = *paths;
 
     if (cur_list == NULL)
         return ERROR;
