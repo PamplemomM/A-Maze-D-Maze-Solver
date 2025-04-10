@@ -108,6 +108,7 @@ int find_solved_maze(maze_t *maze)
     free_paths(&good_path);
     paths = find_allpath(maze);
     good_path = get_shortest_path_temp(paths);
+    mini_printf("Path length = %d, found %d lower\n", paths->length, get_lowerpath_count(paths, paths));
     display_robots_move_singlepath(good_path, maze);
     free_pathlist(paths);
     return SUCCESS;
