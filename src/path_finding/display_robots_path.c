@@ -19,6 +19,22 @@ int get_pathcount(pathlist_t **paths)
     return cpt;
 }
 
+pathlist_t *get_shortest_pathlist(pathlist_t **paths)
+{
+    pathlist_t *shortest = NULL;
+    pathlist_t *current = *paths;
+    int min = MAX_INT;
+
+    while (current != NULL) {
+        if (current->length < min) {
+            min = current->length;
+            shortest = current;
+        }
+        current = current->next;
+    }
+    return shortest;
+}
+
 int get_lowerpath_count(pathlist_t **paths, pathlist_t *current)
 {
     int cpt = 0;
