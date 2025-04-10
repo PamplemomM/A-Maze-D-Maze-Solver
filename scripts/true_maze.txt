@@ -1,3 +1,4 @@
+# This maze was made with Pathie's maze maker.
 #number_of_robots
 10
 #rooms
