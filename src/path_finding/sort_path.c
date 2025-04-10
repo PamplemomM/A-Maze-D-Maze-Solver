@@ -7,6 +7,24 @@
 
 #include "../../include/header_amazed.h"
 
+static int insert_list(pathlist_t **paths, pathlist_t *new_node)
+{
+    pathlist_t *current = *paths;
+
+    if (*paths == NULL || (*paths)->length > new_node->length) {
+        new_node->next = *paths;
+        *list = new_node;
+        return SUCCESS;
+    }
+    while (current->next != NULL &&
+        current->next->length > new_node->length)) {
+        current = current->next;
+    }
+    new_node->next = current->next;
+    current->next = new_node;
+    return SUCCESS;
+}
+
 static int sort_path(pathlist_t **paths)
 {
     pathlist_t *list = NULL;
