@@ -12,6 +12,26 @@ int get_movelength(int path_size, int robot_count)
     return path_size + robot_count - 2;
 }
 
+path_t *get_shortest_path_temp(pathlist_t *paths)
+{
+    pathlist_t *current = paths;
+    path_t *winner = NULL;
+    int min = 0;
+
+    if (current == NULL)
+        return NULL;
+    min = current->length;
+    winner = current->path;
+    while (current != NULL) {
+        if (current->length < min) {
+            min = current->length;
+            winner = current->path;
+        }
+        current = current->next;
+    }
+    return winner;
+}
+
 int my_linked_size(path_t **node)
 {
     int size = 0;

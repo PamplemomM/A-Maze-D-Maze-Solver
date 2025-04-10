@@ -7,26 +7,6 @@
 
 #include "../../include/header_amazed.h"
 
-path_t *get_shortest_path_temp(pathlist_t *paths)
-{
-    pathlist_t *current = paths;
-    path_t *winner = NULL;
-    int min = 0;
-
-    if (current == NULL)
-        return NULL;
-    min = current->length;
-    winner = current->path;
-    while (current != NULL) {
-        if (current->length < min) {
-            min = current->length;
-            winner = current->path;
-        }
-        current = current->next;
-    }
-    return winner;
-}
-
 int calculate_paths_proportion(pathlist_t *paths, maze_t *maze)
 {
     int max_id = get_movelength(paths->length, maze->nb_robots);
