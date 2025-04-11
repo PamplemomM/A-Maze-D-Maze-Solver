@@ -34,3 +34,10 @@ mini_printf("%d paths founds!\n", get_pathcount(&paths));
 initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
 ```
 
+
+---- display_robot_moves.c ----
+
+- You can place in the main loop of the function `display_robots_move_singlepath` :
+```C
+mini_printf("Id=%d ; move=%d ; path_num=%d ; room %s\n", id, rbt, abs(rbt - (id + 1)), path[abs(rbt - (id + 1))]);
+```
