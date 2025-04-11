@@ -65,8 +65,8 @@ static char **dup_pathlist(path_t *good_path)
 
 static int print_move(int rbt, int id, char **path, int id_size)
 {
-    if (rbt <= id + 1 && abs(rbt - (id + 1)) < id_size)
-        mini_printf("P%d-%s ", rbt, path[abs(rbt - (id + 1))]);
+    if (rbt <= id + 1 && ABS(rbt - (id + 1)) < id_size)
+        mini_printf("P%d-%s ", rbt, path[ABS(rbt - (id + 1))]);
     return SUCCESS;
 }
 

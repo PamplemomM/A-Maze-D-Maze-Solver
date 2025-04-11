@@ -87,8 +87,8 @@ static room_t *select_best_path(room_t *current, room_t *dest_room,
     int dist = 0;
 
     while (path != NULL) {
-        dist = abs(path->room->x - dest_room->x) +
-            abs(path->room->y - dest_room->y);
+        dist = ABS(path->room->x - dest_room->x) +
+            ABS(path->room->y - dest_room->y);
         if (dist < dist_min) {
             dist_min = dist;
             best_path = path->room;
