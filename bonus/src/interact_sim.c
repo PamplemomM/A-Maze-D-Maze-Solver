@@ -34,7 +34,7 @@ static void interact_sim_iterate(void)
 {
     if ((KEYPRESS(sfKeyAdd) || KEYPRESS(sfKeyN))
         && get_timer("iterup_cdwn") == NULL) {
-        run_timer("iterup_cdwn", 0.2);
+        run_timer("iterup_cdwn", 0.15);
         if ((int)GAME->move_id >= GAME->nb_moves && GAME->state == PAUSE)
             text_jumpscare("no more moves blud </3", 1);
         if ((int)GAME->move_id < GAME->nb_moves)
@@ -44,7 +44,7 @@ static void interact_sim_iterate(void)
     }
     if ((KEYPRESS(sfKeySubtract) || KEYPRESS(sfKeyB))
         && get_timer("iterdown_cdwn") == NULL) {
-        run_timer("iterdown_cdwn", 0.2);
+        run_timer("iterdown_cdwn", 0.15);
         if ((int)GAME->move_id <= 0 && GAME->state == PAUSE)
             text_jumpscare("wrong way dawg </3", 1);
         if ((int)GAME->move_id > 0)
