@@ -67,7 +67,7 @@ int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int start_id = 1;
 
     for (int i = 1; i < maze->nb_robots + 1; i++) {
-        start_id = CEILING(i / path_size) + 1;
+        start_id = CEILING((i) / path_size) + 1;
         while (!(MAX(maze->nb_robots - start_id + 1, shortest + 1) >
             current->length + current->lower)) {
             current = (current->next == NULL) ? *paths : current->next;

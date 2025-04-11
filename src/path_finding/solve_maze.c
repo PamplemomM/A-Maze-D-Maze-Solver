@@ -114,7 +114,8 @@ int find_solved_maze(maze_t *maze)
     find_path_lower(&paths);
     calculate_paths_proportion(&paths, maze);
     sort_path(&paths);
-    initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
+    initialise_moving_sequence(&paths, maze,
+        get_path_currentcount(&paths, maze->nb_robots));
     display_every_move(maze);
     free_pathlist(&paths);
     return SUCCESS;

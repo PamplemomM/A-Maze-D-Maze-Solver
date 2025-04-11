@@ -7,13 +7,21 @@
 
 #include "../../include/header_amazed.h"
 
-int get_pathcount(pathlist_t **paths)
+int get_path_currentcount(pathlist_t **paths, int robots_left)
 {
     int cpt = 0;
     pathlist_t *current = *paths;
+    static path_t *shortest_path = NULL;
+    static int shortest = 0;
 
+    if (shortest_path == NULL) {
+        shortest_path = get_shortest_path_temp(paths);
+        shortest = my_linked_size(&shortest_path);
+    }
     while (current != NULL) {
-        cpt++;
+        if (MAX(robots_left, shortest + 1) >
+            current->length + current->lower)
+            cpt++;
         current = current->next;
     }
     return cpt;
