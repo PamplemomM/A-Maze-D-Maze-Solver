@@ -40,7 +40,7 @@ typedef struct room_s {
     struct room_s **links;
 } room_t;
 
-typedef struct path_s {
+typedef strucint display_path(path_t **path)t path_s {
     struct path_s *next;
     char *name;
     room_t *room;
@@ -136,7 +136,8 @@ pathlist_t *find_allpath(maze_t *maze);
 int get_movelength(int path_size, int robot_count);
 path_t *get_shortest_path_temp(pathlist_t **paths);
 int my_linked_size(path_t **node);
-int display_robots_move_singlepath(path_t *good_path, maze_t *maze);
+int display_path(path_t **path);
+int display_robots_move_singlepath(path_t **good_path, maze_t *maze);
 
 // --- display_robot_path.c ---
 int get_path_currentcount(pathlist_t **paths, int robots_left);

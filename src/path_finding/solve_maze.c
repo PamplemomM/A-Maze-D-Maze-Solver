@@ -96,7 +96,8 @@ int find_solved_maze_one_line(maze_t *maze)
     free_paths(&good_path);
     paths = find_allpath(maze);
     good_path = get_shortest_path_temp(&paths);
-    display_robots_move_singlepath(good_path, maze);
+    mini_printf("Path length found : %d\n", my_linked_size(&good_path));
+    display_robots_move_singlepath(&good_path, maze);
     free_pathlist(&paths);
     return SUCCESS;
 }
