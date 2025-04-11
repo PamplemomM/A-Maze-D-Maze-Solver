@@ -1,0 +1,36 @@
+Hello, this secret file is for developpers that needs pre-made debug prints.
+Here are they :
+
+
+---- create_move_sequence.c ----
+
+- In move_robo_untilend loop :
+```C
+mini_printf("Making the move for robot %d during %d in %s\n", robot_id, id, current->name);
+```
+
+-In initialise_moving_sequence for loop after start_id :
+```C
+mini_printf("Moving robot %d\n", i);
+mini_printf("MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1, shortest + 1, current->length + current->lower);
+mini_printf("StartID = %d and path_num = %d actual path size : %d\n", start_id, path_size, current->length);
+```
+
+- In initialise_moving_sequence while loop :
+```C
+mini_printf("BAD : MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1, shortest + 1, current->length + current->lower);
+```
+
+
+---- solve_maze.c ----
+
+- In the function find_solved_maze:
+Place before
+`initialise_moving_sequence(&paths, maze, get_path_currentcount(&paths, maze->nb_robots));`
+
+This debug print:
+```C
+mini_printf("%d paths founds!\n", get_pathcount(&paths));
+initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
+```
+

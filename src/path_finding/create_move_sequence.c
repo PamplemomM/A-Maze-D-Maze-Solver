@@ -94,22 +94,3 @@ int move_robot_untilend(pathlist_t **path, int start_id, int robot_id,
     }
     return SUCCESS;
 }
-/*
-DEBUG PRINTS:
-
-in move_robo_untilend loop :
-mini_printf("Making the move for robot %d during %d in %s\n",
-    robot_id, id, current->name);
-
-
-in initialise_moving_sequence for loop after start_id :
-mini_printf("Moving robot %d\n", i);
-mini_printf("MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1,
-    shortest + 1, current->length + current->lower);
-mini_printf("StartID = %d and path_num = %d actual path size : %d\n",
-    start_id, path_size, current->length);
-
-In initialise_moving_sequence while loop :
-mini_printf("BAD : MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1,
-    shortest + 1, current->length + current->lower);
-*/
