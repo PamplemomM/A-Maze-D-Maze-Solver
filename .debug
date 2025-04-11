@@ -1,22 +1,22 @@
-Hello, this secret file is for developpers that needs pre-made debug prints.
-Here are they :
+Hello!
+This file contains pre-made debug prints for the files of the `path_finding` directory.
 
 
 ---- create_move_sequence.c ----
 
-- In move_robo_untilend loop :
+- In the `move_robot_untilend` function's `while` loop:
 ```C
 mini_printf("Making the move for robot %d during %d in %s\n", robot_id, id, current->name);
 ```
 
--In initialise_moving_sequence for loop after start_id :
+- In the `initialise_moving_sequence` function's `for` loop, after the `start_id` line:
 ```C
 mini_printf("Moving robot %d\n", i);
 mini_printf("MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1, shortest + 1, current->length + current->lower);
 mini_printf("StartID = %d and path_num = %d actual path size : %d\n", start_id, path_size, current->length);
 ```
 
-- In initialise_moving_sequence while loop :
+- In the `initialise_moving_sequence` function's `while` loop:
 ```C
 mini_printf("BAD : MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1, shortest + 1, current->length + current->lower);
 ```
@@ -24,20 +24,15 @@ mini_printf("BAD : MAX(%d, %d) > %d\n", maze->nb_robots - start_id + 1, shortest
 
 ---- solve_maze.c ----
 
-- In the function find_solved_maze:
-Place before
-`initialise_moving_sequence(&paths, maze, get_path_currentcount(&paths, maze->nb_robots));`
-
-This debug print:
+- In the `find_solved_maze` function, right before the `initialise_moving_sequence` line:
 ```C
-mini_printf("%d paths founds!\n", get_pathcount(&paths));
-initialise_moving_sequence(&paths, maze, get_pathcount(&paths));
+mini_printf("%d paths founds!\n", get_path_currentcount(&paths, maze->nb_robots));
 ```
 
 
 ---- display_robot_moves.c ----
 
-- You can place in the main loop of the function `display_robots_move_singlepath` :
+- In the `display_robots_move_singlepath` function's nested `for` loop:
 ```C
 mini_printf("Id=%d ; move=%d ; path_num=%d ; room %s\n", id, rbt, abs(rbt - (id + 1)), path[abs(rbt - (id + 1))]);
 ```
