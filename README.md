@@ -12,7 +12,7 @@ Once all robots have reached the exit, the results are displayed, showing each s
 
 To compile the program, open a terminal at the root of the project's repository, and type in this command:
 ```bash
-make re
+make
 ```
 
 Then, to execute the program, you must send your maze layout as follows:
