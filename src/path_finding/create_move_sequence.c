@@ -56,8 +56,6 @@ int display_every_move(maze_t *maze)
     return SUCCESS;
 }
 
-// It's maybe there that does the fact that the first one is always alone.
-// Surely due to the id movement if you look with the debug prints(downstais)
 int initialise_moving_sequence(pathlist_t **paths, maze_t *maze,
     int path_size)
 {
