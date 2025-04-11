@@ -42,11 +42,12 @@ static int init_icons(void)
 static int init_display_robot_counter(void)
 {
     char *nb_robots = int_to_str(MAZE->nb_robots);
+    int counter_width = digitcount(MAZE->nb_robots) * 22;
 
     if (nb_robots == NULL)
         return ERROR;
     if (make_text("nb_robots", nb_robots,
-        765 - digitcount(MAZE->nb_robots) * 22, 20) == NULL) {
+        1600, 20) == NULL) {
         OMNIFREE(nb_robots, 1);
         return ERROR;
     }
@@ -54,6 +55,8 @@ static int init_display_robot_counter(void)
     get_text("nb_robots")->color = color_from_hue(0, 255, 0, 150);
     get_text("nb_robots")->type = HUD;
     sfText_setCharacterSize(get_text("nb_robots")->text, 80);
+    make_tween("counterintro", &get_text("nb_robots")->pos.x,
+        765 - counter_width, 6.0)->method = EASEOUT;
     return SUCCESS;
 }
 
@@ -67,6 +70,7 @@ static int init_display_robots(void)
         get_robot(i)->sprite->pos.x = 750 -
             ((i - 1) / ((float)MAZE->nb_robots)) * 100.0;
         get_robot(i)->sprite->pos.y = 90;
+        get_robot(i)->sprite->rect = (sfIntRect){0, 0, 175, 356};
         get_robot(i)->sprite->type = HUD;
     }
     return SUCCESS;
