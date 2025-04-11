@@ -48,6 +48,8 @@ The viewer's usage can be displayed by executing it with the `-h` option:
 ./viewer -h
 ```
 
+---------------------------------------------------------------------------
+
 ### **Maker**
 
 The maker is an extension of the viewer, in which you get to build and export your own maze, using the beautiful graphical interface of the viewer.
