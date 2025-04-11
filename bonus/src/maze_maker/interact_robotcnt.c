@@ -34,6 +34,7 @@ int update_robot_counter(int hold)
     OMNIFREE(counter->str, 1);
     counter->str = nb_robots;
     sfText_setString(counter->text, counter->str);
+    DESTROY(get_tween("counterintro"), get_tweenlist, free_tween);
     counter->pos.x = 765 - digitcount(MAZE->nb_robots) * 22;
     counter->scale = (sfVector2f)
         {MAX(counter->scale.x - 0.05, 0.8),
