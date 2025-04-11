@@ -1,6 +1,7 @@
-# **A-maze-d**
+# **A-Maze-d**
 
 ## ✨ **Description** ✨
+
 **The A-Maze-d project consists in moving a set of robots through a maze, from its entrance to its exit.**
 
 It reads data representing the layout of a maze: the disposition of its rooms, the number of robots in it, and the tunnels linking the rooms together.
@@ -8,6 +9,7 @@ After this, a pathfinding algorithm is ran through the maze in order to guide ea
 Once all robots have reached the exit, the results are displayed, showing each set of moves that were executed, in their respective order.
 
 ## 🛠️ **Usage** 🛠️
+
 To compile the program, open a terminal at the root of the project's repository, and type in this command:
 ```bash
 make re
@@ -17,13 +19,18 @@ Then, to execute the program, you must send your maze layout as follows:
 ```bash
 ./amazed < [FILE]
 ```
-*In case you are missing maze layout files of your own, you can find sample files inside of the `scripts` folder.*
+_In case you are missing maze layout files of your own, you can find sample files inside of the `scripts` folder._
 
-## 💰 **Bonus** 💰
-**This repository comes with a bonus viewer!**
+## 💰 **Bonuses** 💰
 
-It acts as a visualizer for the A-Maze-d program, and reads its input data the exact same way as its counterpart.
-This viewer and its source files are located inside of the `bonus` directory, but moving to this directory is not necessary.
+**This repository comes with many bonuses!**
+
+---------------------------------------------------------------------------
+
+### **Viewer**
+
+The viewer acts as a visualizer for the A-Maze-d program, and reads its input data the exact same way as its counterpart.
+This program and its source files are located inside of the `bonus` directory, but moving to this directory is not necessary.
 
 To compile the viewer, make sure you are at the root of the project's repository, then run this command:
 ```bash
@@ -36,60 +43,71 @@ Then, to execute the viewer, you can send your maze layout to it through the A-M
 ./amazed < [FILE] | ./viewer
 ```
 
-Furthermore, the viewer's usage can be displayed by executing it with the `-h` option:
+The viewer's usage can be displayed by executing it with the `-h` option:
 ```bash
 ./viewer -h
 ```
 
+### **Maker**
+
+The maker is an extension of the viewer, in which you get to build and export your own maze, using the beautiful graphical interface of the viewer.
+
+To execute the maker, simply compile the viewer (as shown above), and use the `-m` option:
+```bash
+./viewer -m
+```
+_The controls for the maker are also documented in the viewer's usage_
+
 ---------------------------------------------------------------------------
 
-### **You can also generate a brand new script!**
+### **Generator**
 
-It will generate a simple script to give as input for the program. You can also combine it with the viewer!
+The *gen.sh* script, located at the root of the repository, lets you generate a new maze with however many robots and rooms you wish for.
 
-To use it, please make sure you have the compiled version of the program with `make re`.
-If that's the case, you can now use at the root of the project a command following this pattern :
+To use it, execute the following command:
 ```bash
-./gen.sh [NB_ROBOTS] [SIZE] [POSITION] | ./amazed
+./gen.sh [NB_ROBOTS] [NB_ROOMS]
+```
+The script writes its result on the standard output, which makes it super easy to send it to the A-Maze-d program!
+
+To do so, simply execute it as follows:
+```bash
+./gen.sh [NB_ROBOTS] [NB_ROOMS] | ./amazed
 ```
 
-To enjoy the best experience with the viewer, ensure you’ve compiled the viewer with `make viewer`, then use this pattern:
+You can even pair this with the viewer, if you have it compiled:
 ```bash
-./gen.sh [NB_ROBOTS] [SIZE] [POSITION] | ./amazed | ./viewer
-```
-Here is an *example usage* :
-```bash
-./gen.sh 2 5 6 | ./amazed | ./viewer
+./gen.sh [NB_ROBOTS] [NB_ROOMS] | ./amazed | ./viewer
 ```
 
-## 🔎 **Testing Part** 🔎
+---------------------------------------------------------------------------
 
-Multiple tests have been created especially for this project!
-From unit tests to functional tests.
+## 🔎 **Tester** 🔎
 
-Simply run this command in your terminal, at the root of the project:
+Many tests were created for this project, ranging from unit tests to functional tests.
+
+To compile and run the unit tests, simply use this command, at the root of the repository:
 ```bash
 make test_run
 ```
-**Functional tests** :
+
 For the functional tests, you can execute this bash script:
 ```bash
 ./tester.sh
 ```
-The output of the *error values* will be stored in the file `tests/testerEresult`, and the *success values* will be in `tests/testerSresult` if you want to take a closer look.
+_The output of the **error values tests** is stored in `tests/testerEresult`, and the **success values tests**' in `tests/testerSresult`, if you'd like to take a closer look._
 
 
-*You can now have fun using our A-maze-d project, even with sample files or by generating some. Test it automatically, view the results in our super-cool viewer.
-But after all of this, isn’t the root looking like garbage?*
+## 🧹 **Cleaner** 🧹
 
-## 🧹 **Cleaning** 🧹
+After all those tests and compilations... The repository is looking like quite a mess, isn't it?
 
-After all those tests, compilations... The repository is looking like a mess isn't it ?
-Here comes the super-bash-cleaner!
-Run this command in your terminal, from the root of the project:
+**Here comes the Super-Bash-Cleaner™!**
+
+To cleanse this repository of all of its useless files, just execute the `clean.sh` script, located at the root of the repository:
 ```bash
 ./clean.sh
 ```
-And your repository will look awesome in seconds!
+And your repository will be squeaky-clean in seconds!
 
 <sup>📝 EPITECH project developed as part of the B-CPE-200 module by AntothP, Pathie and PamplemomM.</sup>
