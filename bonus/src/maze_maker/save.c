@@ -20,10 +20,21 @@ static int save_nb_robots(int fd)
     return SUCCESS;
 }
 
+static int save_room_coord(int fd, float coord)
+{
+    char *tmp = int_to_str(coord / 50);
+
+    if (tmp == NULL)
+        return ERROR;
+    write(fd, " ", 1);
+    write(fd, tmp, strlen(tmp));
+    OMNIFREE(tmp, 1);
+    return SUCCESS;
+}
+
 static int save_rooms(int fd)
 {
     room_t *room = MAZE->rooms;
-    char *tmp = NULL;
 
     if (room == NULL)
         return SUCCESS;
@@ -34,18 +45,10 @@ static int save_rooms(int fd)
         if (room == MAZE->end)
             write(fd, "##end\n", strlen("##end\n"));
         write(fd, room->name, strlen(room->name));
-        write(fd, " ", 1);
-        tmp = int_to_str(room->x / 50);
-        if (tmp == NULL)
+        if (save_room_coord(fd, room->x) == ERROR)
             return ERROR;
-        write(fd, tmp, strlen(tmp));
-        OMNIFREE(tmp, 1);
-        write(fd, " ", 1);
-        tmp = int_to_str(room->y / 50);
-        if (tmp == NULL)
+        if (save_room_coord(fd, room->y) == ERROR)
             return ERROR;
-        write(fd, tmp, strlen(tmp));
-        OMNIFREE(tmp, 1);
         write(fd, "\n", 1);
         room = room->next;
     }

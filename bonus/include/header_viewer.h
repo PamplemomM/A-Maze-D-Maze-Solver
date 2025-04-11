@@ -143,30 +143,41 @@ void free_robot(vwr_robot_t *robot);
 // --- main_maker.c ---
 int start_maker(void);
 
-// --- place_rooms.c ---
-sprite_t *get_room_sprite(room_t *room);
-char *make_room_name(sfVector2f pos);
-void destroy_room(room_t *room);
-int place_room(void);
-
-// --- place_tunnels.c ---
-sprite_t *get_tunnel_sprite(tunnel_t *tunnel);
-char *make_tunnel_name(tunnel_t *tunnel);
-void destroy_tunnel(tunnel_t *tunnel);
-int place_tunnel(room_t *r1, room_t *r2);
-int interact_tunnel(void);
+// --- interact_maker.c ---
+void update_room_select(void);
+void track_room_select(void);
+int interact_maker(void);
 
 // --- interact_robotcnt.c ---
 int update_robot_display(void);
 int update_robot_counter(int hold);
 int interact_nb_robots(void);
 
+// --- interact_rooms.c ---
+int interact_room(void);
+
+// --- interact_tunnels.c ---
+int interact_tunnel(void);
+
+// --- place_rooms.c ---
+void update_rooms(void);
+sprite_t *get_room_sprite(room_t *room);
+char *make_room_name(sfVector2f pos);
+void destroy_room(room_t *room);
+int place_room(sfVector2f pos);
+
+// --- place_tunnels.c ---
+sprite_t *get_tunnel_sprite(tunnel_t *tunnel);
+char *make_tunnel_name(tunnel_t *tunnel);
+void destroy_tunnel(tunnel_t *tunnel);
+int place_tunnel(room_t *r1, room_t *r2);
+
 // --- save.c ---
 void save_maze(void);
 
 // --- update_bounds.c ---
 void update_maker_bounds(void);
-int update_rooms_pos(sprite_t *select, int add_or_del);
+int update_rooms_pos(int add_or_del);
 
 // --- init_maker_assets.c ---
 int init_maker_assets(void);

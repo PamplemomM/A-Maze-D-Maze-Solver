@@ -43,6 +43,8 @@ static char *merge_sprite_path(char *name)
 
 static void setup_sprite(sprite_t *sprite)
 {
+    sprite_t *head = *get_spritelist();
+
     sfSprite_setTexture(sprite->sprite, sprite->texture, sfTrue);
     sprite->scale = (sfVector2f){1, 1};
     sprite->angle = 0;

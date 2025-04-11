@@ -7,6 +7,25 @@
 
 #include "../../include/header_viewer.h"
 
+void update_rooms(void)
+{
+    sprite_t *room = NULL;
+    timers_t *timer = *get_timerlist();
+    float time_left = 0;
+    float wobble_fact = 0;
+
+    while (timer != NULL) {
+        room = get_sprite(timer->name);
+        if (room != NULL) {
+            time_left = timer->tend - TIME;
+            wobble_fact = cos(TIME * 28) * time_left / 6.0;
+            room->scale.x = 1 + wobble_fact + time_left / 3.0;
+            room->scale.y = 1 - wobble_fact + time_left / 3.0;
+        }
+        timer = timer->next;
+    }
+}
+
 sprite_t *get_room_sprite(room_t *room)
 {
     sprite_t *sprite = NULL;
@@ -118,10 +137,26 @@ static void room_modifs(room_t *room)
     OMNIFREE(name, 1);
 }
 
-int place_room(void)
+static void place_room_effects(room_t *room)
 {
-    sprite_t *select = get_sprite("room_select");
-    char *name = make_room_name(select->pos);
+    if (GAME->state == MKR_EXIT) {
+        destroy_room(MAZE->end);
+        MAZE->end = room;
+    }
+    add_logs_new_room(room);
+    create_room_sprite(room);
+    room_modifs(room);
+    update_maker_bounds();
+    update_rooms_pos(0);
+    play_sound("place", MIN(40.0 * CAM->zoom + 30.0, 90.0),
+        diceroll(90, 110) / 100.0);
+    if (GAME->state == MKR_EXIT)
+        update_rooms_pos(1);
+}
+
+int place_room(sfVector2f pos)
+{
+    char *name = make_room_name(pos);
 
     if (name == NULL)
         return ERROR;
@@ -134,23 +169,11 @@ int place_room(void)
         if (GAME->state == MKR_EXIT)
             destroy_room(get_room(name, MAZE));
     }
-    if (add_room(name, select->pos.x, select->pos.y, &MAZE) == ERROR) {
+    if (add_room(name, pos.x, pos.y, &MAZE) == ERROR) {
         OMNIFREE(name, 1);
         return ERROR;
     }
-    if (GAME->state == MKR_EXIT) {
-        destroy_room(MAZE->end);
-        MAZE->end = get_room(name, MAZE);
-    }
-    add_logs_new_room(get_room(name, MAZE));
-    create_room_sprite(get_room(name, MAZE));
-    room_modifs(get_room(name, MAZE));
+    place_room_effects(get_room(name, MAZE));
     OMNIFREE(name, 1);
-    update_maker_bounds();
-    update_rooms_pos(select, 0);
-    play_sound("place", MIN(40.0 * CAM->zoom + 30.0, 90.0),
-        diceroll(90, 110) / 100.0);
-    if (GAME->state == MKR_EXIT)
-        update_rooms_pos(select, 1);
     return SUCCESS;
 }

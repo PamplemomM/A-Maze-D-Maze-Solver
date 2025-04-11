@@ -39,7 +39,7 @@ static int init_icons(void)
     return SUCCESS;
 }
 
-static int init_maker_robots(void)
+static int init_display_robot_counter(void)
 {
     char *nb_robots = int_to_str(MAZE->nb_robots);
 
@@ -51,6 +51,16 @@ static int init_maker_robots(void)
         return ERROR;
     }
     OMNIFREE(nb_robots, 1);
+    get_text("nb_robots")->color = color_from_hue(0, 255, 0, 150);
+    get_text("nb_robots")->type = HUD;
+    sfText_setCharacterSize(get_text("nb_robots")->text, 80);
+    return SUCCESS;
+}
+
+static int init_display_robots(void)
+{
+    if (init_display_robot_counter() == ERROR)
+        return ERROR;
     for (int i = 1; i <= MAZE->nb_robots; i++) {
         if (make_robot(i) == NULL)
             return ERROR;
@@ -59,16 +69,13 @@ static int init_maker_robots(void)
         get_robot(i)->sprite->pos.y = 90;
         get_robot(i)->sprite->type = HUD;
     }
-    get_text("nb_robots")->color = color_from_hue(0, 255, 0, 150);
-    get_text("nb_robots")->type = HUD;
-    sfText_setCharacterSize(get_text("nb_robots")->text, 80);
     return SUCCESS;
 }
 
 static int init_maker_sprites(void)
 {
     int inits[8] = {init_room_select(), init_start_room(), init_blackscreen(),
-        init_icons(), init_maker_robots(), init_compass(),
+        init_icons(), init_display_robots(), init_compass(),
         init_logs(), init_bg()};
 
     for (int i = 0; i < 8; i++) {
@@ -84,7 +91,7 @@ static int init_maker_music(void)
     if (play_music("Floor One", "Dorkus64 - Floor One", 0, 1.0) == NULL)
         return ERROR;
     make_tween("music_fadein", &MUSIC->volume,
-        60, 5.0)->method = EASEINOUT;
+        0, 5.0)->method = EASEINOUT;  // lalalallalala
     sfMusic_setLoop(MUSIC->music, sfTrue);
     return SUCCESS;
 }
