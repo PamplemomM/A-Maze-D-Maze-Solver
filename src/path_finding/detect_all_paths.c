@@ -122,5 +122,3 @@ pathlist_t *find_allpath(maze_t *maze)
         display_paths(0, &paths);
     return paths;
 }
-//for (int i = 1; i < maze->nb_robots + 1; i++)
-//    display_paths(i, paths);
