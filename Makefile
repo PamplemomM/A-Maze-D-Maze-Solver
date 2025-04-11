@@ -81,3 +81,5 @@ re	:	fclean all
 
 cleaner	:
 		@./clean.sh
+
+doall	:	all viewer

@@ -77,9 +77,8 @@ for ((i = 1; i <= nb_rooms; i++)); do
   done
 done
 
-
 # Generate a direct path to the end
-current=0
+current=1
 while [ "$current" -ne "$nb_rooms" ]; do
   next=$(((current + 1 + RANDOM % ($nb_rooms - current))))
   echo "$current-$next"
