@@ -106,8 +106,8 @@ char *get_name(char *line, int *i, char const *separators);
 int parse_room(maze_t **maze, char *line, int *special);
 
 // --- parse_tunnel.c ---
-int add_tunnel(room_t *r1, room_t *r2, maze_t **maze);
 int connect_rooms(room_t *r1, room_t *r2);
+int add_tunnel(room_t *r1, room_t *r2, maze_t **maze);
 int parse_tunnel(maze_t **maze, char *line);
 
 
