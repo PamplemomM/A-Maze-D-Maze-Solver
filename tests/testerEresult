@@ -1,0 +1,145 @@
+
+---------------------------------------
+
+[Test 01] - Testing with empty file :
+
+PARSING ERROR: Invalid number of robots.
+
+[Test 01] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 02] - Testing with bad robot count :
+
+PARSING ERROR: Invalid number of robots.
+
+[Test 02] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 03] - Testing with no exit :
+
+#number_of_robots
+1
+#rooms
+1 2 2
+##start
+2 2 3
+PARSING ERROR: No end room.
+
+[Test 03] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 04] - Testing with no rooms :
+
+#number_of_robots
+3
+PARSING ERROR: No rooms.
+
+[Test 04] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 05] - Testing with no tunnels :
+
+#number_of_robots
+3
+#rooms
+##end
+1 2 2
+##start
+2 2 3
+PARSING ERROR: No tunnels.
+
+[Test 05] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 06] - Testing with bad tunnels :
+
+#number_of_robots
+3
+#rooms
+##end
+1 2 2
+##start
+2 2 3
+PARSING ERROR: Tunnel between non-existent rooms.
+
+[Test 06] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 07] - Testing with no start room :
+
+#number_of_robots
+3
+#rooms
+##end
+1 2 2
+2 2 3
+PARSING ERROR: No start room.
+
+[Test 07] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 08] - Testing with no end room :
+
+#number_of_robots
+3
+#rooms
+##start
+1 2 2
+2 2 3
+PARSING ERROR: No end room.
+
+[Test 08] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 09] - Testing with multiple start rooms :
+
+#number_of_robots
+3
+#rooms
+##start
+1 2 2
+##end
+2 2 3
+PARSING ERROR: Multiple start rooms.
+
+[Test 09] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 10] - Testing with multiple end rooms :
+
+#number_of_robots
+3
+#rooms
+##start
+1 2 2
+##end
+2 2 3
+PARSING ERROR: Multiple end rooms.
+
+[Test 10] - Error exit Status : SUCCESS
+
+---------------------------------------
+
+[Test 11] - Testing with input line containing garbage :
+
+#number_of_robots
+3
+#rooms
+##start
+1 2 2
+##end
+2 2 3
+PARSING ERROR: Tunnel between non-existent rooms.
+
+[Test 11] - Error exit Status : SUCCESS
+
+---------------------------------------

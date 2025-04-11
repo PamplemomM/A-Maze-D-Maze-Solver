@@ -111,7 +111,7 @@ dispE "[Test 02] - Error exit Status : SUCCESS"
 delimE
 
 dispE "[Test 03] - Testing with no exit :"
-echo -e "1\n##end \n1 2 2 \n##start \n2 2 3 \n1-2" > data
+echo -e "1 \n1 2 2 \n##start \n2 2 3 \n1-2" > data
 error ./amazed < data
 dispE "[Test 03] - Error exit Status : SUCCESS"
 delimE
@@ -179,8 +179,8 @@ my_putstr "-" 43 " "
 sleep 1.2
 
 delimS
-dispS "[Test 01] - Testing with 50 Horizontal : "
-success ./amazed < scripts/50horizontal.txt
+dispS "[Test 01] - Testing with La Frangipane : "
+success ./amazed < scripts/la_frangipane.txt
 dispS "[Test 01] - Exit Status : SUCCESS"
 delimS
 sleep 1.3
@@ -191,16 +191,16 @@ dispS "[Test 02] - Exit Status : SUCCESS"
 delimS
 sleep 0.3
 
-dispS "[Test 03] - Testing with Simple House : "
-success ./amazed < scripts/house.txt
+dispS "[Test 03] - Testing with Example : "
+success ./amazed < scripts/example.txt
 sleep 0.1
 sleep 0.05
 dispS "[Test 03] - Exit Status : SUCCESS"
 delimS
 sleep 0.1
 
-dispS "[Test 04] - Testing with Long : "
-success ./amazed < scripts/long.txt
+dispS "[Test 04] - Testing with Really Stupid Algo : "
+success ./amazed < scripts/really_stupid_algo.txt
 sleep 1.5
 dispS "[Test 04] - Exit Status : SUCCESS"
 delimS
@@ -212,8 +212,8 @@ dispS "[Test 05] - Exit Status : SUCCESS"
 delimS
 sleep 0.3
 
-dispS "[Test 06] - Testing with a simple line : "
-success ./amazed < scripts/simple-line.txt
+dispS "[Test 06] - Testing with a True maze : "
+success ./amazed < scripts/true_maze.txt
 dispS "[Test 06] - Exit Status : SUCCESS"
 delimS
 sleep 0.3
@@ -221,18 +221,6 @@ sleep 0.3
 dispS "[Test 07] - Testing with Spaceship : "
 success ./amazed < scripts/spaceship.txt
 dispS "[Test 07] - Exit Status : SUCCESS"
-delimS
-sleep 0.3
-
-dispS "[Test 08] - Testing with a stupid algorithm : "
-success ./amazed < scripts/stupid_algo.txt
-dispS "[Test 08] - Exit Status : SUCCESS"
-delimS
-sleep 0.3
-
-dispS "[Test 09] - Testing with a last test : "
-success ./amazed < scripts/test.txt
-dispS "[Test 09] - Exit Status : SUCCESS"
 delimS
 sleep 0.3
 
