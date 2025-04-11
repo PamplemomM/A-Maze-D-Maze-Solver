@@ -32,6 +32,9 @@ static int interact_tunnel_update(tunnel_t **tunnel, room_t **room_tmp)
         (*room_tmp)->y = select->pos.y;
         sprite->color.a = (cos(TIME * 2.0) + 1) * 25 + 175;
         setup_tunnel(sprite, (*tunnel)->r1, (*tunnel)->r2);
+        if (get_sound("tunnel_stretch")->status == 0)
+            play_sound("tunnel_stretch", MIN(70.0 * CAM->zoom, 80.0),
+                0.7 + sprite->scale.y / 10.0);
     } else {
         DESTROY(sprite, get_spritelist, free_sprite);
         if (try_place_tunnel(tunnel, room_tmp) == ERROR) {
@@ -86,6 +89,8 @@ static int interact_tunnel_initiate(tunnel_t **tunnel,
     (*tunnel)->r1 = r1;
     (*tunnel)->r2 = *room_tmp;
     (*tunnel)->next = NULL;
+    play_sound("tunnel_start", MIN(70.0 * CAM->zoom + 5.0, 70.0),
+        diceroll(90, 110) / 100.0);
     return SUCCESS;
 }
 

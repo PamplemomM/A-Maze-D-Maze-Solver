@@ -94,7 +94,7 @@ int place_tunnel(room_t *r1, room_t *r2)
         return ERROR;
     add_logs_new_tunnel(get_tunnel(r1, r2, MAZE));
     create_tunnel_sprite(get_tunnel(r1, r2, MAZE));
-    play_sound("place", MIN(40.0 * CAM->zoom + 30.0, 90.0),
-        diceroll(90, 110) / 100.0); // pick a new one blud
+    play_sound("tunnel_place", MIN(70.0 * CAM->zoom + 20.0, 90.0),
+        diceroll(90, 110) / 100.0);
     return SUCCESS;
 }

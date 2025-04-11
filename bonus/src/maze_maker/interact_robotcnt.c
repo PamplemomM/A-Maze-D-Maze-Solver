@@ -35,10 +35,12 @@ int update_robot_counter(int hold)
     counter->str = nb_robots;
     sfText_setString(counter->text, counter->str);
     counter->pos.x = 765 - digitcount(MAZE->nb_robots) * 22;
-    counter->scale = (sfVector2f){0.9, 0.9};
+    counter->scale = (sfVector2f)
+        {MAX(counter->scale.x - 0.05, 0.8),
+        MAX(counter->scale.y - 0.05, 0.8)};
     make_tween("cntr_scalex", &counter->scale.x, 1.0, 0.5)->method = EASEOUT;
     make_tween("cntr_scaley", &counter->scale.y, 1.0, 0.5)->method = EASEOUT;
-    play_sound("counter_iterate", 60 / ((abs(hold) + 1) / 100.0),
+    play_sound("counter_iterate", MIN(10 / ((abs(hold) + 1) / 200.0), 80),
         MAX(MIN(1.0 + (hold / 100.0), 8.0), 0.5));
     return SUCCESS;
 }

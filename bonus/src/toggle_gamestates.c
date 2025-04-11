@@ -44,7 +44,7 @@ static void toggle_gamestate_rewind(gamestate_t state)
 
 static void toggle_gamestate_maker_effect(int def)
 {
-    play_sound("switch", diceroll(30, 50), (diceroll(100, 110) - def * 20)
+    play_sound("switch", diceroll(40, 70), (diceroll(100, 110) - def * 20)
         / 100.0);
     get_sprite("icon")->angle += 5;
     make_tween("icon_tilt", &get_sprite("icon")->angle,

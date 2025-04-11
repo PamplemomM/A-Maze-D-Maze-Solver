@@ -7,6 +7,18 @@
 
 #include "../include/header_viewer.h"
 
+static void cam_zoom_music_fade(void)
+{
+    tween_t *cam_zoom = get_tween("camzoom");
+
+    if (cam_zoom != NULL && get_tween("music_fadein") == NULL) {
+        if (cam_zoom->dest >= 2.25)
+            make_tween("musicvol", &MUSIC->volume, 30, 1)->method = LINEAR;
+        else
+            make_tween("musicvol", &MUSIC->volume, 60, 1)->method = LINEAR;
+    }
+}
+
 void cam_move_mouse(sfMouseMoveEvent mouse)
 {
     static sfMouseMoveEvent mouseold = {sfEvtMouseMoved, 0, 0};
@@ -39,6 +51,7 @@ void cam_zoom_mouse(sfMouseWheelScrollEvent mouse)
     else if (tmp < 0.1)
         tmp = 0.1;
     tween->dest = tmp;
+    cam_zoom_music_fade();
 }
 
 static void cam_zoom_keys(float fact)
@@ -49,6 +62,7 @@ static void cam_zoom_keys(float fact)
     else if (KEYPRESS(sfKeyX))
         make_tween("camzoom", &CAM->zoom, MAX(CAM->zoom
             / (1.1 + (fact - 1) / 2.0), 0.1), 0.8)->method = EASEOUT;
+    cam_zoom_music_fade();
 }
 
 void cam_move_keys(void)

@@ -106,6 +106,8 @@ void destroy_room(room_t *room)
     DESTROY(room, get_rooms, free_room);
     select->scale = (sfVector2f){0.95, 0.95};
     update_maker_bounds();
+    play_sound("destroy", MIN(60.0 * CAM->zoom + 20.0, 100.0),
+        diceroll(90, 110) / 100.0);
 }
 
 static int add_logs_new_room(room_t *room)
@@ -148,7 +150,7 @@ static void place_room_effects(room_t *room)
     room_modifs(room);
     update_maker_bounds();
     update_rooms_pos(0);
-    play_sound("place", MIN(40.0 * CAM->zoom + 30.0, 90.0),
+    play_sound("place", MIN(60.0 * CAM->zoom + 30.0, 100.0),
         diceroll(90, 110) / 100.0);
     if (GAME->state == MKR_EXIT)
         update_rooms_pos(1);
