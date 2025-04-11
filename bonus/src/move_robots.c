@@ -62,7 +62,7 @@ static int do_move(vwr_robot_t *robot, room_t *room, float speed)
         return ERROR;
     play_sound("move", zoom_attenfact * dist_attenfact,
         diceroll(80, 90) / 100.0 + speed / 50.0);
-    run_timer("moving", 0.8 / speed / 1.5);
+    run_timer("moving", 0.8 / speed / 1.4);
     robot->room = room;
     robot->move_to = NULL;
     return SUCCESS;

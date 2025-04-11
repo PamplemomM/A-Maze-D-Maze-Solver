@@ -36,7 +36,7 @@ int update_robots(void)
     }
     if (GAME->state == REWIND && GAME->move_id <= 0.2)
         DESTROY(tween_id, get_tweenlist, free_tween);
-    if (tween_id == NULL && get_timer("moving") == NULL)
+    if (tween_id == NULL && get_tween("barbuff") == NULL)
         toggle_gamestate(PAUSE);
     if ((int)GAME->move_id != prev_id) {
         prev_id = (int)GAME->move_id;
