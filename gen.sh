@@ -48,9 +48,14 @@ generate_pos() {
 echo "$nb_robots"
 echo "##start"
 
+size=$((limit * limit))
+
+if [ "$nb_rooms" -gt "$size" ]; then
+    nb_rooms=$size
+fi
 
 # Generate the rooms until the end.
-for ((i = 0; i <= nb_rooms; i++)); do
+for ((i = 1; i <= nb_rooms; i++)); do
   if [ "$i" -eq "$nb_rooms" ]; then
     echo "##end"
   fi
