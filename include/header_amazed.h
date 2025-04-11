@@ -22,7 +22,7 @@
     #define FALSE 0
     #define MAX_INT 2147483647
     #define MAX(a, b) ((a) > (b) ? (a) : (b))
-    #define ABS(nb) (nb < 0) ? -nb : nb
+    #define ABS(nb) ((nb < 0) ? (-nb) : (nb))
     #define OMNIFREE(thing, dimension) omnifree((void ***)&thing, dimension)
     #define PRINT(format, ...) mini_printf(format, __VA_ARGS__)
 
@@ -40,7 +40,7 @@ typedef struct room_s {
     struct room_s **links;
 } room_t;
 
-typedef strucint display_path(path_t **path)t path_s {
+typedef struct path_s {
     struct path_s *next;
     char *name;
     room_t *room;
